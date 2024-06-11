@@ -8,8 +8,8 @@
             <li><router-link to="/">아차챌린지</router-link></li>
           </ul>
           <ul class="nav justify-content-end">
-            <li><router-link to="/"><img src="../assets/profile.png" alt=""/></router-link></li>
-            <li><router-link to="/"><img src="../assets/setting.png" alt=""/></router-link></li>
+            <li><router-link to="/"><img src="../assets/navbar/profile.png" alt=""/></router-link></li>
+            <li><router-link to="/"><img src="../assets/navbar/setting.png" alt=""/></router-link></li>
           </ul> 
         </div>
       </nav>
