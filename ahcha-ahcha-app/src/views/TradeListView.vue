@@ -1,11 +1,12 @@
 <template>
     <TradeList v-bind:tradeList="states.tradeList"></TradeList>
-    <!-- <friendship @listChanged="fetchTradeList"></friendship> -->
+   <TransactionLogWrite @logChanged="fetchTradeList"></TransactionLogWrite>
 </template>
 
 
 <script>
 import TradeList from '../components/TradeList/TradeList.vue'
+import TransactionLogWrite from '@/components/write/TransactionLogWrite.vue';
 import { ref, computed, reactive, provide } from 'vue';
 import axios from 'axios';
 
@@ -13,7 +14,7 @@ export default{
     components:{
         TradeList,
         //우정님 모달 추가
-
+        TransactionLogWrite
     },
     setup(){
         const BASEURL = "http://localhost:3001";
@@ -41,7 +42,7 @@ export default{
         provide('actions', {fetchTradeList});
 
 
-        return {states};
+        return {states, fetchTradeList};
     }
 }
 

@@ -119,7 +119,9 @@ export default {
         // sort는 all 또는 income 또는 outcome
         const sortButtonGroup = reactive({"sort":"all"})
         const selected_button = {
-            
+            style: {
+                backgroundColor: '#F1B73F', // blue
+            }
         }
 
 
