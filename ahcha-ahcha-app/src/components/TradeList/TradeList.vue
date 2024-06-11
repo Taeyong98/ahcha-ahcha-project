@@ -11,22 +11,27 @@
             </button>
             <span>
                 <button class="btn btn-main" 
-                style="margin-left:10px">
+                style="margin-left:10px"
+                @click="toggleCategoryModal()">
                     카테고리 선택
                 </button>
-                <div class="selectCategoryBox card">
+                <div class="selectCategoryBox card"
+                v-if="isShowModal">
                     <div class="group1">
-                        <button class="btn">지출</button>
-                        <button class="btn">수입</button>
+                        <button class="btn" @click="changeCategorySortButton('outcome')"
+                        :style="[categorySortSelected.sort=='outcome' ? selectedButton : '']"
+                        >지출</button>
+                        <button class="btn" @click="changeCategorySortButton('income')"
+                        :style="[categorySortSelected.sort=='income' ? selectedButton : '']"
+                        >수입</button>
                     </div>
-                    <div class="form-check" style="margin-top: 10px;">
-                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked>
-                        <label class="form-check-label" for="check1">Option 1</label>
+                        <div v-for="ic in states.outcomeCategory">
+                            <div class="form-check" style="margin-top: 10px;">
+                            <input type="checkbox" class="form-check-input" >
+                            <label class="form-check-label" for="check1">{{ ic }}</label>
+                            </div>
                         </div>
-                        <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="check2" name="option2" value="something">
-                        <label class="form-check-label" for="check2">Option 2</label>
-                        </div>
+                        
                         <button type="submit" class="btn mt-3 btn-main">적용하기</button>
                     </div>
               
@@ -69,27 +74,104 @@
             :style="[sortButtonGroup.sort=='income' ? selectedButton : '']"
             @click="changeSortButton('income')">수입</button>
         </div>
+        <div style="margin-top: 2px; margin-bottom: 20px;" class="sort_button_group">
+            <label>{{ account.all }}</label>
+            <label style="color: #FF3838;">{{ account.outcome }}</label>
+            <label style="color: #0066FF;">{{ account.income }}</label>
+        </div>
+
+
 
         <div>
-            <table>
-                <tr v-for="t in tradeList">
-                    <td>{{ t.desc }}</td>
+            <table class="table">
+                <tr>
+                    <td>날짜</td>
+                    <td>카테고리</td>
+                    <td>금액</td>
+                    <td>내용</td>
+                </tr>
+                <tr v-for="t in states.tradeList">
+                    <td>{{ getShowDate(t.date) }}</td>
                 </tr>
             </table>
         </div>
 
-       
-
     </div>
 </template>
+
 <script>
 import { ref, computed, reactive, onMounted } from 'vue';
-
+import axios from 'axios';
 export default {
-    props:["tradeList","category"],
-    setup(props){
-        console.log(props.category);
-      
+    //props:["states"],
+    setup(){
+        const account = reactive({
+            "all":0,
+            "income":0,
+            "outcome":0
+        });
+
+
+        const BASEURL = "http://localhost:3001";
+        const states = reactive({
+            tradeList:[],
+            incomeCategory:[],
+            outcomeCategory:[]
+        })
+
+        let income = 0;
+        let outcome = 0;
+        const fetchTradeList = async () => {
+            try{
+                const response = await axios.get(BASEURL+'/trade_list');
+                if(response.status == 200){
+
+                    states.tradeList= response.data;
+                    console.log(states.tradeList);
+                    states.tradeList.forEach((item)=>{
+                        if(item.type=='income'){
+                            income += parseInt(item.price);
+                        }else{
+                            outcome += parseInt(item.price);
+                        }
+                    })
+
+                    account.all = income-outcome;
+                    account.income = income;
+                    account.outcome = outcome;
+
+                    console.log(income)
+                    console.log(outcome);
+
+
+                }else{
+                    alert("거래 내역을 가져오는데 실패하였습니다. ");
+                }
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        const fetchCategory = async () => {
+            try{
+                const response = await axios.get(BASEURL+'/user_category?id=ted');
+                if(response.status == 200){
+                    states.incomeCategory = response.data[0].income;
+                    states.outcomeCategory = response.data[0].outcome;
+
+                }else{
+                    alert("카테고리 내역을 가져오는데 실패하였습니다. ");
+                }
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        onMounted(()=>{
+            fetchTradeList();
+            fetchCategory();
+        });
+
         // 일주일 간의 거래 내역을 보여준다. 
         const showPeriod = 7;
         const today = new Date();
@@ -149,22 +231,34 @@ export default {
             sortButtonGroup.sort = value;
         }
 
-
-        const outcomeCategory = ref({});
-        
-        onMounted(()=>{
-
-        
-            
-          
+        const isShowModal = ref(false);
+        // 카테고리 모달 띄울 토글
+        function toggleCategoryModal(){
+            isShowModal.value = !(isShowModal.value);
+        }
+        const categorySortSelected = reactive({
+            "sort":"outcome"
         })
+        function changeCategorySortButton(value){
+            categorySortSelected.sort = value;
+        }
+
+
+        function getShowDate(value){
+            const date = new Date(value);
+            const d = date.getFullYear()+"."+(date.getMonth()+1)
+            +'.'+date.getDate();
+            return d;
+        }
+
         
 
 
 
-
-        return {range, attr, isCalendarShow,dateToggle, sortButtonGroup,
-            selectedButton, changeSortButton
+        return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
+            selectedButton, categorySortSelected,changeCategorySortButton,
+            changeSortButton, toggleCategoryModal, isShowModal, account
+           , getShowDate
         };
     }    
 }
@@ -184,7 +278,11 @@ export default {
 }
 .sort_button_group{
     margin-top: 10px;
+}
+.sort_button_group label{
+    width:33.3%;
     text-align: center;
+
 }
 
 
