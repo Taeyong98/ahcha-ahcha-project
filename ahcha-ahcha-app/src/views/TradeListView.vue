@@ -1,89 +1,63 @@
 <template>
-    <div>
-        <div>
-            <button>
-                {{showDate.start +' ~ '+showDate.end}}
-            </button>
-        </div>
-        <VDatePicker
-            v-model.range="range"
-            @drag="dragValue = $event"
-            :select-attribute="attr"
-            :drag-attribute="attr"
-            v-if="isCalendarShow"
-        >
-            <template #day-popover="{ format }"
-            >
-            <div>
-                {{ format(range.start, 'MMM D') }}
-                -
-                {{ format(range.end, 'MMM D') }}
-            </div>
-            </template>
-        </VDatePicker>
-
-    </div>
+    <TradeList v-bind:tradeList="states.tradeList"></TradeList>
+    <!-- <friendship @listChanged="fetchTradeList"></friendship> -->
 </template>
 
 
 <script>
-import { ref, computed, reactive } from 'vue';
+import TradeList from '../components/TradeList/TradeList.vue'
+import { ref, computed, reactive, provide } from 'vue';
+import axios from 'axios';
+
 export default{
+    components:{
+        TradeList,
+        //우정님 모달 추가
+
+    },
     setup(){
-        // 일주일 간의 거래 내역을 보여준다. 
-        const showPeriod = 7;
-        const today = new Date();
-        let startDate = new Date(new Date().setDate(today.getDate()-showPeriod));
+        const BASEURL = "http://localhost:3001";
+        const states = reactive({
+            tradeList:[]
+        })
 
-        // 선택되는 날짜 데이터
-        const range = reactive({
-            start: startDate,
-            end: today,
-        });
-
-        // 달력 보여주는 달력에 보일 텍스트
-        const showDate = {
-            start:range.start.getFullYear()+'.'+(parseInt(range.start.getMonth())+1),
-            end:range.end.getFullYear()+'.'+(parseInt(range.end.getMonth())+1)
-        }
-        
-        const isCalendarShow = ref(false);
-
-        // 캘린더에서 선택된 기간의 색상을 위한 값
-       const attr= {
-                highlight: {
-                    start: {
-                        style: {
-                            backgroundColor: '#F1B73F', // blue
-                        },
-                        contentStyle: {
-                            color: '#ffffff' // color of the text
-                        }
-                    },
-                    base: {
-                        style: {
-                            backgroundColor: '#FBE4A7', // light blue
-                        }
-                    },
-                    end: {
-                        style: {
-                            backgroundColor: '#F1B73F', // blue
-                        },
-                        contentStyle: {
-                            color: '#ffffff' // color of the text
-                        }
-                    }
+        const fetchTradeList = async () => {
+            try{
+                const response = await axios.get(BASEURL+"/trade_list");
+                if(response.status == 200){
+                    states.tradeList = response.data;
+                    console.log(states.tradeList);
+                }else{
+                    alert("거래 내역을 가져오는데 실패하였습니다. ");
                 }
-            };
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        fetchTradeList();
+
+        //provide('tradeList', computed(()=>states.tradeList));
+        provide('actions', {fetchTradeList});
 
 
-        return {range, attr, showDate, isCalendarShow};
+        return {states};
     }
 }
 
 </script>
 
 
-<style scoped>
+<style>
+    .main-color{
+        background-color:#F1B73F
+    }
+    .btn-main{
+        background-color:#F1B73F;
 
+    }
+    .btn-main:hover{
+        background-color:#F1B73F;
+    }
+    
 </style>
