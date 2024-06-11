@@ -1,10 +1,12 @@
 <template>
     <div class="write">
-        <span>기록</span>
+        <h2>기록</h2>
         <hr/>
         <div>
+            <div>
             <input type="radio" id="type1" name="type" value="income" v-model="state.type">
             <label for="type1">수입</label>
+            </div>
             <input type="radio" id="type2" name="type" value="outcome" v-model="state.type">
             <label for="type2">지출</label><br/>
         </div>
@@ -39,13 +41,16 @@
         </div>
 
         <div>
-            <button type="button" v-on:click="submitForm">입력하기</button>
+            <button type="button" v-on:click="handleClick">입력하기</button>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { reactive, onMounted } from 'vue';
+    import { reactive} from 'vue';
+    import { defineEmits } from 'vue'
+
+    const emit = defineEmits(['logChanged']);
 
     const form = reactive({
         incomeCategories:["월급", "환급금", "기타"],
@@ -86,16 +91,22 @@
                 },
                 body: JSON.stringify(state)
             });
-            if(!resoponse.ok){
+            if(!response.ok){
                 throw new Error('Network response was not ok');
             }
             const result = await response.json();
 
-            this.$emit('logChanged', {state});
             console.log('Data saved successfully:', result);
-        } catch (error){
+            } 
+            catch (error){
+                console.error('Failed to save data:', error)
 
-        }
+            }
+    }
+
+    const handleClick = async () => {
+        await submitForm();
+        emit('logChanged');
     }
 </script>
 
