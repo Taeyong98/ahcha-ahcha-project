@@ -1,17 +1,15 @@
 
 
 <template>
-
     <TransactGraph ref="transactGraph"/>
-    <TransactionLogWrite @logChanged="handleLogChanged"></TransactionLogWrite>
-
+    <WriteButton @logChanged="handleLogChanged"></WriteButton>
 </template>
 
 
 <script setup>
 import {ref} from 'vue';
 import TransactGraph from '../components/Home/TransactGraph.vue'
-import TransactionLogWrite from '@/components/write/TransactionLogWrite.vue';
+import WriteButton from '@/components/write/WriteButton.vue';
 
 const transactGraph = ref(null);
 
