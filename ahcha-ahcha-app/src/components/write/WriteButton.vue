@@ -10,7 +10,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <TransactionLogWrite @logChanged="handleLogChanged" />
+                        <TransactionLogWrite @submitForm="handleSubmitForm" />
                     </div>
                 </div>
             </div>
@@ -21,12 +21,16 @@
 <script setup>
 import TransactionLogWrite from './TransactionLogWrite.vue';
 import {Modal} from 'bootstrap';
+import {defineEmits} from 'vue';
 
-const handleLogChanged = () => {
-    console.log('Log changed');
+const emit = defineEmits(['logChanged'])
+
+const handleSubmitForm = () => {
     const modalElement = document.getElementById('transactionModal');
     const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
     modalInstance.hide();
+
+    emit('logChanged');
 };
 </script>
 
