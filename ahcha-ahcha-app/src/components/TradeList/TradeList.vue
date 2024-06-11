@@ -1,4 +1,5 @@
 <template>
+
     <div class=""
     style=" width: 100%;">
         <div>
@@ -8,10 +9,30 @@
                  +' ~ '+
                  range.end.getFullYear()+'.'+(parseInt(range.end.getMonth())+1)}}
             </button>
-            <button class="btn btn-main"
-            style="margin-left:10px">
-                카테고리 선택 ▼
-            </button>
+            <span>
+                <button class="btn btn-main" 
+                style="margin-left:10px">
+                    카테고리 선택
+                </button>
+                <div class="selectCategoryBox card">
+                    <div class="group1">
+                        <button class="btn">지출</button>
+                        <button class="btn">수입</button>
+                    </div>
+                    <div class="form-check" style="margin-top: 10px;">
+                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked>
+                        <label class="form-check-label" for="check1">Option 1</label>
+                        </div>
+                        <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="check2" name="option2" value="something">
+                        <label class="form-check-label" for="check2">Option 2</label>
+                        </div>
+                        <button type="submit" class="btn mt-3 btn-main">적용하기</button>
+                    </div>
+              
+               
+            </span>
+          
         </div>
         <VDatePicker
             style="position:absolute;"
@@ -35,15 +56,18 @@
         </VDatePicker>
 
         <div class="sort_button_group">
-            <button class="btn" :class="[sortButtonGroup.sort=='all' ? selected_button : '']"
+            <button class="btn" :style="[sortButtonGroup.sort=='all' ? selectedButton : '']"
              style="border-top-right-radius: 0px;
             border-bottom-right-radius: 0px;"
-            @click="">전체</button>
+            @click="changeSortButton('all')">전체</button>
             <button class="btn" style="border-radius: 0px;"
-            @click="">지출</button>
+            @click="changeSortButton('outcome')"
+            :style="[sortButtonGroup.sort=='outcome' ? selectedButton : '']"
+            >지출</button>
             <button class="btn" style="border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;"
-            @click="">수입</button>
+            :style="[sortButtonGroup.sort=='income' ? selectedButton : '']"
+            @click="changeSortButton('income')">수입</button>
         </div>
 
         <div>
@@ -54,17 +78,17 @@
             </table>
         </div>
 
+       
 
     </div>
 </template>
 <script>
-import { ref, computed, reactive, provide } from 'vue';
+import { ref, computed, reactive, onMounted } from 'vue';
 
 export default {
-    props:{
-        tradeList:{}
-    },
+    props:["tradeList","category"],
     setup(props){
+        console.log(props.category);
       
         // 일주일 간의 거래 내역을 보여준다. 
         const showPeriod = 7;
@@ -85,7 +109,7 @@ export default {
             highlight: {
                 start: {
                     style: {
-                        backgroundColor: '#F1B73F', // blue
+                        backgroundColor: '#F1B73F',
                     },
                     contentStyle: {
                         color: '#ffffff' // color of the text
@@ -93,12 +117,12 @@ export default {
                 },
                 base: {
                     style: {
-                        backgroundColor: '#FBE4A7', // light blue
+                        backgroundColor: '#FBE4A7',
                     }
                 },
                 end: {
                     style: {
-                        backgroundColor: '#F1B73F', // blue
+                        backgroundColor: '#F1B73F', 
                     },
                     contentStyle: {
                         color: '#ffffff' // color of the text
@@ -118,15 +142,29 @@ export default {
 
         // sort는 all 또는 income 또는 outcome
         const sortButtonGroup = reactive({"sort":"all"})
-        const selected_button = {
-            style: {
-                backgroundColor: '#F1B73F', // blue
-            }
+        const selectedButton = {
+            backgroundColor: '#F1B73F'
+        }
+        function changeSortButton(value){
+            sortButtonGroup.sort = value;
         }
 
 
+        const outcomeCategory = ref({});
+        
+        onMounted(()=>{
+
+        
+            
+          
+        })
+        
+
+
+
+
         return {range, attr, isCalendarShow,dateToggle, sortButtonGroup,
-            selected_button
+            selectedButton, changeSortButton
         };
     }    
 }
@@ -134,10 +172,6 @@ export default {
 
 
 <style scoped>
-.datepicker{    
-position:absolute;
-width: 100%;
-}
 
 .sort_button_group button{
     background-color: #D7D7D7;
@@ -153,4 +187,24 @@ width: 100%;
     text-align: center;
 }
 
+
+.group1 button{
+    width: 50%;
+    border-color: white;
+}
+.group1 button:active{
+    border-color: white;
+}
+.dropdown-menu{
+    width:300px;
+}
+
+.selectCategoryBox{
+    position: absolute;
+    background-color: white;
+    width: 50%;
+    transform: translate(50%,50%);
+    
+    padding: 10px;
+}
 </style>

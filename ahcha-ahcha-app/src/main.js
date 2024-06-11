@@ -1,5 +1,5 @@
-import './assets/main.css'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+//import './assets/main.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // 거래 내역 보여줄 때 날짜 선택 위한 VCalendar
 // npm install v-calendar@next @popperjs/core
