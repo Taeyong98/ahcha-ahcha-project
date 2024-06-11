@@ -1,54 +1,53 @@
 <template>
     <div class="write">
-        <h2>기록</h2>
-        <hr/>
-        <div>
-            <div>
-            <input type="radio" id="type1" name="type" value="income" v-model="state.type">
-            <label for="type1">수입</label>
+        <div class="mb-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="type1" name="type" value="income" v-model="state.type">
+                <label class="form-check-label" for="type1">수입</label>
             </div>
-            <input type="radio" id="type2" name="type" value="outcome" v-model="state.type">
-            <label for="type2">지출</label><br/>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="type2" name="type" value="outcome" v-model="state.type">
+                <label class="form-check-label" for="type2">지출</label><br/>
+            </div>
         </div>
 
-        <div>
-            <label for="price">금액</label><br/>
-            <input type="number" id="price" v-model="state.price"><br/>
+        <div class="mb-3">
+            <label for="price" class="form-label">금액</label><br/>
+            <input type="text" class="form-control text-end" id="price" :value="formattedPrice" @input="formatPrice"><br/>
         </div>
         
-        <div>
-        <label for="category">카테고리</label><br/>
-            <select id="category" v-model="state.category">
+        <div class="mb-3">
+        <label for="category" class="form-label">카테고리</label><br/>
+            <select id="category" class="form-select" v-model="state.category">
                 <option value="" disabled>카테고리를 선택해주세요</option>
                 <option v-if="state.type==='income'" v-for="category in form.incomeCategories" :key="category">{{ category }}</option>
                 <option v-if="state.type==='outcome'" v-for="category in form.outcomeCategories" :key="category">{{ category }}</option>
             </select><br/>
         </div>
 
-        <div>
-            <label for="date">날짜</label><br/>
-            <input type="date" id="date" v-model="state.date"><br/>
+        <div class="mb-3">
+            <label for="date" class="form-label">날짜</label><br/>
+            <input class="form-control" type="date" id="date" v-model="state.date"><br/>
         </div>
 
-        <div>
-            <label for="desc">내역</label><br/>
-            <input type="text" id="desc" v-model="state.desc"><br/>
+        <div class="mb-3">
+            <label for="desc" class="form-label">내역</label><br/>
+            <input type="text"  class="form-control" id="desc" v-model="state.desc"><br/>
         </div>
         
-        <div>
-            <label for="memo">메모</label><br/>
-            <input type="text" id="memo" v-model="state.memo"><br/>
+        <div class="mb-3">
+            <label for="memo" class="form-label">메모</label><br/>
+            <textarea type="text" class="form-control" id="memo" v-model="state.memo" rows="5"></textarea><br/>
         </div>
 
-        <div>
-            <button type="button" v-on:click="handleClick">입력하기</button>
+        <div class="mb-3 button">
+            <button type="button" class="btn btn-warning" v-on:click="handleClick">입력하기</button>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { reactive} from 'vue';
-    import { defineEmits } from 'vue'
+    import { reactive, defineEmits, watch} from 'vue';
 
     const emit = defineEmits(['logChanged']);
 
@@ -67,6 +66,14 @@
         userid: ""
     });
 
+    let formattedPrice = "";
+    watch(
+        ()=>state.price,
+        (newValue) => {
+            formattedPrice=newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    )
+
 
     // onMounted(async()=>{
     //     try{
@@ -80,6 +87,13 @@
     //         console.error('Failed to fetch data:', error)
     //     }
     // });
+
+    const formatPrice = (event)=>{
+        let value = event.target.value;
+        value = value.replace(/,/g, '');
+        state.price = value;
+        event.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
 
     const submitForm = async function() {
         console.log('Current state : ', state);
@@ -104,9 +118,19 @@
             }
     }
 
+    const resetForm = () => {
+        state.type = "";
+        state.category = "";
+        state.price = "";
+        state.date = "";
+        state.desc = "";
+        state.memo = "";
+    }
+
     const handleClick = async () => {
         await submitForm();
         emit('logChanged');
+        resetForm();
     }
 </script>
 
@@ -117,5 +141,13 @@
         border-radius: 10px;
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .button
+    {
+        float: right;
+        margin-bottom: 2vh;
     }
 </style>
