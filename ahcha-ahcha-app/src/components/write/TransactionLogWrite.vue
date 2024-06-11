@@ -49,7 +49,7 @@
 <script setup>
     import { reactive, defineEmits, watch} from 'vue';
 
-    const emit = defineEmits(['logChanged']);
+    const emit = defineEmits(['submitForm']);
 
     const form = reactive({
         incomeCategories:["월급", "환급금", "기타"],
@@ -129,7 +129,7 @@
 
     const handleClick = async () => {
         await submitForm();
-        emit('logChanged');
+        emit('submitForm');
         resetForm();
     }
 </script>
