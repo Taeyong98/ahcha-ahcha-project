@@ -31,11 +31,11 @@
           const monthlyData = {};
           tradeList.forEach(entry => {
             const date = entry.date.toString();
-            console.log("date_Graph",date)
+            
             const year = date.slice(0, 4);
-            console.log("year",year)
+            
             const month = date.slice(5, 7);
-            console.log("month",month)
+            
   
             // 추출한 년도와 월을 결합한 키를 생성하고 이에 해당하는 데이터를 그룹화
             const key = `${year}-${month}`;
