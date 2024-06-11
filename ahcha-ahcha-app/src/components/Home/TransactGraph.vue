@@ -7,8 +7,7 @@
   <script>
   import { ref, onMounted,inject } from 'vue';
   import axios from 'axios';
-  import { Chart, registerables } from 'chart.js';
-
+  import { Chart,registerables } from 'chart.js';
   
   Chart.register(...registerables);
   
@@ -33,7 +32,6 @@
             const date = entry.date.toString();
             
             const year = date.slice(0, 4);
-            
             const month = date.slice(5, 7);
             
   
@@ -45,10 +43,13 @@
                 outcome: 0
               };
             }
+
+            const price = parseFloat(entry.price);
+
             if (entry.type === 'income') {
-              monthlyData[key].income += entry.price;
+              monthlyData[key].income += price;
             } else if (entry.type === 'outcome') {
-              monthlyData[key].outcome += entry.price;
+              monthlyData[key].outcome += price;
             }
           });
   
@@ -63,11 +64,13 @@
               outcomeData.push(monthlyData[key].outcome);
             }
           }
-  
+
           // 기존 차트가 있으면 파괴
           if (chartInstance) {
             chartInstance.destroy();
           }
+  
+          
   
           // Chart.js를 사용하여 그래프 생성
           const config = {
@@ -90,6 +93,7 @@
               ]
             }
           };
+        
   
           // 그래프를 캔버스에 렌더링
           const ctx = canvas.value.getContext('2d');
@@ -103,17 +107,17 @@
         // 초기 데이터 가져오기
         fetchData();
         
-  
-    //     // 주기적으로 데이터 업데이트
-    //     setInterval(fetchData, 60000); // 1분마다 데이터 업데이트
       });
-      const updateGraph = () => {
-      fetchData();
+      
+
+      const updateGraph = async () => {
+       await fetchData();
     };
   
       return {
         canvas,
-        updateGraph
+        updateGraph,
+
       };
     }
   };
