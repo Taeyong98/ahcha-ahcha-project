@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import TransactGraph from '../components/Home/TransactGraph.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+
+    <TransactGraph></TransactGraph>
+
 </template>
