@@ -40,7 +40,7 @@
             <textarea type="text" class="form-control" id="memo" v-model="state.memo" rows="5"></textarea><br/>
         </div>
 
-        <div>
+        <div class="mb-3 button">
             <button type="button" class="btn btn-warning" v-on:click="handleClick">입력하기</button>
         </div>
     </div>
@@ -145,8 +145,9 @@
         overflow-y: auto;
     }
 
-    button
+    .button
     {
         float: right;
+        margin-bottom: 2vh;
     }
 </style>
