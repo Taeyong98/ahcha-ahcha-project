@@ -2,7 +2,7 @@
     
     <div 
     style=" width: 70%; padding-top: 50px; margin: 0 auto;">
-        <div>
+        <div style="position: relative;">
             <button class="btn btn-main"
             @click="dateToggle()">
                 {{ dateFormatChange(range.start)
@@ -46,6 +46,13 @@
                         class="btn mt-3 btn-main" @click="categorySubmit()">적용하기</button>
                     </div>
                
+            </span>
+
+            <span v-if="checkedTradeList.list.length>0">
+                <button class="btn btn-delete"
+                @click="deleteTradeList()">
+                    선택항목 삭제
+                </button>
             </span>
 
           
@@ -104,22 +111,33 @@
 
 
         <div>
-            <table class="table" style="text-align: center">
+            <table class="table" style="text-align: center; " >
                 <thead>
-                    <tr>
+                    <tr style="border-color: #D7D7D7">
+                        <th></th>
                     <th>날짜</th>
                     <th>카테고리</th>
                     <th>금액</th>
                     <th>내용</th>
                     </tr>
                 </thead>
-                <tbody>
-                <tr v-for="t in showTradeList.value">
-                    <td>{{ getShowDate(t.date) }}</td>
-                    <td>{{ t.category }}</td>
-                    <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
-                    <td>{{ t.desc }}</td>
-                </tr>
+                <tbody v-for="(t, index) in showTradeList.value">
+    
+                    <!-- 날짜가 바뀔 때마다 구분선을 추가 -->
+                    <template v-if="index!=0 && (t.date) !== showTradeList.value[index - 1].date">
+                    <tr style="border-top: 1px solid #D7D7D7; ">
+                        <td colspan="5" style="padding:0px;"
+                       ></td>
+                    </tr>
+                    </template>
+                    <tr style="border-color: white;">
+                        <td><input type="checkbox" class="form-check-input" :id="t.id"
+                            v-model="checkedTradeList.list" :value="t.id"></td>
+                        <td>{{ getShowDate(t.date) }}</td>
+                        <td>{{ t.category }}</td>
+                        <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
+                        <td>{{ t.desc }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -153,6 +171,21 @@ export default {
             .replace(/\./g, '')
             .replace(/\s/g, '-');
         }
+        function dateFormatChangeByDot(d){ 
+            const dateString = d.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday:'long',
+            });
+            
+            const parts = dateString.split(' ');
+            const datePart = parts.slice(0, 3).join('');
+            const weekdayPart = parts[3].slice(0,1);
+
+            // 최종 형식으로 변환
+            return `${datePart} (${weekdayPart})`;
+        }
         // today = dateFormatChange(new Date());
         // startDate = dateFormatChange(startDate);
 
@@ -166,6 +199,9 @@ export default {
         // 체크박스에서 선택된 지출 카테고리 목록
         const checkedOutcomeCategory = reactive({list:[]});
         const checkedIncomeCategory = reactive({list:[]});
+
+        // 체크박스로 선택된 거래 항목
+        const checkedTradeList = reactive({list:[]});
 
         // sort는 [all 또는 income 또는 outcome]
         const sortButtonGroup = reactive({"sort":"all"})
@@ -191,9 +227,8 @@ export default {
         // 테이블에 날짜 항목 형식 변환
         function getShowDate(value){
             const date = new Date(value);
-            const d = date.getFullYear()+"."+(date.getMonth()+1)
-            +'.'+date.getDate();
-            return d;
+            return dateFormatChangeByDot(date);
+          
         }
 
 
@@ -273,6 +308,20 @@ export default {
             }
         }
 
+        const deleteTrade = async(id) => {
+            try{
+                const response = await axios.delete(BASEURL+"/trade_list/"+id);
+                if(response.status == 200){
+                    let index = states.tradeList.findIndex((item)=> item.id==id);
+                    states.tradeList.slice(index,1);
+                    filterAndSortTradeList();
+                }else{
+                    console.log("삭제 실패");
+                }
+            }catch(error){
+                alert("삭제 실패: "+error);
+            }
+        }
 
         // 날짜 순으로 tradeList 정렬함
         function sortTradeListByDate(list){
@@ -394,6 +443,15 @@ export default {
             filterAndSortTradeList();   
         }
 
+        // 선택 항목 삭제하는 함수
+        function deleteTradeList(){
+            checkedTradeList.list.forEach((item)=>{
+                deleteTrade(item.id);
+            })
+
+            checkedTradeList.list = [];
+
+        }
         
 
 
@@ -413,7 +471,7 @@ export default {
             changeTypeButton: changeSortButton, toggleCategoryModal, isShowModal, account
            , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
            ,changeDate, dateFormatChange, selectedButton2, checkedOutcomeCategory,checkedIncomeCategory,
-           categorySubmit
+           categorySubmit, dateFormatChangeByDot, checkedTradeList, deleteTradeList
         };
     }    
 }
@@ -484,5 +542,21 @@ export default {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     border-color:#D7D7D7;
+}
+
+.table th, .table td {
+  padding: 14px;
+}
+
+.btn-delete{
+    background-color:#FF3838;
+    color:white;
+    position:absolute;
+    right: 0;
+}
+
+.btn-delete:hover{
+    background-color: #FFE1E1;
+    color:#FF3838
 }
 </style>
