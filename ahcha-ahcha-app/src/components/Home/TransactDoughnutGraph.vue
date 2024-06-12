@@ -104,11 +104,16 @@
         // 페이지 로드 시 초기 데이터 가져오기
         fetchData();
       });
+
+      const updateGraph = async () => {
+      await fetchData();
+    };
   
       return {
         canvas,
         selectedMonth,
         fetchData,
+        updateGraph
       };
     }
   };

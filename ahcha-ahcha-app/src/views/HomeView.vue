@@ -6,13 +6,10 @@
     <div class="col1">
       <TransactTrack></TransactTrack>
     </div>
-
     <div class="col2 d-flex justify-content-center align-items-center">
-
       <TransactGraph ref="transactGraph"/>
       <TransactDoughnutGraph ref="transactGraph"/>
     </div>
-    
   </div>
       <WriteButton @logChanged="handleLogChanged"></WriteButton>
   </div>
@@ -27,12 +24,16 @@ import TransactDoughnutGraph from '@/components/Home/TransactDoughnutGraph.vue';
 
 // 전역으로 ref 변수들을 정의합니다.
 const transactGraph = ref(null);
+const transactDoughnutGraph = ref(null);
 const transactTrack = ref(null);
 
 // handleLogChanged 함수를 정의합니다.
 const handleLogChanged = () => {
   if (transactGraph.value) {
     transactGraph.value.updateGraph();
+  }
+  if (transactDoughnutGraph.value) {
+    transactDoughnutGraph.value.updateGraph();
   }
 
   if (transactTrack.value) {
@@ -42,7 +43,7 @@ const handleLogChanged = () => {
 </script>
 
 <style scoped>
-.container-full {
+.container-full{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +51,7 @@ const handleLogChanged = () => {
   /* border: #000000 solid 5px; */
 
   padding:10px;
-  margin:10px;
+  margin:30px;
 }
 
 .col1{
