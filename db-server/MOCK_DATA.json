@@ -58,10 +58,40 @@
     {
       "id": "fcc1",
       "type": "outcome",
-      "category": "교통비",
+      "category": "교통",
       "price": "5800",
       "date": "2024-06-09",
       "desc": "택시비",
+      "memo": "",
+      "userid": ""
+    },
+    {
+      "id": "0d77",
+      "type": "income",
+      "category": "기타",
+      "price": "30000",
+      "date": "2024-06-10",
+      "desc": "알바비",
+      "memo": "쿠팡 일급",
+      "userid": ""
+    },
+    {
+      "id": "581d",
+      "type": "outcome",
+      "category": "교통",
+      "price": "5500",
+      "date": "2024-06-21",
+      "desc": "카카오바이크",
+      "memo": "바이크타기~",
+      "userid": ""
+    },
+    {
+      "id": "5602",
+      "type": "outcome",
+      "category": "식비",
+      "price": "30000",
+      "date": "2024-06-12",
+      "desc": "저녁값",
       "memo": "",
       "userid": ""
     }

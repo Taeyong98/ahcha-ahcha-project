@@ -1,7 +1,7 @@
 <template>
     
     <div 
-    style=" width: 70%; padding-top: 30px; margin: 0 auto;">
+    style=" width: 70%; padding-top: 50px; margin: 0 auto;">
         <div>
             <button class="btn btn-main"
             @click="dateToggle()">
@@ -9,9 +9,9 @@
                  +' ~ '+
                  dateFormatChange(range.end)}}
             </button>
-            <span>
+            <span style="position: relative;">
                 <button class="btn btn-main" 
-                style="margin-left:10px"
+                style="margin-left:15px"
                 @click="toggleCategoryModal()">
                     카테고리 선택
                 </button>
@@ -19,25 +19,26 @@
                 v-if="isShowModal">
                     <div class="group1">
                         <button class="btn" @click="changeCategorySortButton('outcome')"
-                        :style="[categorySortSelected.sort=='outcome' ? selectedButton : '']"
+                        :style="[typeSelected.sort=='outcome' ? selectedButton2 : '']"
                         >지출</button>
                         <button class="btn" @click="changeCategorySortButton('income')"
-                        :style="[categorySortSelected.sort=='income' ? selectedButton : '']"
+                        :style="[typeSelected.sort=='income' ? selectedButton2 : '']"
                         >수입</button>
                     </div>
                         <div v-for="ic in states.outcomeCategory">
-                            <div class="form-check" style="margin-top: 10px;">
-                            <input type="checkbox" class="form-check-input" >
-                            <label class="form-check-label" for="check1">{{ ic }}</label>
+                            <div class="form-check" style="margin-top: 15px;">
+                            <input type="checkbox" class="form-check-input" :id="ic"
+                            v-model="checkedOutcomeCategory.list" :value="ic">
+                            <label class="form-check-label" :for="ic">{{ ic }}</label>
                             </div>
                         </div>
                         
                         <button type="submit" 
-                        class="btn mt-3 btn-main">적용하기</button>
+                        class="btn mt-3 btn-main" @click="categorySubmit()">적용하기</button>
                     </div>
-              
                
             </span>
+
           
         </div>
         <div v-if="isCalendarShow"
@@ -72,18 +73,18 @@
         
 
         <div class="sort_button_group">
-            <button class="btn" :style="[sortButtonGroup.sort=='all' ? selectedButton : '']"
+            <button class="btn" :style="[typeButtonGroup.sort=='all' ? selectedButton : '']"
              style="border-top-right-radius: 0px;
             border-bottom-right-radius: 0px;"
-            @click="changeSortButton('all')">전체</button>
+            @click="changeTypeButton('all')">전체</button>
             <button class="btn" style="border-radius: 0px;"
-            @click="changeSortButton('outcome')"
-            :style="[sortButtonGroup.sort=='outcome' ? selectedButton : '']"
+            @click="changeTypeButton('outcome')"
+            :style="[typeButtonGroup.sort=='outcome' ? selectedButton : '']"
             >지출</button>
             <button class="btn" style="border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;"
-            :style="[sortButtonGroup.sort=='income' ? selectedButton : '']"
-            @click="changeSortButton('income')">수입</button>
+            :style="[typeButtonGroup.sort=='income' ? selectedButton : '']"
+            @click="changeTypeButton('income')">수입</button>
         </div>
         <div style="margin-top: 2px; margin-bottom: 20px;" class="sort_button_group">
             <label>{{ account.all.toLocaleString() }}원</label>
@@ -153,6 +154,10 @@ export default {
         });
 
 
+        // 체크박스에서 선택된 지출 카테고리 목록
+        const checkedOutcomeCategory = reactive({list:[]});
+        const checkedIncomeCategory = reactive({list:[]});
+
         // sort는 [all 또는 income 또는 outcome]
         const sortButtonGroup = reactive({"sort":"all"})
         function changeSortButton(value){
@@ -164,11 +169,11 @@ export default {
         function toggleCategoryModal(){
             isShowModal.value = !(isShowModal.value);
         }
-        const categorySortSelected = reactive({
+        const typeSelected = reactive({
             "sort":"outcome"
         })
-        function changeCategorySortButton(value){
-            categorySortSelected.sort = value;
+        function changeTypeButton(value){
+            typeSelected.sort = value;
         }
 
         // 테이블에 날짜 항목 형식 변환
@@ -210,12 +215,7 @@ export default {
                 if(response.status == 200){
 
                     states.tradeList = response.data;
-                    // type에 맞게 보여지는 거래 내역을 필터링
-                    filterTradeListByType();
-                    // 날짜 순으로 거래 내역을 정렬
-                    sortTradeListByDate();
-                    filterTradeListByDate(range);
-                    console.log(range)
+                    filterAndSortTradeList();
                     
                     // 전체, 수입, 지출 요금 저장해두기.
                     states.tradeList.forEach((item)=>{
@@ -246,6 +246,13 @@ export default {
                     states.incomeCategory = response.data[0].income;
                     states.outcomeCategory = response.data[0].outcome;
 
+                    checkedOutcomeCategory.list = states.outcomeCategory;
+                    checkedIncomeCategory.list = states.incomeCategory;
+
+                    fetchTradeList();
+                    
+                    
+                    
                 }else{
                     alert("카테고리 내역을 가져오는데 실패하였습니다. ");
                 }
@@ -254,20 +261,10 @@ export default {
             }
         }
 
-        // type에 따라서 show되는 tradeList가 다르게 됨. 
-        function filterTradeListByType(){
-            if(sortButtonGroup.sort=='all'){
-                showTradeList.value = states.tradeList;
-                return;
-            }
-            showTradeList.value = states.tradeList.filter((item)=>{
-                return item.type==sortButtonGroup.sort   
-            })
-        }
 
         // 날짜 순으로 tradeList 정렬함
-        function sortTradeListByDate(){
-            showTradeList.value.sort((a, b)=>{
+        function sortTradeListByDate(list){
+            list.sort((a, b)=>{
                 if(a.date > b.date){
                     return -1;
                 }else if(a.date < b.date){
@@ -278,15 +275,44 @@ export default {
             });
         }
 
-        // 날짜에 맞게 보여지는 항목을 필터링한다. 
-        function filterTradeListByDate(r){
-            filterTradeListByType();
-            
+
+         // 날짜에 맞게 보여지는 항목을 필터링한다. 
+         function filterTradeListByDate(r, list){
+
             const start = dateFormatChange(r.start);
             const end = dateFormatChange(r.end);
-            showTradeList.value = showTradeList.value.filter((item)=>{
+            range.start = r.start;
+            range.end = r.end;
+            
+            showTradeList.value = list.filter((item)=>{
                 return item.date >= start && item.date <= end;
             })
+
+        }
+        // type에 따라서 show되는 tradeList가 다르게 됨. 
+        const filterTradeListByType=(list)=>{
+            if(sortButtonGroup.sort=='all'){
+                showTradeList.value = states.tradeList;
+                return;
+            }
+            showTradeList.value = list.filter((item)=>{
+                return item.type==sortButtonGroup.sort   
+            });
+        }
+
+        // 카테고리로 필터링함.
+        function filterTradeListByCategory(list){
+            showTradeList.value = list.filter((item)=>{
+                return checkedOutcomeCategory.list.includes(item.category) 
+                || checkedIncomeCategory.list.includes(item.category);
+            })
+        }
+
+        function filterAndSortTradeList(){
+            filterTradeListByType(states.tradeList);
+            filterTradeListByDate(range, showTradeList.value);
+            sortTradeListByDate(showTradeList.value);
+            filterTradeListByCategory(showTradeList.value);
         }
 
        
@@ -303,12 +329,12 @@ export default {
         function changeDate(r){
             dateToggle();
             // 날짜에 맞게 거래 내역을 필터링한다.
-            filterTradeListByDate(r);
+            filterTradeListByType(states.tradeList);
+            filterTradeListByDate(r, showTradeList.value);
+            sortTradeListByDate(showTradeList.value);
+            filterTradeListByCategory(showTradeList.value);
         }
 
-      
-
-        
 
         // 수입 텍스트 색, 지출 텍스트 색
         const incomeText = {color: "#0066FF"};
@@ -343,25 +369,40 @@ export default {
         const selectedButton = {
             backgroundColor: '#F1B73F'
         }
+        const selectedButton2 = {
+            backgroundColor:'#FBE4A7'
+        }
 
-        onMounted(()=>{
-            fetchTradeList();
-            fetchCategory();
-        });
+
+         
+      
+        // 카테고리 적용 버튼 클릭됨.
+        function categorySubmit(){
+            toggleCategoryModal();
+            filterAndSortTradeList();   
+        }
 
         
+
+
+        onMounted(()=>{
+            fetchCategory();
+           
+            
+        });
+        
         watch([sortButtonGroup], ([newType])=>{
-            console.log('aaa');
             // type이 바뀌면 보여지는 거래 내역 항목도 바뀐다. 
-            filterTradeListByType();
+            filterAndSortTradeList();
         });
 
 
-        return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
-            selectedButton, categorySortSelected,changeCategorySortButton,
-            changeSortButton, toggleCategoryModal, isShowModal, account
+        return {states, range, attr, isCalendarShow,dateToggle, typeButtonGroup: sortButtonGroup,
+            selectedButton, typeSelected: typeSelected,changeCategorySortButton: changeTypeButton,
+            changeTypeButton: changeSortButton, toggleCategoryModal, isShowModal, account
            , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
-           ,changeDate, dateFormatChange
+           ,changeDate, dateFormatChange, selectedButton2, checkedOutcomeCategory,
+           categorySubmit
         };
     }    
 }
@@ -416,10 +457,13 @@ export default {
 .selectCategoryBox{
     position: absolute;
     background-color: white;
-    width: 50%;
-    transform: translate(50%,20%);
-    
-    padding: 10px;
+    width: 170%;
+    padding: 17px;
+    left:0;
+    margin-left:15px;
+}
+.selectCategoryBox input{
+    padding-left: 10px;
 }
 
 
