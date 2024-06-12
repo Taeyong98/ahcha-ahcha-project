@@ -1,7 +1,15 @@
 <template>
-  <div class="container">
+
+
+<div class="container-full text-center">
+  <div class="row justify-content-center">
+    <div class="col1">
+      <TransactTrack></TransactTrack>
+    </div>
+    <div class="col2 d-flex justify-content-center align-items-center">
       <TransactGraph ref="transactGraph"/>
-      <TransactTrack/>
+    </div>
+  </div>
       <WriteButton @logChanged="handleLogChanged"></WriteButton>
   </div>
 </template>
@@ -22,15 +30,29 @@ if (transactGraph.value) {
 </script>
 
 <style scoped>
-.container {
+.container-full {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background-color: #f9f9f9;
+  justify-content: center;
+  border: #000000 solid 5px;
+
+  padding:20px;
+  margin:20px;
 }
 
-.container > * {
-  margin: 10px 0;
+.col1{
+  border: #FBE4A7 solid 3px;
+  padding:10px;
+  margin:10px;
+  width: 500px;
+  height: 500px;
+}
+
+.col2{
+  border: #FBE4A7 solid 3px;
+  margin:10px;
+  width: 700px;
+  height: 500px;
 }
 </style>
