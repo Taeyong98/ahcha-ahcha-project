@@ -24,7 +24,12 @@
                 </div>
             </div>
             <div>
-                <button class="me-5 mt-1" type="button" @click="fileInput.click()" style="display: flex; float: right">
+                <button
+                    class="me-5 mt-1 btn"
+                    type="button"
+                    @click="fileInput.click()"
+                    style="display: flex; float: right"
+                >
                     파일 첨부
                 </button>
             </div>
@@ -47,7 +52,7 @@
                 </div>
             </div>
             <div>
-                <button class="me-5 mt-1" type="button" style="display: flex; float: right">변경</button>
+                <button class="me-5 mt-1 btn" type="button" style="display: flex; float: right">변경</button>
             </div>
             <div class="container mt-2">
                 <h3 class="mt-3" style="display: flex; width: 200px; float: left">
@@ -60,7 +65,7 @@
                             type="password"
                             class="form-control"
                             id="pwd"
-                            placeholder="Enter password"
+                            placeholder="현재 비밀번호"
                             name="pswd"
                             required
                         />
@@ -68,7 +73,7 @@
                             type="password"
                             class="form-control mt-3"
                             id="pwd"
-                            placeholder="Enter password"
+                            placeholder="새로운 비밀번호"
                             name="pswd"
                             required
                         />
@@ -76,7 +81,7 @@
                 </div>
             </div>
             <div>
-                <button class="me-5 mt-1" type="button" style="display: flex; float: right">변경</button>
+                <button class="me-5 mt-1 btn" type="button" style="display: flex; float: right">변경</button>
             </div>
         </div>
     </div>
