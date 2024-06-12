@@ -4,9 +4,7 @@
       <button type="button" @click="changeDate(-1)"><</button>
       <span>{{ formatDate(currentDate) }}</span>
       <button type="button" @click="changeDate(1)">></button> <br/>
-  
-      <button @click="updateList">리셋</button> <br/>
-      
+
       <table>
         <tr v-for="trade in userTrades" :key="trade.date">
           <td>{{ trade.date }}</td>
