@@ -75,24 +75,31 @@
             @click="changeSortButton('income')">수입</button>
         </div>
         <div style="margin-top: 2px; margin-bottom: 20px;" class="sort_button_group">
-            <label>{{ account.all }}</label>
-            <label style="color: #FF3838;">{{ account.outcome }}</label>
-            <label style="color: #0066FF;">{{ account.income }}</label>
+            <label>{{ account.all }}원</label>
+            <label style="color: #FF3838;">{{ account.outcome }}원</label>
+            <label style="color: #0066FF;">{{ account.income }}원</label>
         </div>
 
 
 
         <div>
-            <table class="table">
-                <tr>
-                    <td>날짜</td>
-                    <td>카테고리</td>
-                    <td>금액</td>
-                    <td>내용</td>
-                </tr>
+            <table class="table" style="text-align: center">
+                <thead>
+                    <tr>
+                    <th>날짜</th>
+                    <th>카테고리</th>
+                    <th>금액</th>
+                    <th>내용</th>
+                    </tr>
+                </thead>
+                <tbody>
                 <tr v-for="t in states.tradeList">
                     <td>{{ getShowDate(t.date) }}</td>
+                    <td>{{ t.category }}</td>
+                    <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ t.price.toLocaleString() }}원</td>
+                    <td>{{ t.desc }}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
 
@@ -136,9 +143,9 @@ export default {
                         }
                     })
 
-                    account.all = income-outcome;
-                    account.income = income;
-                    account.outcome = outcome;
+                    account.all = (income-outcome).toLocaleString();
+                    account.income = income.toLocaleString();
+                    account.outcome = outcome.toLocaleString();
 
                     console.log(income)
                     console.log(outcome);
@@ -252,13 +259,15 @@ export default {
         }
 
         
+        const incomeText = {color: "#0066FF"};
+        const outcomeText = {color:"#FF3838"}
 
 
 
         return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
             selectedButton, categorySortSelected,changeCategorySortButton,
             changeSortButton, toggleCategoryModal, isShowModal, account
-           , getShowDate
+           , getShowDate, incomeText, outcomeText,
         };
     }    
 }
