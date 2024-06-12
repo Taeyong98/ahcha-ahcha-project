@@ -4,12 +4,12 @@
         <div class="container">
           <ul class="nav">
             <li><router-link to="/">홈</router-link></li>
-            <li><router-link to="/">소개</router-link></li>
+            <li><router-link to="/">거래</router-link></li>
             <li><router-link to="/">아차챌린지</router-link></li>
           </ul>
           <ul class="nav justify-content-end">
-            <li><router-link to="/"><img src="../assets/navbar/profile.png" alt=""/></router-link></li>
-            <li><router-link to="/"><img src="../assets/navbar/setting.png" alt=""/></router-link></li>
+            <li><router-link to="/"><img src="../../assets/navbar/profile.png" alt=""/></router-link></li>
+            <li><router-link to="/"><img src="../../assets/navbar/setting.png" alt=""/></router-link></li>
           </ul> 
         </div>
       </nav>
@@ -35,7 +35,7 @@
   
   .nav li, .nav justify-content-end li {
     float: left;
-    padding: 20px;
+    padding: 5px 10px 0 10px;
   }
   
   .nav li:last-child, .nav justify-content-end li:last-child {
@@ -56,7 +56,7 @@
     height: 30px; /* 아이콘의 높이 조정 */
   }
   
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 100px) {
     .navbar {
       display: flex;
       justify-content: space-between; /* 왼쪽과 오른쪽 여백을 최대화하여 요소들을 좌우로 분산 배치 */
@@ -64,7 +64,7 @@
       height: 60px; /* 네비게이션 바의 적절한 높이 설정 */
       width: 100%;
       background-color: #FBE4A7;
-      padding: 0;
+      padding: 0 10px 0 10px;
     }
   
     .nav-left, .nav-right {
