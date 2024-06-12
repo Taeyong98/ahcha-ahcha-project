@@ -94,6 +94,16 @@
       "desc": "저녁값",
       "memo": "",
       "userid": ""
+    },
+    {
+      "id": "cc9b",
+      "type": "income",
+      "category": "월급",
+      "price": "2000000",
+      "date": "2024-06-10",
+      "desc": "KB 월급",
+      "memo": "5월달 근무 월급",
+      "userid": ""
     }
   ],
   "user_list": [

@@ -1,27 +1,12 @@
 
 
 <template>
-
-
-<div class="container-full text-center">
-  <div class="row justify-content-center">
-    <div class="col1">
-      <TransactTrack></TransactTrack>
-    </div>
-
-    <div class="col2 d-flex justify-content-center align-items-center">
-
-      <TransactGraph ref="transactGraph"/>
-      <TransactDoughnutGraph ref="transactGraph"/>
-    </div>
-    
-  </div>
-      <WriteButton @logChanged="handleLogChanged"></WriteButton>
-  </div>
+  <TradeListView></TradeListView>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import TradeListView from './TradeListView.vue';
 import TransactGraph from '../components/Home/TransactGraph.vue';
 import WriteButton from '@/components/write/WriteButton.vue';
 import TransactTrack from '@/components/Home/TransactTrack.vue';
