@@ -25,10 +25,19 @@
                         :style="[typeSelected.sort=='income' ? selectedButton2 : '']"
                         >수입</button>
                     </div>
-                        <div v-for="ic in states.outcomeCategory">
+                        <div v-for="ic in states.outcomeCategory"
+                        v-if="typeSelected.sort=='outcome'">
                             <div class="form-check" style="margin-top: 15px;">
                             <input type="checkbox" class="form-check-input" :id="ic"
                             v-model="checkedOutcomeCategory.list" :value="ic">
+                            <label class="form-check-label" :for="ic">{{ ic }}</label>
+                            </div>
+                        </div>
+                        <div v-for="ic in states.incomeCategory"
+                        v-if="typeSelected.sort=='income'">
+                            <div class="form-check" style="margin-top: 15px;">
+                            <input type="checkbox" class="form-check-input" :id="ic"
+                            v-model="checkedIncomeCategory.list" :value="ic">
                             <label class="form-check-label" :for="ic">{{ ic }}</label>
                             </div>
                         </div>
@@ -173,7 +182,10 @@ export default {
             "sort":"outcome"
         })
         function changeTypeButton(value){
+            // 카테고리 필터링 모달에서 '지출' 또는 '수입' 버튼 누르면 호출됨
+            // categoryType은 'income'또는'outcome'
             typeSelected.sort = value;
+            console.log(typeSelected.sort);
         }
 
         // 테이블에 날짜 항목 형식 변환
@@ -216,7 +228,7 @@ export default {
 
                     states.tradeList = response.data;
                     filterAndSortTradeList();
-                    
+
                     // 전체, 수입, 지출 요금 저장해두기.
                     states.tradeList.forEach((item)=>{
                         if(item.type=='income'){
@@ -303,8 +315,8 @@ export default {
         // 카테고리로 필터링함.
         function filterTradeListByCategory(list){
             showTradeList.value = list.filter((item)=>{
-                return checkedOutcomeCategory.list.includes(item.category) 
-                || checkedIncomeCategory.list.includes(item.category);
+                return (item.type=='outcome' && checkedOutcomeCategory.list.includes(item.category))
+                || (item.type=='income' && checkedIncomeCategory.list.includes(item.category));
             })
         }
 
@@ -387,8 +399,7 @@ export default {
 
         onMounted(()=>{
             fetchCategory();
-           
-            
+        
         });
         
         watch([sortButtonGroup], ([newType])=>{
@@ -401,7 +412,7 @@ export default {
             selectedButton, typeSelected: typeSelected,changeCategorySortButton: changeTypeButton,
             changeTypeButton: changeSortButton, toggleCategoryModal, isShowModal, account
            , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
-           ,changeDate, dateFormatChange, selectedButton2, checkedOutcomeCategory,
+           ,changeDate, dateFormatChange, selectedButton2, checkedOutcomeCategory,checkedIncomeCategory,
            categorySubmit
         };
     }    
