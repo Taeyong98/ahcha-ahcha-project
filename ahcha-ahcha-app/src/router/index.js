@@ -5,7 +5,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/ahcha/',
       name: 'home',
       component: HomeView
     },
@@ -15,12 +15,12 @@ const router = createRouter({
       component: () => import('../views/TradeListView.vue')
    
     },
-    // {
-    //   path: '/ahcha/challenge',
-    //   name: 'ahcha challenge',
-    //   component: () => import('../views/ChallengeView.vue')
+    {
+      path: '/ahcha/challenge',
+      name: 'ahcha challenge',
+      component: () => import('../views/ChallengeView.vue')
    
-    // },
+    },
     {
       path: '/ahcha/mypage/:user_id',
       name: 'mypage',

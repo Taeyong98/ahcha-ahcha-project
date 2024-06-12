@@ -22,7 +22,7 @@ import WriteButton from '@/components/write/WriteButton.vue';
 import TransactTrack from '@/components/Home/TransactTrack.vue';
 import TransactDoughnutGraph from '@/components/Home/TransactDoughnutGraph.vue';
 
-// 전역으로 ref 변수들을 정의합니다.
+// 전역으로 ref 변수들을 정의
 const transactGraph = ref(null);
 const transactDoughnutGraph = ref(null);
 const transactTrack = ref(null);
@@ -33,7 +33,7 @@ const handleLogChanged = () => {
     transactGraph.value.updateGraph();
   }
   if (transactDoughnutGraph.value) {
-    transactDoughnutGraph.value.updateGraph();
+    transactDoughnutGraph.value.updateDoughnutGraph();
   }
 
   if (transactTrack.value) {
@@ -68,7 +68,7 @@ const handleLogChanged = () => {
   border: #FBE4A7 solid 3px;
   border-radius: 10px;
   margin:10px;
-  width: 1200px;
+  width: 1100px;
   height: 550px;
   padding:20px;
   margin-left: 50px; /* col2의 왼쪽에 50px 간격 */
