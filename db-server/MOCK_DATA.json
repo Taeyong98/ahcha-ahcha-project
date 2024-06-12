@@ -1,0 +1,127 @@
+{
+  "user_category": [
+    {
+      "id": "ted",
+      "income": [
+        "월급",
+        "환급금",
+        "기타"
+      ],
+      "outcome": [
+        "식비",
+        "교통",
+        "기타"
+      ]
+    }
+  ],
+  "trade_list": [
+    {
+      "type": "income",
+      "category": "월급",
+      "price": 30000000,
+      "date": 1717984021,
+      "desc": "KB 월급",
+      "memo": "월급이당~",
+      "user_id": "ted",
+      "id": "cd4d"
+    },
+    {
+      "type": "outcome",
+      "category": "식비",
+      "price": 30000,
+      "desc": "외식",
+      "date": 1717984023,
+      "memo": "옴아카세",
+      "user_id": "ted",
+      "id": "cb79"
+    },
+    {
+      "id": "370a",
+      "type": "income",
+      "category": "기타",
+      "price": "3000",
+      "date": "2024-06-12",
+      "desc": "용돈",
+      "memo": "부모님께 용돈",
+      "userid": ""
+    },
+    {
+      "id": "1ce9",
+      "type": "outcome",
+      "category": "식비",
+      "price": "5000",
+      "date": "2024-06-11",
+      "desc": "간식비",
+      "memo": "편의점 간식 구매",
+      "userid": ""
+    },
+    {
+      "id": "4d75",
+      "type": "income",
+      "category": "환급금",
+      "price": "3000",
+      "date": "2024-06-12",
+      "desc": "dkssud",
+      "memo": "asdf",
+      "userid": ""
+    },
+    {
+      "id": "a303",
+      "type": "outcome",
+      "category": "기타",
+      "price": "20000",
+      "date": "2024-06-12",
+      "desc": "생활용품 구매",
+      "memo": "",
+      "userid": ""
+    },
+    {
+      "id": "67a7",
+      "type": "income",
+      "category": "월급",
+      "price": "2323",
+      "date": "",
+      "desc": "",
+      "memo": "",
+      "userid": ""
+    },
+    {
+      "id": "7c0c",
+      "type": "income",
+      "category": "기타",
+      "price": "2000",
+      "date": "2024-06-12",
+      "desc": "",
+      "memo": "",
+      "userid": ""
+    },
+    {
+      "id": "f491",
+      "type": "income",
+      "category": "월급",
+      "price": "1111",
+      "date": "",
+      "desc": "",
+      "memo": "",
+      "userid": ""
+    }
+  ],
+  "user_list": [
+    {
+      "id": "ted",
+      "user_name": "태용",
+      "user_nickname": "태용",
+      "phone_num": "010-4444-4444",
+      "email": "example@example.com",
+      "password": "akf;ajkd;ajf"
+    },
+    {
+      "id": "ted1",
+      "user_name": "태용1",
+      "user_nickname": "태용1",
+      "phone_num": "010-4444-4444",
+      "email": "example@example.com",
+      "password": "akf;ajkd;ajf"
+    }
+  ]
+}
