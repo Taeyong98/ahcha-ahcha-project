@@ -14,7 +14,7 @@
         <div class="progress-bar-container">
             <div :class="progressBarClass" :style="{ width: progressBarWidth + '%' }"></div>
         </div>
-        <p :class="textClass">진행률: {{ progressBarWidth.toFixed(2) }}%</p>
+        <p :class="textClass">실패확률: {{ progressBarWidth.toFixed(2) }}%</p>
     </div>
 </template>
 
