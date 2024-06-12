@@ -1,6 +1,6 @@
 <template>
     
-    <div class=""
+    <div class="container"
     style=" width: 100%;">
         <div>
             <button class="btn btn-main"
@@ -119,6 +119,40 @@ export default {
     },
     //props:["states"],
     setup(){
+
+        // sort는 [all 또는 income 또는 outcome]
+        const sortButtonGroup = reactive({"sort":"all"})
+        const selectedButton = {
+            backgroundColor: '#F1B73F'
+        }
+        function changeSortButton(value){
+            sortButtonGroup.sort = value;
+        }
+
+        const isShowModal = ref(false);
+        // 카테고리 모달 띄울 토글
+        function toggleCategoryModal(){
+            isShowModal.value = !(isShowModal.value);
+        }
+        const categorySortSelected = reactive({
+            "sort":"outcome"
+        })
+        function changeCategorySortButton(value){
+            categorySortSelected.sort = value;
+        }
+
+        // 테이블에 날짜 항목 형식 변환
+        function getShowDate(value){
+            const date = new Date(value);
+            const d = date.getFullYear()+"."+(date.getMonth()+1)
+            +'.'+date.getDate();
+            return d;
+        }
+
+
+
+        // 전체, 수입, 지출에 맞게 얼마있는지 적용. 
+        // axios로 가져올 때 반영됨
         const account = reactive({
             "all":0,
             "income":0,
@@ -133,6 +167,8 @@ export default {
             outcomeCategory:[]
         })
 
+        const showTradeList = reactive({});
+
         let income = 0;
         let outcome = 0;
         const fetchTradeList = async () => {
@@ -140,8 +176,10 @@ export default {
                 const response = await axios.get(BASEURL+'/trade_list');
                 if(response.status == 200){
 
-                    states.tradeList= response.data;
-                    console.log(states.tradeList);
+                    states.tradeList = response.data;
+
+                    
+                    // 전체, 수입, 지출 요금 저장해두기.
                     states.tradeList.forEach((item)=>{
                         if(item.type=='income'){
                             income += parseInt(item.price);
@@ -178,11 +216,6 @@ export default {
             }
         }
 
-        onMounted(()=>{
-            fetchTradeList();
-            fetchCategory();
-        });
-
         // 일주일 간의 거래 내역을 보여준다. 
         const showPeriod = 7;
         const today = new Date();
@@ -193,10 +226,23 @@ export default {
             start: startDate,
             end: today,
         });
+        const isCalendarShow = ref(false);
+    
+
+        function dateToggle(){
+            if(isCalendarShow.value){
+                isCalendarShow.value = false;
+            }else{
+                isCalendarShow.value = true;
+            }
+        }
+
 
         
-        const isCalendarShow = ref(false);
 
+        // 수입 텍스트 색, 지출 텍스트 색
+        const incomeText = {color: "#0066FF"};
+        const outcomeText = {color:"#FF3838"}
         // 캘린더에서 선택된 기간의 색상을 위한 값
         const attr= {
             highlight: {
@@ -224,54 +270,16 @@ export default {
             }
         };
 
-        function dateToggle(){
-            if(isCalendarShow.value){
-                isCalendarShow.value = false;
-            }else{
-                isCalendarShow.value = true;
-            }
-        }
 
-
-        // sort는 all 또는 income 또는 outcome
-        const sortButtonGroup = reactive({"sort":"all"})
-        const selectedButton = {
-            backgroundColor: '#F1B73F'
-        }
-        function changeSortButton(value){
-            sortButtonGroup.sort = value;
-        }
-
-        const isShowModal = ref(false);
-        // 카테고리 모달 띄울 토글
-        function toggleCategoryModal(){
-            isShowModal.value = !(isShowModal.value);
-        }
-        const categorySortSelected = reactive({
-            "sort":"outcome"
-        })
-        function changeCategorySortButton(value){
-            categorySortSelected.sort = value;
-        }
-
-
-        function getShowDate(value){
-            const date = new Date(value);
-            const d = date.getFullYear()+"."+(date.getMonth()+1)
-            +'.'+date.getDate();
-            return d;
-        }
-
-        
-        const incomeText = {color: "#0066FF"};
-        const outcomeText = {color:"#FF3838"}
-
-
+        onMounted(()=>{
+            fetchTradeList();
+            fetchCategory();
+        });
 
         return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
             selectedButton, categorySortSelected,changeCategorySortButton,
             changeSortButton, toggleCategoryModal, isShowModal, account
-           , getShowDate, incomeText, outcomeText,fetchTradeList
+           , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
         };
     }    
 }
