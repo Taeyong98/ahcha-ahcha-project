@@ -43,10 +43,10 @@ const handleLogChanged = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: #000000 solid 5px;
+  /* border: #000000 solid 5px; */
 
-  padding:20px;
-  margin:20px;
+  padding:10px;
+  margin:10px;
 }
 
 .col1{
