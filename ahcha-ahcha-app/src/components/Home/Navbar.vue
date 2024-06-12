@@ -36,12 +36,13 @@
 
 /* 네비게이션 바 스타일 */
 .navbar {
-  
+
   background-color: #FBE4A7;
   height: 70px;
   display: flex;
   align-items: center;
   padding: 0 10px;
+
 }
 
 /* 홈페이지 이름 스타일 */
@@ -76,11 +77,7 @@
   text-decoration: none;
 }
 
-.inButton{
-  background-color: rgb(255, 255, 255);
 
-  
-}
 
 
 /* 이미지 스타일 */
