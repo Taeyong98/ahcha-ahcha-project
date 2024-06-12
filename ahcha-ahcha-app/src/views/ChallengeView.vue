@@ -1,16 +1,25 @@
 <template>
-    <div>
-        <SpendLessChallenge
-                v-for="(challenge, index) in spendLessList"
-                :key="index"
-                :challenge="challenge"
-        />
-        <SavingChallenge
-                v-for="(challenge, index) in savingList"
-                :key = "index"
-                :challenge="challenge"
-        />
+    
+    <div class="mt-3">
+        
+        <button type="button" class="btn btn-warning mb-3">목표 추가하기</button>
+        <div class="row justify-content-center">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <SpendLessChallenge
+                        v-for="(challenge, index) in spendLessList"
+                        :key="index"
+                        :challenge="challenge"
+                />
+            </div>
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <SavingChallenge
+                        v-for="(challenge, index) in savingList"
+                        :key = "index"
+                        :challenge="challenge"
+                />
+            </div>
         </div>
+    </div>
 </template>
 
 <script setup>
@@ -44,5 +53,17 @@ const savingList = computed(()=>{
 </script>
 
 <style scoped>
+
+.mt-3{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+}
+
+.row{
+    width:80%;
+}
+
 
 </style>
