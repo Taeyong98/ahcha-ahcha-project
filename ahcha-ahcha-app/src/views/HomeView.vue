@@ -1,8 +1,12 @@
-
+<script setup>
+</script>
 
 <template>
+
     <TransactGraph ref="transactGraph"/>
     <WriteButton @logChanged="handleLogChanged"></WriteButton>
+
+
 </template>
 
 
