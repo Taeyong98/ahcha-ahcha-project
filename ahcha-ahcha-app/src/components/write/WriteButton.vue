@@ -30,6 +30,14 @@ const handleSubmitForm = () => {
     const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
     modalInstance.hide();
 
+    //검은 배경이 남아있는지 확인하는 코드 추가
+    modalElement.addEventListener('hidden.bs.modal', ()=>{
+        const backdrop = document.querySelector('.modal-backdrop');
+        if(backdrop){
+            backdrop.parentNode.removeChild(backdrop);
+        }
+    });
+
     emit('logChanged');
 };
 </script>
