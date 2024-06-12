@@ -1,13 +1,13 @@
 <template>
     
-    <div class="container"
-    style=" width: 100%;">
+    <div 
+    style=" width: 70%; padding-top: 30px; margin: 0 auto;">
         <div>
             <button class="btn btn-main"
             @click="dateToggle()">
-                {{range.start.getFullYear()+'.'+(parseInt(range.start.getMonth())+1)
+                {{ dateFormatChange(range.start)
                  +' ~ '+
-                 range.end.getFullYear()+'.'+(parseInt(range.end.getMonth())+1)}}
+                 dateFormatChange(range.end)}}
             </button>
             <span>
                 <button class="btn btn-main" 
@@ -32,20 +32,23 @@
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn mt-3 btn-main">적용하기</button>
+                        <button type="submit" 
+                        class="btn mt-3 btn-main">적용하기</button>
                     </div>
               
                
             </span>
           
         </div>
-        <VDatePicker
-            style="position:absolute;"
+        <div v-if="isCalendarShow"
+        class="calendar-container">
+            <VDatePicker
+            style="border-color: white"
             v-model.range="range"
-            @drag="dragValue = $event"
+            @drag="range = $event"
             :select-attribute="attr"
             :drag-attribute="attr"
-            v-if="isCalendarShow"
+            
         >
             <template #day-popover="{ format }"
             >
@@ -54,11 +57,19 @@
                 -
                 {{ format(range.end, 'MMM D') }}
             
-                <button>적용</button>    
+                   
             </div>
             
             </template>
         </VDatePicker>
+        <div>
+            <button class="btn btn-main"
+            style="float:right; margin: 12px 10px;"
+            @click="changeDate(range)">
+            적용</button>
+        </div>
+        </div>
+        
 
         <div class="sort_button_group">
             <button class="btn" :style="[sortButtonGroup.sort=='all' ? selectedButton : '']"
@@ -93,7 +104,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr v-for="t in states.tradeList">
+                <tr v-for="t in showTradeList.value">
                     <td>{{ getShowDate(t.date) }}</td>
                     <td>{{ t.category }}</td>
                     <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
@@ -102,7 +113,6 @@
                 </tbody>
             </table>
         </div>
-
         <WriteButton @logChanged="fetchTradeList"></WriteButton>
         
     </div>
@@ -110,7 +120,7 @@
 
 
 <script>
-import { ref, computed, reactive, onMounted } from 'vue';
+import { ref, computed, reactive, onMounted, watch } from 'vue';
 import WriteButton from '@/components/write/WriteButton.vue';
 import axios from 'axios';
 export default {
@@ -119,12 +129,32 @@ export default {
     },
     //props:["states"],
     setup(){
+         // 처음엔 일주일 간의 거래 내역을 보여준다. 
+        const showPeriod = 7;
+        let today = new Date();
+        let startDate = new Date(new Date().setDate(today.getDate()-showPeriod));
+
+        function dateFormatChange(d){
+            return d.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            }) // 객체 {year, month, day}를 인수로 넣은 이유는 월, 일을 두자리로 만들기 위함 
+            .replace(/\./g, '')
+            .replace(/\s/g, '-');
+        }
+        // today = dateFormatChange(new Date());
+        // startDate = dateFormatChange(startDate);
+
+        // 선택되는 날짜 데이터
+        const range = reactive({
+            start: startDate,
+            end: today,
+        });
+
 
         // sort는 [all 또는 income 또는 outcome]
         const sortButtonGroup = reactive({"sort":"all"})
-        const selectedButton = {
-            backgroundColor: '#F1B73F'
-        }
         function changeSortButton(value){
             sortButtonGroup.sort = value;
         }
@@ -167,7 +197,10 @@ export default {
             outcomeCategory:[]
         })
 
-        const showTradeList = reactive({});
+        // 새 데이터 불러올 때, '전체.지출.수입' 버튼 클릭됐을 때
+        // 수정되어야 하는 데이터.
+        // 테이블 내역을 보여주는 데이터.
+        const showTradeList = reactive({value:{}});
 
         let income = 0;
         let outcome = 0;
@@ -177,7 +210,12 @@ export default {
                 if(response.status == 200){
 
                     states.tradeList = response.data;
-
+                    // type에 맞게 보여지는 거래 내역을 필터링
+                    filterTradeListByType();
+                    // 날짜 순으로 거래 내역을 정렬
+                    sortTradeListByDate();
+                    filterTradeListByDate(range);
+                    console.log(range)
                     
                     // 전체, 수입, 지출 요금 저장해두기.
                     states.tradeList.forEach((item)=>{
@@ -216,19 +254,44 @@ export default {
             }
         }
 
-        // 일주일 간의 거래 내역을 보여준다. 
-        const showPeriod = 7;
-        const today = new Date();
-        let startDate = new Date(new Date().setDate(today.getDate()-showPeriod));
+        // type에 따라서 show되는 tradeList가 다르게 됨. 
+        function filterTradeListByType(){
+            if(sortButtonGroup.sort=='all'){
+                showTradeList.value = states.tradeList;
+                return;
+            }
+            showTradeList.value = states.tradeList.filter((item)=>{
+                return item.type==sortButtonGroup.sort   
+            })
+        }
 
-        // 선택되는 날짜 데이터
-        const range = reactive({
-            start: startDate,
-            end: today,
-        });
+        // 날짜 순으로 tradeList 정렬함
+        function sortTradeListByDate(){
+            showTradeList.value.sort((a, b)=>{
+                if(a.date > b.date){
+                    return -1;
+                }else if(a.date < b.date){
+                    return 1;
+                }else{
+                    return 1;
+                }
+            });
+        }
+
+        // 날짜에 맞게 보여지는 항목을 필터링한다. 
+        function filterTradeListByDate(r){
+            filterTradeListByType();
+            
+            const start = dateFormatChange(r.start);
+            const end = dateFormatChange(r.end);
+            showTradeList.value = showTradeList.value.filter((item)=>{
+                return item.date >= start && item.date <= end;
+            })
+        }
+
+       
+        // 달력 보여지는지 결정하는 변수
         const isCalendarShow = ref(false);
-    
-
         function dateToggle(){
             if(isCalendarShow.value){
                 isCalendarShow.value = false;
@@ -237,6 +300,13 @@ export default {
             }
         }
 
+        function changeDate(r){
+            dateToggle();
+            // 날짜에 맞게 거래 내역을 필터링한다.
+            filterTradeListByDate(r);
+        }
+
+      
 
         
 
@@ -269,17 +339,29 @@ export default {
                 }
             }
         };
-
+        // 테이블에서 선택된 종류(전체, 지출, 수입 중) 버튼 색
+        const selectedButton = {
+            backgroundColor: '#F1B73F'
+        }
 
         onMounted(()=>{
             fetchTradeList();
             fetchCategory();
         });
 
+        
+        watch([sortButtonGroup], ([newType])=>{
+            console.log('aaa');
+            // type이 바뀌면 보여지는 거래 내역 항목도 바뀐다. 
+            filterTradeListByType();
+        });
+
+
         return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
             selectedButton, categorySortSelected,changeCategorySortButton,
             changeSortButton, toggleCategoryModal, isShowModal, account
            , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
+           ,changeDate, dateFormatChange
         };
     }    
 }
@@ -335,8 +417,17 @@ export default {
     position: absolute;
     background-color: white;
     width: 50%;
-    transform: translate(50%,50%);
+    transform: translate(50%,20%);
     
     padding: 10px;
+}
+
+
+.calendar-container{
+    position:absolute; background-color: white;
+    border: solid 1px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-color:#D7D7D7;
 }
 </style>
