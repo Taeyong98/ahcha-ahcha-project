@@ -26,17 +26,18 @@ import {defineEmits} from 'vue';
 const emit = defineEmits(['logChanged'])
 
 const handleSubmitForm = () => {
-    const modalElement = document.getElementById('transactionModal');
-    const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
-    modalInstance.hide();
-
+    const closeButton = document.querySelector('#transactionModal .btn-close');
+    if (closeButton) {
+        closeButton.click();
+    }
     emit('logChanged');
 };
 </script>
 
 <style scoped>
+
 .floating-button {
-    position: fixed;
+    position : fixed;
     bottom: 20px;
     right: 20px;
     width: 60px;
