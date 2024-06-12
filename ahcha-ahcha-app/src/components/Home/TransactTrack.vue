@@ -1,13 +1,17 @@
 <template>
     <div>
-      <h2>거래 목록</h2>
-      <button type="button" @click="changeDate(-1)"><</button>
-      <span>{{ formatDate(currentDate) }}</span>
-      <button type="button" @click="changeDate(1)">></button> <br/>
-  
-      <button @click="updateList">리셋</button> <br/>
+      <div class="upperPart">
+        <h3>거래 목록</h3>
+        <div id="decideDate">
+          <button type="button" @click="changeDate(-1)"><</button>
+          <span>{{ formatDate(currentDate) }}</span>
+          <button type="button" @click="changeDate(1)">></button> 
+        </div>
+      </div>
       
-      <table>
+  
+      
+      <table class="content">
         <tr v-for="trade in userTrades" :key="trade.date">
           <td>{{ trade.date }}</td>
           <td>{{ trade.category }}</td>
@@ -78,15 +82,41 @@
   
   <style scoped>
   .income {
-    color: #ff3838;
-  }
-  
-  .outcome {
-    color: #0066ff;
-  }
-  
-  td {
-    padding: 15px 25px;
-  }
+  color: #ff3838;
+}
+
+.outcome {
+  color: #0066ff;
+}
+
+td {
+  padding: 15px 25px;
+}
+
+h3{
+  margin-bottom:15px;
+}
+.upperPart {
+  border: #FBE4A7 solid 5px;
+  background-color: #FBE4A7;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center; /* Center align text inside the div */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align items horizontally */
+}
+
+
+#decideDate {
+  border: white solid 5px;
+  background-color: white;
+  width: 200px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between; /* Space out the button and span elements */
+  align-items: center; /* Center align items vertically */
+}
+
   </style>
   

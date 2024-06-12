@@ -6,6 +6,7 @@
     <div class="col1">
       <TransactTrack></TransactTrack>
     </div>
+
     <div class="col2 d-flex justify-content-center align-items-center">
       <TransactGraph ref="transactGraph"/>
     </div>
@@ -50,16 +51,22 @@ const handleLogChanged = () => {
 
 .col1{
   border: #FBE4A7 solid 3px;
+  border-radius: 10px;
   padding:10px;
   margin:10px;
   width: 500px;
   height: 500px;
+  margin-right: 50px; /* col1의 오른쪽에 50px 간격 */
 }
 
 .col2{
   border: #FBE4A7 solid 3px;
+  border-radius: 10px;
   margin:10px;
   width: 700px;
   height: 500px;
+  margin-left: 50px; /* col2의 왼쪽에 50px 간격 */
 }
+
+
 </style>

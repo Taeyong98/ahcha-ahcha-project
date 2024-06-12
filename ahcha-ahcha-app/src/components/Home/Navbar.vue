@@ -38,6 +38,7 @@
 .navbar {
 
   background-color: #FBE4A7;
+  
   height: 70px;
   display: flex;
   align-items: center;
