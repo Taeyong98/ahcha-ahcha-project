@@ -1,6 +1,9 @@
 <template>
     <div :class="containerClass">
-        <h5>소비 줄이기<span :class="remainingDaysClass">{{ remainingDaysText }}</span></h5>
+        <h5 class="header">
+            {{challenge.title}}
+            <span :class="remainingDaysClass">{{ remainingDaysText }}</span>
+        </h5>
         목표 금액 : <span :class="textClass">{{ formatCurrency(challenge.goal) }}</span> <br/>
         시간 기한 : <span :class="textClass">{{ challenge.from_date }}</span> <br/>
         목표 기한 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
@@ -161,8 +164,15 @@ hr {
     margin: 10px 0;
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
 .remaining-days-header {
-    float: right;
     margin-left: 2px;
     color: #FF6347;
     font-size: medium;
