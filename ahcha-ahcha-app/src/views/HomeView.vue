@@ -1,10 +1,3 @@
-<<<<<<< test1
-
-
-<template>
-  <TradeListView></TradeListView>
-</template>
-=======
 <template>
 
 <div class="container-full text-center">
