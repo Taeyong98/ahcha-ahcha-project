@@ -15,7 +15,6 @@
     }
   ],
   "trade_list": [
-
     {
       "id": "370a",
       "type": "income",
@@ -44,6 +43,26 @@
       "date": "2024-06-12",
       "desc": "dkssud",
       "memo": "asdf",
+      "userid": ""
+    },
+    {
+      "id": "45d4",
+      "type": "income",
+      "category": "월급",
+      "price": "44444",
+      "date": "2024-06-15",
+      "desc": "",
+      "memo": "",
+      "userid": ""
+    },
+    {
+      "id": "fcc1",
+      "type": "outcome",
+      "category": "교통비",
+      "price": "5800",
+      "date": "2024-06-09",
+      "desc": "택시비",
+      "memo": "",
       "userid": ""
     }
   ],
