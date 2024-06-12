@@ -243,6 +243,7 @@ export default {
 
 
         const BASEURL = "http://localhost:3001";
+        const userid = "ted";
         const states = reactive({
             tradeList:[],
             incomeCategory:[],
@@ -254,28 +255,13 @@ export default {
         // 테이블 내역을 보여주는 데이터.
         const showTradeList = reactive({value:{}});
 
-        let income = 0;
-        let outcome = 0;
         const fetchTradeList = async () => {
             try{
-                const response = await axios.get(BASEURL+'/trade_list');
+                const response = await axios.get(BASEURL+'/trade_list?='+userid);
                 if(response.status == 200){
 
                     states.tradeList = response.data;
                     filterAndSortTradeList();
-
-                    // 전체, 수입, 지출 요금 저장해두기.
-                    states.tradeList.forEach((item)=>{
-                        if(item.type=='income'){
-                            income += parseInt(item.price);
-                        }else{
-                            outcome += parseInt(item.price);
-                        }
-                    })
-
-                    account.all = (income-outcome);
-                    account.income = income;
-                    account.outcome = outcome;
 
 
                 }else{
@@ -309,11 +295,14 @@ export default {
         }
 
         const deleteTrade = async(id) => {
+            console.log(id);
             try{
                 const response = await axios.delete(BASEURL+"/trade_list/"+id);
                 if(response.status == 200){
                     let index = states.tradeList.findIndex((item)=> item.id==id);
-                    states.tradeList.slice(index,1);
+                    console.log(index);
+                    states.tradeList.splice(index,1);
+
                     filterAndSortTradeList();
                 }else{
                     console.log("삭제 실패");
@@ -374,6 +363,21 @@ export default {
             filterTradeListByDate(range, showTradeList.value);
             sortTradeListByDate(showTradeList.value);
             filterTradeListByCategory(showTradeList.value);
+
+            let income = 0;
+            let outcome = 0;
+            // 전체, 수입, 지출 요금 저장해두기.
+            states.tradeList.forEach((item)=>{
+                if(item.type=='income'){
+                    income += parseInt(item.price);
+                }else{
+                    outcome += parseInt(item.price);
+                }
+            });
+
+            account.all = (income-outcome);
+            account.income = income;
+            account.outcome = outcome;
         }
 
        
@@ -445,8 +449,9 @@ export default {
 
         // 선택 항목 삭제하는 함수
         function deleteTradeList(){
+            console.log(checkedTradeList.list);
             checkedTradeList.list.forEach((item)=>{
-                deleteTrade(item.id);
+                deleteTrade(item);
             })
 
             checkedTradeList.list = [];
