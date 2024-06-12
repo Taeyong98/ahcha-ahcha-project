@@ -12,10 +12,12 @@
   </div>
       <WriteButton @logChanged="handleLogChanged"></WriteButton>
   </div>
+>>>>>>> dev
 
 </template>
 <script setup>
 import { ref } from 'vue';
+import TradeListView from './TradeListView.vue';
 import TransactGraph from '../components/Home/TransactGraph.vue';
 import WriteButton from '@/components/write/WriteButton.vue';
 import TransactTrack from '@/components/Home/TransactTrack.vue';
