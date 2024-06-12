@@ -75,9 +75,9 @@
             @click="changeSortButton('income')">수입</button>
         </div>
         <div style="margin-top: 2px; margin-bottom: 20px;" class="sort_button_group">
-            <label>{{ account.all }}원</label>
-            <label style="color: #FF3838;">{{ account.outcome }}원</label>
-            <label style="color: #0066FF;">{{ account.income }}원</label>
+            <label>{{ account.all.toLocaleString() }}원</label>
+            <label style="color: #FF3838;">{{ account.outcome.toLocaleString() }}원</label>
+            <label style="color: #0066FF;">{{ account.income.toLocaleString() }}원</label>
         </div>
 
 
@@ -96,20 +96,26 @@
                 <tr v-for="t in states.tradeList">
                     <td>{{ getShowDate(t.date) }}</td>
                     <td>{{ t.category }}</td>
-                    <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ t.price.toLocaleString() }}원</td>
+                    <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
                     <td>{{ t.desc }}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
+        <WriteButton @logChanged="fetchTradeList"></WriteButton>
+        
     </div>
 </template>
 
 <script>
 import { ref, computed, reactive, onMounted } from 'vue';
+import WriteButton from '@/components/write/WriteButton.vue';
 import axios from 'axios';
 export default {
+    components:{
+        WriteButton
+    },
     //props:["states"],
     setup(){
         const account = reactive({
@@ -143,12 +149,9 @@ export default {
                         }
                     })
 
-                    account.all = (income-outcome).toLocaleString();
-                    account.income = income.toLocaleString();
-                    account.outcome = outcome.toLocaleString();
-
-                    console.log(income)
-                    console.log(outcome);
+                    account.all = (income-outcome);
+                    account.income = income;
+                    account.outcome = outcome;
 
 
                 }else{
@@ -267,7 +270,7 @@ export default {
         return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
             selectedButton, categorySortSelected,changeCategorySortButton,
             changeSortButton, toggleCategoryModal, isShowModal, account
-           , getShowDate, incomeText, outcomeText,
+           , getShowDate, incomeText, outcomeText,fetchTradeList
         };
     }    
 }
