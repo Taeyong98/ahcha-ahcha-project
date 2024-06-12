@@ -26,25 +26,18 @@ import {defineEmits} from 'vue';
 const emit = defineEmits(['logChanged'])
 
 const handleSubmitForm = () => {
-    const modalElement = document.getElementById('transactionModal');
-    const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
-    modalInstance.hide();
-
-    //검은 배경이 남아있는지 확인하는 코드 추가
-    modalElement.addEventListener('hidden.bs.modal', ()=>{
-        const backdrop = document.querySelector('.modal-backdrop');
-        if(backdrop){
-            backdrop.parentNode.removeChild(backdrop);
-        }
-    });
-
+    const closeButton = document.querySelector('#transactionModal .btn-close');
+    if (closeButton) {
+        closeButton.click();
+    }
     emit('logChanged');
 };
 </script>
 
 <style scoped>
+
 .floating-button {
-    position: fixed;
+    position : fixed;
     bottom: 20px;
     right: 20px;
     width: 60px;
