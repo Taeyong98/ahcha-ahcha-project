@@ -2,7 +2,7 @@
     <div>
         <MyPageProfile v-bind:user="user" v-bind:image="user.user.image" />
         <hr />
-        <MyPageEdit v-bind:user="user" v-on:fetch-data="fetchData" />
+        <MyPageEdit v-bind:user="user" @fetch-data="fetchData" />
     </div>
 </template>
 <script>

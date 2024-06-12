@@ -40,7 +40,7 @@
             </div>
             <div class="container mt-2">
                 <h3 class="mt-3" style="display: flex; width: 200px; float: left">
-                    <label for="uname" class="form-label" @click="changeNickname">닉네임 변경</label>
+                    <label for="uname" class="form-label">닉네임 변경</label>
                 </h3>
 
                 <div style="display: flex; justify-content: right; align-items: center; float: right; margin-right: 40">
@@ -51,7 +51,7 @@
                             id="uname"
                             :placeholder="user.user.user_nickname"
                             name="uname"
-                            v-bind="newNickname"
+                            v-model="newNickname"
                             required
                         />
                     </form>
@@ -62,6 +62,7 @@
                     class="me-5 mt-1 btn"
                     type="button"
                     style="display: flex; float: right; background-color: #fbe4a7"
+                    @click="changeNickname"
                 >
                     변경
                 </button>
@@ -99,6 +100,7 @@
                     class="me-5 mt-1 btn"
                     type="button"
                     style="display: flex; float: right; background-color: #fbe4a7"
+                    @click="changePassword"
                 >
                     변경
                 </button>
@@ -108,10 +110,11 @@
 </template>
 <script>
 import axios from 'axios';
-import { reactive, ref, computed } from 'vue';
+import {ref} from 'vue';
 export default {
     props: ['user'],
-    setup(props) {
+    emits: ["fetchData"],
+    setup(props,context) {
         const file = ref(null);
         const filePreview = ref(null);
         const fileInput = ref(null);
@@ -119,7 +122,6 @@ export default {
         const newNickname = ref('');
         const currentPassword = ref('');
         const newPassword = ref('');
-
         const handleDragOver = (event) => {
             event.currentTarget.classList.add('drag-over');
         };
@@ -183,11 +185,16 @@ export default {
                     console.log(err);
                 })
                 .finally(() => {
-                    console.log('emit작동해야함');
+                    file.value = null;
+                    context.emit("fetchData");
                 });
         };
 
         const changeNickname = () => {
+            if(!newNickname.value){
+                alert("닉네임을 입력해주세요!")
+                return;
+            }
             axios
                 .put('http://localhost:3001/user_list/ted', {
                     id: props.user.user.id,
@@ -207,12 +214,17 @@ export default {
                     console.log(err);
                 })
                 .finally(() => {
-                    console.log('emit작동해야함');
+                    newNickname.value = ""
+                    context.emit("fetchData");
                 });
         };
         const changePassword = () => {
             if (currentPassword.value != props.user.user.password) {
                 alert('현재 비밀번호가 다릅니다!');
+                return;
+            }
+            if(!newPassword.value){
+                alert("새로운 비밀번호를 입력해주세요!")
                 return;
             }
             axios
@@ -234,7 +246,9 @@ export default {
                     console.log(err);
                 })
                 .finally(() => {
-                    console.log('emit작동해야함');
+                    currentPassword.value = ""
+                    newPassword.value = ""
+                    context.emit("fetchData");
                 });
         };
 
