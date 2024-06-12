@@ -18,24 +18,29 @@
                     <input type="file" multiple ref="fileInput" @change="handleFileChange" style="display: none" />
                 </div>
                 <div v-if="file" class="ms-1">
-                    {{ file.name }}<img :src="`${filePreview}`" width="30" /><button type="button" class="ms-2">
+                    {{ file.name }}<img :src="`${filePreview}`" width="30" /><button
+                        type="button"
+                        class="ms-2 btn"
+                        style="background-color: #fbe4a7"
+                        @click="changeProfile"
+                    >
                         프로필 변경
                     </button>
                 </div>
             </div>
             <div>
                 <button
-                    class="me-5 mt-1 btn"
+                    class="me-5 mt-2 btn"
                     type="button"
                     @click="fileInput.click()"
-                    style="display: flex; float: right"
+                    style="display: flex; float: right; background-color: #fbe4a7"
                 >
                     파일 첨부
                 </button>
             </div>
             <div class="container mt-2">
                 <h3 class="mt-3" style="display: flex; width: 200px; float: left">
-                    <label for="uname" class="form-label">닉네임 변경</label>
+                    <label for="uname" class="form-label" @click="changeNickname">닉네임 변경</label>
                 </h3>
 
                 <div style="display: flex; justify-content: right; align-items: center; float: right; margin-right: 40">
@@ -44,15 +49,22 @@
                             type="text"
                             class="form-control"
                             id="uname"
-                            placeholder="새로운 닉네임을 입력하세요"
+                            :placeholder="user.user.user_nickname"
                             name="uname"
+                            v-bind="newNickname"
                             required
                         />
                     </form>
                 </div>
             </div>
             <div>
-                <button class="me-5 mt-1 btn" type="button" style="display: flex; float: right">변경</button>
+                <button
+                    class="me-5 mt-1 btn"
+                    type="button"
+                    style="display: flex; float: right; background-color: #fbe4a7"
+                >
+                    변경
+                </button>
             </div>
             <div class="container mt-2">
                 <h3 class="mt-3" style="display: flex; width: 200px; float: left">
@@ -67,32 +79,47 @@
                             id="pwd"
                             placeholder="현재 비밀번호"
                             name="pswd"
+                            v-model="currentPassword"
                             required
                         />
                         <input
                             type="password"
                             class="form-control mt-3"
-                            id="pwd"
+                            id="pwd2"
                             placeholder="새로운 비밀번호"
                             name="pswd"
+                            v-model="newPassword"
                             required
                         />
                     </form>
                 </div>
             </div>
             <div>
-                <button class="me-5 mt-1 btn" type="button" style="display: flex; float: right">변경</button>
+                <button
+                    class="me-5 mt-1 btn"
+                    type="button"
+                    style="display: flex; float: right; background-color: #fbe4a7"
+                >
+                    변경
+                </button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { reactive, ref } from 'vue';
+import axios from 'axios';
+import { reactive, ref, computed } from 'vue';
 export default {
-    setup() {
+    props: ['user'],
+    setup(props) {
         const file = ref(null);
         const filePreview = ref(null);
         const fileInput = ref(null);
+        const imgBase64 = ref(null);
+        const newNickname = ref('');
+        const currentPassword = ref('');
+        const newPassword = ref('');
+
         const handleDragOver = (event) => {
             event.currentTarget.classList.add('drag-over');
         };
@@ -125,18 +152,106 @@ export default {
                 alert('이미지 파일만 올려주세요.');
                 return;
             }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64String = event.target.result.split(',')[1];
+                imgBase64.value = base64String;
+            };
+            reader.readAsDataURL(selectedFile);
+
             file.value = selectedFile;
             filePreview.value = URL.createObjectURL(selectedFile);
+        };
+
+        const changeProfile = () => {
+            axios
+                .put('http://localhost:3001/user_list/ted', {
+                    id: props.user.user.id,
+                    user_name: props.user.user.user_name,
+                    user_nickname: props.user.user.user_nickname,
+                    phone_num: props.user.user.phone_num,
+                    email: props.user.user.email,
+                    image: imgBase64.value,
+                    password: props.user.user.password,
+                })
+                .then((res) => {
+                    if (res.status == 200) {
+                        alert('적용 완료되었습니다.');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    console.log('emit작동해야함');
+                });
+        };
+
+        const changeNickname = () => {
+            axios
+                .put('http://localhost:3001/user_list/ted', {
+                    id: props.user.user.id,
+                    user_name: props.user.user.user_name,
+                    user_nickname: newNickname.value,
+                    phone_num: props.user.user.phone_num,
+                    email: props.user.user.email,
+                    image: props.user.user.image,
+                    password: props.user.user.password,
+                })
+                .then((res) => {
+                    if (res.status == 200) {
+                        alert('적용 완료되었습니다.');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    console.log('emit작동해야함');
+                });
+        };
+        const changePassword = () => {
+            if (currentPassword.value != props.user.user.password) {
+                alert('현재 비밀번호가 다릅니다!');
+                return;
+            }
+            axios
+                .put('http://localhost:3001/user_list/ted', {
+                    id: props.user.user.id,
+                    user_name: props.user.user.user_name,
+                    user_nickname: props.user.user.user_nickname,
+                    phone_num: props.user.user.phone_num,
+                    email: props.user.user.email,
+                    image: props.user.user.image,
+                    password: newPassword.value,
+                })
+                .then((res) => {
+                    if (res.status == 200) {
+                        alert('적용 완료되었습니다.');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    console.log('emit작동해야함');
+                });
         };
 
         return {
             file,
             filePreview,
             fileInput,
+            currentPassword,
+            newNickname,
+            newPassword,
             handleDragOver,
             handleDragLeave,
             handleDrop,
             handleFileChange,
+            changeProfile,
+            changeNickname,
+            changePassword,
         };
     },
 };
