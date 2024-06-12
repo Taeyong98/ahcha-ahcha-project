@@ -20,12 +20,19 @@ import TransactGraph from '../components/Home/TransactGraph.vue';
 import WriteButton from '@/components/write/WriteButton.vue';
 import TransactTrack from '@/components/Home/TransactTrack.vue';
 
+// 전역으로 ref 변수들을 정의합니다.
 const transactGraph = ref(null);
+const transactTrack = ref(null);
 
+// handleLogChanged 함수를 정의합니다.
 const handleLogChanged = () => {
-if (transactGraph.value) {
-  transactGraph.value.updateGraph();
-}
+  if (transactGraph.value) {
+    transactGraph.value.updateGraph();
+  }
+
+  if (transactTrack.value) {
+    transactTrack.value.updateList();
+  }
 };
 </script>
 
