@@ -43,8 +43,9 @@ const handleSubmitForm = () => {
 </script>
 
 <style scoped>
+
 .floating-button {
-    position: fixed;
+    position : fixed;
     bottom: 20px;
     right: 20px;
     width: 60px;
