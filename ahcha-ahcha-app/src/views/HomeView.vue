@@ -1,34 +1,46 @@
 <template>
+  <div class="container-full text-center">
+    <div class="row justify-content-center">
+      <!-- 왼쪽 위젯 -->
+      <div class="left_widget col-md-6 mb-3 mb-md-0">
+        <TransactTrack ref="transactTrack" class="widget"/>
+      </div>
 
-<div class="container-full text-center">
-  <div class="row justify-content-center">
-    <div class="col1">
-      <TransactTrack></TransactTrack>
+      <!-- 오른쪽 위젯 -->
+      <div class="right_widget col-md-6" >
+        <div class="row justify-content-center">
+          
+          <div class="row">
+          <!-- 그래프 위젯 -->
+          <div class="widgetGraph">
+            <div class="mb-3">
+              <TransactGraph ref="transactGraph" width="400px" height="500px"/>
+            </div>
+            <div >
+              <TransactDoughnutGraph ref="transactDoughnutGraph" width="400px" height="500px"/>
+            </div>
+          </div>  
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col2 d-flex justify-content-center align-items-center">
-      <TransactGraph ref="transactGraph"/>
-      <TransactDoughnutGraph ref="transactGraph"/>
-    </div>
+    <!-- 로그 변경 버튼 -->
+    <WriteButton @logChanged="handleLogChanged" class="write-button"></WriteButton>
   </div>
-      <WriteButton @logChanged="handleLogChanged"></WriteButton>
-  </div>
->>>>>>> dev
-
 </template>
+
+
 <script setup>
 import { ref } from 'vue';
-import TradeListView from './TradeListView.vue';
 import TransactGraph from '../components/Home/TransactGraph.vue';
 import WriteButton from '@/components/write/WriteButton.vue';
 import TransactTrack from '@/components/Home/TransactTrack.vue';
 import TransactDoughnutGraph from '@/components/Home/TransactDoughnutGraph.vue';
 
-// 전역으로 ref 변수들을 정의
 const transactGraph = ref(null);
 const transactDoughnutGraph = ref(null);
 const transactTrack = ref(null);
 
-// handleLogChanged 함수를 정의합니다.
 const handleLogChanged = () => {
   if (transactGraph.value) {
     transactGraph.value.updateGraph();
@@ -36,7 +48,6 @@ const handleLogChanged = () => {
   if (transactDoughnutGraph.value) {
     transactDoughnutGraph.value.updateDoughnutGraph();
   }
-
   if (transactTrack.value) {
     transactTrack.value.updateList();
   }
@@ -44,40 +55,75 @@ const handleLogChanged = () => {
 </script>
 
 <style scoped>
-.container-full{
+.container-full {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* border: #000000 solid 5px; */
-
-  padding:10px;
-  margin:30px;
-}
-
-.col1{
-  border: #FBE4A7 solid 3px;
+  padding: 20px;
+  margin: 30px;
+  background-color: #f9f9f9;
   border-radius: 10px;
-  padding:10px;
-  margin:10px;
-  width: 400px;
-  height: 550px;
-  margin-right: 50px; /* col1의 오른쪽에 50px 간격 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.col2{
-  border: #FBE4A7 solid 3px;
+.left_widget{
+
+  margin: 0px;
+
+} 
+.justify-content-center{
+
+  margin: 0px;
+
+}
+
+.row {
+  width: 100%;
+  margin-bottom: 200px;
+  margin:0px;
+}
+
+.container-full{
+
+  margin:0px;
+
+} 
+.col-md-6 {
+  margin-bottom: 20px;
+}
+
+.left_widget,
+.right_widget {
+  display: flex;
+  justify-content: center;
+}
+
+.widget {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
   border-radius: 10px;
-  margin:10px;
-  width: 1100px;
-  height: 550px;
-  padding:20px;
-  margin-left: 50px; /* col2의 왼쪽에 50px 간격 */
-  margin-bottom: 50px; /* 두 컴포넌트 사이에 50px 간격을 줍니다 */
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* widget의 최대 너비 설정 */
+  height: 600px; /* widget의 고정 높이 설정 */
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 추가 */
 }
 
+.widgetGraph {
+  display: flex;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px; /* widgetGraph의 최대 너비 설정 */
+  height: 600px; /* widgetGraph의 고정 높이 설정 */
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 추가 */
+}
 
 
 
 </style>
-
