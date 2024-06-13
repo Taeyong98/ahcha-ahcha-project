@@ -16,33 +16,80 @@
           <li class="icon">
             <router-link to="/ahcha/mypage/:user_id"><img src="../../assets/navbar/profile.png" alt="Profile"/></router-link>
           </li>
-          <li class="icon">
-            <router-link to=""><img src="../../assets/navbar/setting.png" alt="Setting"/></router-link>
+
+          <!-- 설정 버튼에 기능 넣기 -->
+          <div>
+            <li class="icon" @click="toggleSettings">
+            <img src="../../assets/navbar/setting.png" alt="Setting"/>
           </li>
-        </ul>
+          <div v-if="showSettings" class="settings-dropdown">
+      <div class="settings-option">
+        <label>
+          알림 설정
+          <input type="checkbox" >
+        </label>
       </div>
-    </nav>
-  </header>
+      <div class="settings-option">
+        <label>
+          테마 변경
+          <input type="checkbox" v-model="modeChangeEnabled" @change="toggleTheme">
+        </label>
+      </div>
+    </div>
+    </div>
+  </ul>
+  </div>
+  </nav>
+</header>
 </template>
 
+<script setup>
+import { ref, watch } from 'vue';
+
+const showSettings = ref(false);
+const notificationsEnabled = ref(false);
+const modeChangeEnabled = ref(false);
+
+const toggleSettings = () => {
+  showSettings.value = !showSettings.value;
+};
+
+const toggleTheme = () => {
+  if (modeChangeEnabled.value) {
+    document.documentElement.classList.add('mode-change');
+  } else {
+    document.documentElement.classList.remove('mode-change');
+  }
+};
+
+// 테마 변경 기능
+watch(modeChangeEnabled, (newValue) => {
+  localStorage.setItem('modeChange', newValue);
+});
+
+// 테마 변경 초기화
+if (localStorage.getItem('modeChange') === 'true') {
+  modeChangeEnabled.value = true;
+  document.documentElement.classList.add('mode-change');
+}
+
+
+</script>
+
 <style scoped>
-/* 네비게이션 바 스타일 */
 .navbar {
   background-color: #FBE4A7;
-  
   height: 70px;
   display: flex;
   align-items: center;
   padding: 0 10px;
 }
 
-/* 홈페이지 이름 스타일 */
 .navbar-brand {
   font-size: 24px;
   font-weight: bold;
 }
 
-/* 컨테이너 스타일 */
 .container {
   display: flex;
   justify-content: space-between;
@@ -51,7 +98,6 @@
   max-width: 1200px;
 }
 
-/* 내비게이션 스타일 */
 .nav {
   list-style: none;
   display: flex;
@@ -61,7 +107,7 @@
 }
 
 .nav li {
-  padding: 0 10px; /* 패딩을 줄여서 공간 확보 */
+  padding: 0 10px;
 }
 
 .nav li a {
@@ -69,47 +115,47 @@
   text-decoration: none;
 }
 
-/* 이미지 스타일 */
 .nav .icon img {
   width: 30px;
   height: 30px;
 }
 
-/* 반응형 디자인을 위한 미디어 쿼리 */
-@media (max-width: 520px) {
-  .navbar {
-    height: auto;
-    padding: 5px;
-  }
+.settings-dropdown {
+  position: absolute; 
+  top: 70px;
 
-  .container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .nav li {
-    padding: 5px; /* 패딩을 줄여서 공간 확보 */
-    text-align: center;
-    flex: 1 1 1; /* 요소들이 동일한 비율로 늘어나도록 설정 */
-  }
-
-  .navbar-brand {
-    margin-bottom: 10px;
-    font-size: 20px;
-  }
-
-  .nav .icon img {
-    width: 20px;
-    height: 20px; /* 이미지 크기 줄이기 */
-  }
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
 }
 
-</style>
+.settings-option {
+  margin-bottom: 10px;
+}
 
+.settings-option label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+}
+
+
+.mode-change {
+  background-color: #333;
+}
+
+.mode-change .navbar {
+  background-color: #d3f59c;
+  color:rgb(0, 0, 0);
+}
+
+.mode-change .settings-dropdown {
+  background-color: #f5ffe4;
+  border:#afafaf2f solid 3px;
+
+}
+</style>
