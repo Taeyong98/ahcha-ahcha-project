@@ -1,4 +1,5 @@
 <template>
+
     <div class=""
     style=" width: 100%;">
         <div>
@@ -8,10 +9,35 @@
                  +' ~ '+
                  range.end.getFullYear()+'.'+(parseInt(range.end.getMonth())+1)}}
             </button>
-            <button class="btn btn-main"
-            style="margin-left:10px">
-                카테고리 선택 ▼
-            </button>
+            <span>
+                <button class="btn btn-main" 
+                style="margin-left:10px"
+                @click="toggleCategoryModal()">
+                    카테고리 선택
+                </button>
+                <div class="selectCategoryBox card"
+                v-if="isShowModal">
+                    <div class="group1">
+                        <button class="btn" @click="changeCategorySortButton('outcome')"
+                        :style="[categorySortSelected.sort=='outcome' ? selectedButton : '']"
+                        >지출</button>
+                        <button class="btn" @click="changeCategorySortButton('income')"
+                        :style="[categorySortSelected.sort=='income' ? selectedButton : '']"
+                        >수입</button>
+                    </div>
+                        <div v-for="ic in states.outcomeCategory">
+                            <div class="form-check" style="margin-top: 10px;">
+                            <input type="checkbox" class="form-check-input" >
+                            <label class="form-check-label" for="check1">{{ ic }}</label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn mt-3 btn-main">적용하기</button>
+                    </div>
+              
+               
+            </span>
+          
         </div>
         <VDatePicker
             style="position:absolute;"
@@ -35,37 +61,127 @@
         </VDatePicker>
 
         <div class="sort_button_group">
-            <button class="btn" :class="[sortButtonGroup.sort=='all' ? selected_button : '']"
+            <button class="btn" :style="[sortButtonGroup.sort=='all' ? selectedButton : '']"
              style="border-top-right-radius: 0px;
             border-bottom-right-radius: 0px;"
-            @click="">전체</button>
+            @click="changeSortButton('all')">전체</button>
             <button class="btn" style="border-radius: 0px;"
-            @click="">지출</button>
+            @click="changeSortButton('outcome')"
+            :style="[sortButtonGroup.sort=='outcome' ? selectedButton : '']"
+            >지출</button>
             <button class="btn" style="border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;"
-            @click="">수입</button>
+            :style="[sortButtonGroup.sort=='income' ? selectedButton : '']"
+            @click="changeSortButton('income')">수입</button>
+        </div>
+        <div style="margin-top: 2px; margin-bottom: 20px;" class="sort_button_group">
+            <label>{{ account.all.toLocaleString() }}원</label>
+            <label style="color: #FF3838;">{{ account.outcome.toLocaleString() }}원</label>
+            <label style="color: #0066FF;">{{ account.income.toLocaleString() }}원</label>
         </div>
 
+
+
         <div>
-            <table>
-                <tr v-for="t in tradeList">
+            <table class="table" style="text-align: center">
+                <thead>
+                    <tr>
+                    <th>날짜</th>
+                    <th>카테고리</th>
+                    <th>금액</th>
+                    <th>내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr v-for="t in states.tradeList">
+                    <td>{{ getShowDate(t.date) }}</td>
+                    <td>{{ t.category }}</td>
+                    <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
                     <td>{{ t.desc }}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
 
-
+        <WriteButton @logChanged="fetchTradeList"></WriteButton>
+        
     </div>
 </template>
-<script>
-import { ref, computed, reactive, provide } from 'vue';
 
+<script>
+import { ref, computed, reactive, onMounted } from 'vue';
+import WriteButton from '@/components/write/WriteButton.vue';
+import axios from 'axios';
 export default {
-    props:{
-        tradeList:{}
+    components:{
+        WriteButton
     },
-    setup(props){
-      
+    //props:["states"],
+    setup(){
+        const account = reactive({
+            "all":0,
+            "income":0,
+            "outcome":0
+        });
+
+
+        const BASEURL = "http://localhost:3001";
+        const states = reactive({
+            tradeList:[],
+            incomeCategory:[],
+            outcomeCategory:[]
+        })
+
+        let income = 0;
+        let outcome = 0;
+        const fetchTradeList = async () => {
+            try{
+                const response = await axios.get(BASEURL+'/trade_list');
+                if(response.status == 200){
+
+                    states.tradeList= response.data;
+                    console.log(states.tradeList);
+                    states.tradeList.forEach((item)=>{
+                        if(item.type=='income'){
+                            income += parseInt(item.price);
+                        }else{
+                            outcome += parseInt(item.price);
+                        }
+                    })
+
+                    account.all = (income-outcome);
+                    account.income = income;
+                    account.outcome = outcome;
+
+
+                }else{
+                    alert("거래 내역을 가져오는데 실패하였습니다. ");
+                }
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        const fetchCategory = async () => {
+            try{
+                const response = await axios.get(BASEURL+'/user_category?id=ted');
+                if(response.status == 200){
+                    states.incomeCategory = response.data[0].income;
+                    states.outcomeCategory = response.data[0].outcome;
+
+                }else{
+                    alert("카테고리 내역을 가져오는데 실패하였습니다. ");
+                }
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        onMounted(()=>{
+            fetchTradeList();
+            fetchCategory();
+        });
+
         // 일주일 간의 거래 내역을 보여준다. 
         const showPeriod = 7;
         const today = new Date();
@@ -85,7 +201,7 @@ export default {
             highlight: {
                 start: {
                     style: {
-                        backgroundColor: '#F1B73F', // blue
+                        backgroundColor: '#F1B73F',
                     },
                     contentStyle: {
                         color: '#ffffff' // color of the text
@@ -93,12 +209,12 @@ export default {
                 },
                 base: {
                     style: {
-                        backgroundColor: '#FBE4A7', // light blue
+                        backgroundColor: '#FBE4A7',
                     }
                 },
                 end: {
                     style: {
-                        backgroundColor: '#F1B73F', // blue
+                        backgroundColor: '#F1B73F', 
                     },
                     contentStyle: {
                         color: '#ffffff' // color of the text
@@ -118,15 +234,43 @@ export default {
 
         // sort는 all 또는 income 또는 outcome
         const sortButtonGroup = reactive({"sort":"all"})
-        const selected_button = {
-            style: {
-                backgroundColor: '#F1B73F', // blue
-            }
+        const selectedButton = {
+            backgroundColor: '#F1B73F'
+        }
+        function changeSortButton(value){
+            sortButtonGroup.sort = value;
+        }
+
+        const isShowModal = ref(false);
+        // 카테고리 모달 띄울 토글
+        function toggleCategoryModal(){
+            isShowModal.value = !(isShowModal.value);
+        }
+        const categorySortSelected = reactive({
+            "sort":"outcome"
+        })
+        function changeCategorySortButton(value){
+            categorySortSelected.sort = value;
         }
 
 
-        return {range, attr, isCalendarShow,dateToggle, sortButtonGroup,
-            selected_button
+        function getShowDate(value){
+            const date = new Date(value);
+            const d = date.getFullYear()+"."+(date.getMonth()+1)
+            +'.'+date.getDate();
+            return d;
+        }
+
+        
+        const incomeText = {color: "#0066FF"};
+        const outcomeText = {color:"#FF3838"}
+
+
+
+        return {states, range, attr, isCalendarShow,dateToggle, sortButtonGroup,
+            selectedButton, categorySortSelected,changeCategorySortButton,
+            changeSortButton, toggleCategoryModal, isShowModal, account
+           , getShowDate, incomeText, outcomeText,fetchTradeList
         };
     }    
 }
@@ -134,10 +278,6 @@ export default {
 
 
 <style scoped>
-.datepicker{    
-position:absolute;
-width: 100%;
-}
 
 .sort_button_group button{
     background-color: #D7D7D7;
@@ -150,7 +290,31 @@ width: 100%;
 }
 .sort_button_group{
     margin-top: 10px;
+}
+.sort_button_group label{
+    width:33.3%;
     text-align: center;
+
 }
 
+
+.group1 button{
+    width: 50%;
+    border-color: white;
+}
+.group1 button:active{
+    border-color: white;
+}
+.dropdown-menu{
+    width:300px;
+}
+
+.selectCategoryBox{
+    position: absolute;
+    background-color: white;
+    width: 50%;
+    transform: translate(50%,50%);
+    
+    padding: 10px;
+}
 </style>

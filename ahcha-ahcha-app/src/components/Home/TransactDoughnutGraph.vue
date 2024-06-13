@@ -105,7 +105,7 @@
         fetchData();
       });
 
-      const updateGraph = async () => {
+      const updateDoughnutGraph = async () => {
       await fetchData();
     };
   
@@ -113,7 +113,7 @@
         canvas,
         selectedMonth,
         fetchData,
-        updateGraph
+        updateDoughnutGraph
       };
     }
   };

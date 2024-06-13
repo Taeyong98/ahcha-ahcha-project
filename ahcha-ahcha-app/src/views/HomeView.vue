@@ -2,20 +2,20 @@
   <div class="container-full text-center">
     <div class="row justify-content-center">
       <div class="col-md-6 mb-3 mb-md-0">
-        <TransactTrack ref="transactTrack"></TransactTrack>
+        <TransactTrack ref="transactTrack" class="widget"/>
       </div>
       <div class="col-md-6">
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <TransactGraph ref="transactGraph"/>
+            <TransactGraph ref="transactGraph" class="widgetGraph"/>
           </div>
           <div class="col-md-6">
-            <TransactDoughnutGraph ref="transactDoughnutGraph"/>
+            <TransactDoughnutGraph ref="transactDoughnutGraph" class="widgetGraph"/>
           </div>
         </div>
       </div>
     </div>
-    <WriteButton @logChanged="handleLogChanged"></WriteButton>
+    <WriteButton @logChanged="handleLogChanged" class="write-button"></WriteButton>
   </div>
 </template>
 
@@ -26,12 +26,10 @@ import WriteButton from '@/components/write/WriteButton.vue';
 import TransactTrack from '@/components/Home/TransactTrack.vue';
 import TransactDoughnutGraph from '@/components/Home/TransactDoughnutGraph.vue';
 
-// 전역으로 ref 변수들을 정의
 const transactGraph = ref(null);
 const transactDoughnutGraph = ref(null);
 const transactTrack = ref(null);
 
-// handleLogChanged 함수를 정의합니다.
 const handleLogChanged = () => {
   if (transactGraph.value) {
     transactGraph.value.updateGraph();
@@ -39,7 +37,6 @@ const handleLogChanged = () => {
   if (transactDoughnutGraph.value) {
     transactDoughnutGraph.value.updateDoughnutGraph();
   }
-
   if (transactTrack.value) {
     transactTrack.value.updateList();
   }
@@ -52,30 +49,55 @@ const handleLogChanged = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 20px;
   margin: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.row {
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .col-md-6 {
   margin-bottom: 20px;
 }
 
-.col1, .col2 {
-  border: #FBE4A7 solid 3px;
+.widget {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
   border-radius: 10px;
-  padding: 10px;
-}
-
-.col1 {
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* Set the maximum width for the widgets */
+  height: 500px; /* Set a fixed height for the widgets */
 }
 
-.col2 {
+.widgetGraph{
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 500px; /* Set the maximum width for the widgets */
+  height: 500px; /* Set a fixed height for the widgets */
 }
 
+.write-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.write-button:hover {
+  background-color: #0056b3;
+}
 </style>
