@@ -76,8 +76,5 @@ const handleLogChanged = () => {
   margin-bottom: 50px; /* 두 컴포넌트 사이에 50px 간격을 줍니다 */
 }
 
-
-
-
 </style>
 
