@@ -119,6 +119,7 @@
                     <th>카테고리</th>
                     <th>금액</th>
                     <th>내용</th>
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody v-for="(t, index) in showTradeList.value">
@@ -126,7 +127,7 @@
                     <!-- 날짜가 바뀔 때마다 구분선을 추가 -->
                     <template v-if="index!=0 && (t.date) !== showTradeList.value[index - 1].date">
                     <tr style="border-top: 1px solid #D7D7D7; ">
-                        <td colspan="5" style="padding:0px;"
+                        <td colspan="6" style="padding:0px;"
                        ></td>
                     </tr>
                     </template>
@@ -137,6 +138,11 @@
                         <td>{{ t.category }}</td>
                         <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
                         <td>{{ t.desc }}</td>
+                        <td>
+                            <button type="button" class="btn icon-btn">
+                            <i class="material-icons" style="font-size:24px;">cloud</i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -563,5 +569,10 @@ export default {
 .btn-delete:hover{
     background-color: #FFE1E1;
     color:#FF3838
+}
+
+.icon-btn{
+    border-color: white;
+    outline: none;
 }
 </style>
