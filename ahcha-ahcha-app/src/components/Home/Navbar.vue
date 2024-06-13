@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar">
       <div class="container">
-        <span class="navbar-brand">앗차앗차</span>
+        <span class="navbar-brand"><router-link style="text-decoration: none; color: black;" to="/ahcha/">앗차앗차</router-link></span>
         <ul class="nav">
           <li class="inButton">
             <router-link to="/ahcha/">홈</router-link>
@@ -105,6 +105,12 @@ if (localStorage.getItem('modeChange') === 'true') {
 .navbar-brand {
   font-size: 24px;
   font-weight: bold;
+  color: black; /* 글자색을 검은색으로 변경 */
+}
+
+.navbar-brand .router-link {
+  color: black;
+  text-decoration: none;
 }
 
 .container {
@@ -185,5 +191,4 @@ if (localStorage.getItem('modeChange') === 'true') {
 .mode-change .settings-dropdown button{
   background-color: #e2f1ca;
 }
-
 </style>
