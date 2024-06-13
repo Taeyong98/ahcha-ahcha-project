@@ -35,6 +35,10 @@
           <input type="checkbox" v-model="modeChangeEnabled" @change="toggleTheme">
         </label>
       </div>
+
+      <div class="settings-option">
+        <button @click="logout">로그아웃</button>
+      </div>
     </div>
     </div>
   </ul>
@@ -134,6 +138,7 @@ if (localStorage.getItem('modeChange') === 'true') {
 
 .settings-option {
   margin-bottom: 10px;
+  padding:5px;
 }
 
 .settings-option label {
@@ -141,6 +146,17 @@ if (localStorage.getItem('modeChange') === 'true') {
   justify-content: space-between;
   align-items: center;
   width: 150px;
+}
+.settings-option button {
+  width: 100%;
+  padding: 5px;
+  background-color:#FBE4A7;
+  border:#fbe5a734 solid 3px;
+  border-radius: 10px;
+  padding:5px;
+
+  cursor: pointer;
+  text-align: center; /* 버튼 내 텍스트 중앙 정렬 */
 }
 
 
@@ -153,9 +169,8 @@ if (localStorage.getItem('modeChange') === 'true') {
   color:rgb(0, 0, 0);
 }
 
-.mode-change .settings-dropdown {
-  background-color: #f5ffe4;
-  border:#afafaf2f solid 3px;
-
+.mode-change .settings-dropdown button{
+  background-color: #e2f1ca;
 }
+
 </style>
