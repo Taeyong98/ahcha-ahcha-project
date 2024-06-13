@@ -282,7 +282,7 @@ export default {
 
 
         const BASEURL = "http://localhost:3001";
-        const userid = "ted";
+        const userid = sessionStorage.getItem("userid");
         const states = reactive({
             tradeList:[],
             incomeCategory:[],

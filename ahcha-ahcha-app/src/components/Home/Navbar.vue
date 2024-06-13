@@ -49,6 +49,9 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const showSettings = ref(false);
 const notificationsEnabled = ref(false);
@@ -65,6 +68,16 @@ const toggleTheme = () => {
     document.documentElement.classList.remove('mode-change');
   }
 };
+
+const logout = ()=>{
+  let id = sessionStorage.getItem("userid");
+  
+  if(id != undefined){
+    console.log(id);
+    sessionStorage.removeItem("userid");
+    router.push("/ahcha/login"); 
+  }
+}
 
 // 테마 변경 기능
 watch(modeChangeEnabled, (newValue) => {

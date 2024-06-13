@@ -14,13 +14,14 @@ import axios from 'axios';
 export default {
     components: { MyPageEdit, MyPageProfile },
     setup() {
+        let userid = sessionStorage.getItem('userid');
         const route = useRoute();
         const router = useRouter();
         // const id = route.params.id;
         const user = reactive({ user: {} });
         const fetchData = function () {
             axios
-                .get(`http://localhost:3001/user_list/ted`)
+                .get(`http://localhost:3001/user_list/${userid}`)
                 .then((res) => {
                     user.user = res.data;
                 })
