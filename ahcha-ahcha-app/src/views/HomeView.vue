@@ -20,27 +20,10 @@
               <TransactDoughnutGraph ref="transactDoughnutGraph" width="400px" height="500px"/>
             </div>
           </div>  
-          
-          <!-- <div class="widgetGraph">
-            <div class="col-md-12 mb-3">
-              <TransactGraph ref="transactGraph" id=""/>
-            </div>
-          </div>  -->
-
           </div>
-
-          
         </div>
       </div>
-      
     </div>
-
-  </div>
-      <WriteButton @logChanged="handleLogChanged"></WriteButton>
-  </div>
-
-
-
     <!-- 로그 변경 버튼 -->
     <WriteButton @logChanged="handleLogChanged" class="write-button"></WriteButton>
   </div>
