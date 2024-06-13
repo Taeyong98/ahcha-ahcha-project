@@ -1,6 +1,5 @@
 <template>
 
-
 <div class="container-full text-center">
   <div class="row justify-content-center">
     <div class="col1">
@@ -13,8 +12,8 @@
   </div>
       <WriteButton @logChanged="handleLogChanged"></WriteButton>
   </div>
-</template>
 
+</template>
 <script setup>
 import { ref } from 'vue';
 import TransactGraph from '../components/Home/TransactGraph.vue';

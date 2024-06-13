@@ -86,36 +86,36 @@
 }
 
 .outcome {
-  color: #0066ff;
+color: #0066ff;
 }
 
 td {
-  padding: 15px 25px;
+padding: 15px 25px;
 }
 
 h3{
-  margin-bottom:15px;
+margin-bottom:15px;
 }
 .upperPart {
-  border: #FBE4A7 solid 5px;
-  background-color: #FBE4A7;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center; /* Center align text inside the div */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center align items horizontally */
+border: #FBE4A7 solid 5px;
+background-color: #FBE4A7;
+border-radius: 10px;
+padding: 10px;
+text-align: center; /* Center align text inside the div */
+display: flex;
+flex-direction: column;
+align-items: center; /* Center align items horizontally */
 }
 
 
 #decideDate {
-  border: white solid 5px;
-  background-color: white;
-  width: 200px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between; /* Space out the button and span elements */
-  align-items: center; /* Center align items vertically */
+border: white solid 5px;
+background-color: white;
+width: 200px;
+border-radius: 10px;
+display: flex;
+justify-content: space-between; /* Space out the button and span elements */
+align-items: center; /* Center align items vertically */
 }
 
   </style>
