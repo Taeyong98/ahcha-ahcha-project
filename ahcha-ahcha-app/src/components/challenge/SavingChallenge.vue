@@ -4,8 +4,8 @@
             {{challenge.title}}
             <span :class="remainingDaysClass">{{ remainingDaysText }}</span>
         </h5>
-        목표 금액 : <span :class="textClass">{{ formatCurrency(challenge.goal) }}</span> <br/>
-        목표 기한 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
+        목표 금액 : <span :class="textClass">{{ formatCurrency(Number(challenge.goal)) }}</span> <br/>
+        목표일 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
         <hr>
         현재까지 <span :class="spentClass">{{ formatCurrency(result.currentMoney) }}원</span>을 모았습니다.<br>
         <span v-if="!isSuccess">목표까지 <span :class="remainingAmountClass">{{ formatCurrency(result.remainingAmount) }}원</span> 남았습니다.</span>
