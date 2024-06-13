@@ -2,10 +2,8 @@
   <div class="container-full ">
     
     <div class="widget-container">
-      <!-- 왼쪽 위젯-->
-      <div class="left_widget">
-        <TransactTrack ref="transactTrack" class="widget"/>
-      </div>
+
+
 
       <!-- 오른쪽 위젯 -->
       <div class="right_widget">
@@ -14,6 +12,13 @@
           <div class="graph1"><TransactGraph ref="transactGraph" /></div>
         </div>
       </div>
+
+      
+      <!-- 왼쪽 위젯-->
+      <div class="left_widget">
+        <TransactTrack ref="transactTrack" class="widget"/>
+      </div>
+
     </div>
       
     <!-- 로그 변경 버튼 -->
@@ -91,7 +96,7 @@ const handleLogChanged = () => {
   width: 100%;
   max-width: 400px; /* widget의 최대 너비 설정 */
   height: 600px; /* widget의 고정 높이 설정 */
-  overflow: auto; /* 내용이 넘칠 경우 스크롤 추가 */
+
 }
 
 .widgetGraph {

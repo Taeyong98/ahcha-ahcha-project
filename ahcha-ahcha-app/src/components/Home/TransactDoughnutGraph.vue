@@ -1,13 +1,18 @@
 <template>
   <div class="month-picker">
     <div class="date-picker">
-      <input type="month" id="month" v-model="selectedMonth" @change="fetchData" /><br/>
-      <canvas ref="canvas" width="300px" height="300px"></canvas>
-      <div class="total-income">
-        <label>수입</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalIncome) }}원</label><br/>
-        <label>소비</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalExpenses) }}원</label><br/>
-        <label>남은 금액</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label :class="balanceClass">{{ formatCurrency(balance) }}원</label>
+      <label>이번 달 얼마 남았을까요? </label><br/>
+      <input type="month" id="month" v-model="selectedMonth" @change="fetchData" />
+      
+      <div width="400px" height="550px">
+        <canvas ref="canvas" width="300px" height="300px"></canvas>
+        <div class="total-income">
+          <label>수입</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalIncome) }}원</label><br/>
+          <label>소비</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalExpenses) }}원</label><br/>
+          <label id="total">남은 금액</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label :class="balanceClass">{{ formatCurrency(balance) }}원</label>
+        </div>
       </div>
+      
     </div>
   </div>
 </template>
@@ -174,9 +179,10 @@ canvas {
   border-radius: 8px;
   padding:20px;
 }
+
 input[type="month"] {
   padding: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -187,9 +193,12 @@ label {
   font-size: 16px;
   margin-bottom: 10px;
   color: #333;
-  font-weight: 200;
+  font-weight: 300;
 }
 
+#total{
+  font-weight:300;
+}
 .positive-balance {
   color: #FF3838;
   font-weight: 300;
