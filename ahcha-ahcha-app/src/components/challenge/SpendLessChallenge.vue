@@ -53,7 +53,7 @@ const calculateCurrentSpent = (trades, challenge) => {
             end: parseISO(challenge.to_date)
         })
     )
-    .reduce((sum, trade) => sum + trade.price, 0);
+    .reduce((sum, trade) => sum + Number(trade.price), 0);
 };
 
 const calculateProgress = (currentSpent, goal) => {
