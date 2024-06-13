@@ -36,7 +36,7 @@ const progressBarWidth = ref(0);
 
 const calculateRemainingDays = (toDate) => {
     const today = new Date();
-    return differenceInDays(parseISO(toDate), today);
+    return differenceInDays(parseISO(toDate), today)+1;
 };
 
 const calculateRemainingAmount = (goal, currentSpent) => {

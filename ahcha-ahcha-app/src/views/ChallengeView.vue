@@ -9,7 +9,7 @@
                         v-for="(challenge, index) in spendLessList"
                         :key="index"
                         :challenge="challenge"
-                        @addedGoal="reloadChallenges"
+                        @submitForm="reloadChallenges"
                 />
             </div>
             <div class="col-md-6 d-flex flex-column align-items-center">
@@ -17,7 +17,7 @@
                         v-for="(challenge, index) in savingList"
                         :key = "index"
                         :challenge="challenge"
-                        @addedGoal="reloadChallenges"
+                        @submitForm="reloadChallenges"
                 />
             </div>
         </div>
@@ -31,8 +31,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        입력 컴포넌트 추가
-                        <InputChallenge @addedGoal="reloadChallenges"></InputChallenge>
+                        <ChallengeLogWrite @submitForm="reloadChallenges"></ChallengeLogWrite>
                     </div>
                 </div>
             </div>
@@ -44,7 +43,7 @@
 import { ref, onMounted, computed } from 'vue';
 import SpendLessChallenge from '../components/challenge/SpendLessChallenge.vue'
 import SavingChallenge from '../components/challenge/SavingChallenge.vue'
-import InputChallenge from '../components/challenge/InputChallenge.vue'
+import ChallengeLogWrite from '../components/challenge/ChallengeLogWrite.vue'
 
 const challenges = ref([]);
 
@@ -52,7 +51,7 @@ const fetchChallenges = async () => {
     try{
         const response = await fetch('http://localhost:3001/challenge_list');
         const data = await response.json();
-        challenges.value = data;        
+        challenges.value = data;
     }
     catch(error){
         console.error(error);
@@ -76,10 +75,14 @@ const savingList = computed(()=>{
 
 const reloadChallenges = async () => {
     try {
-        console.log('리로드되었습니다'); // 리로드 메시지 로그
         const response = await fetch('http://localhost:3001/challenge_list');
         const data = await response.json();
         challenges.value = data;
+
+        const closeButton = document.querySelector('#transactionModal .btn-close');
+        if (closeButton) {
+            closeButton.click();
+        }
     } catch (error) {
         console.error('Failed to fetch data:', error);
     }
@@ -99,5 +102,14 @@ const reloadChallenges = async () => {
     width:70%;
 }
 
+.custom-modal-dialog {
+    max-width: 50vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
+    width: 50vw;
+}
 
+
+
+.modal-body {
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능 */
+}
 </style>
