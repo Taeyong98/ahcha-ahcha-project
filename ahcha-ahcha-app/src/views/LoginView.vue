@@ -17,6 +17,7 @@
 </template>
 <script>
 import { ref, reactive } from 'vue';
+import axios from "axios";
 import { useRouter, useRoute } from 'vue-router';
 export default {
     setup() {
@@ -25,6 +26,7 @@ export default {
 
         const id_input = ref("");
         const pw_input = ref("");
+        
 
         return{id_input, pw_input};
     },
