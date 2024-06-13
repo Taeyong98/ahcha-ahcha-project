@@ -4,8 +4,8 @@
             {{challenge.title}}
             <span :class="remainingDaysClass">{{ remainingDaysText }}</span>
         </h5>
-        목표 금액 : <span :class="textClass">{{ formatCurrency(challenge.goal) }}</span> <br/>
-        목표 기한 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
+        목표 금액 : <span :class="textClass">{{ formatCurrency(Number(challenge.goal)) }}</span> <br/>
+        목표일 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
         <hr>
         현재까지 <span :class="spentClass">{{ formatCurrency(result.currentMoney) }}원</span>을 모았습니다.<br>
         <span v-if="!isSuccess">목표까지 <span :class="remainingAmountClass">{{ formatCurrency(result.remainingAmount) }}원</span> 남았습니다.</span>
@@ -55,7 +55,7 @@ const calculateCurrentAmount = (trades, challenge) => {
             end: parseISO(challenge.to_date)
         })
     )
-    .reduce((sum, trade) => sum + trade.price, 0);
+    .reduce((sum, trade) => sum + Number(trade.price), 0);
 };
 
 const calculateCurrentSpent = (trades, challenge) => {
@@ -68,7 +68,7 @@ const calculateCurrentSpent = (trades, challenge) => {
             end: parseISO(challenge.to_date)
         })
     )
-    .reduce((sum, trade) => sum + trade.price, 0);
+    .reduce((sum, trade) => sum + Number(trade.price), 0);
 };
 
 const calculateCurrentMoney = (amount, spent) => {
@@ -93,7 +93,7 @@ onMounted(async () => {
         result.value.remainingDays = calculateRemainingDays(props.challenge.to_date);
         result.value.currentSpent = calculateCurrentSpent(trades, props.challenge);
         result.value.currentMoney = calculateCurrentMoney(result.value.currentAmount, result.value.currentSpent);
-        result.value.remainingAmount = calculateRemainingAmount(props.challenge.goal, result.value.currentMoney);
+        result.value.remainingAmount = calculateRemainingAmount(Number(props.challenge.goal), result.value.currentMoney);
         progressBarWidth.value = calculateProgress(result.value.currentMoney, props.challenge.goal);
 
         if (result.value.currentMoney >= props.challenge.goal) {

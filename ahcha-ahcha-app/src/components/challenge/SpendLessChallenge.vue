@@ -4,9 +4,9 @@
             {{challenge.title}}
             <span :class="remainingDaysClass">{{ remainingDaysText }}</span>
         </h5>
-        목표 금액 : <span :class="textClass">{{ formatCurrency(challenge.goal) }}</span> <br/>
-        시간 기한 : <span :class="textClass">{{ challenge.from_date }}</span> <br/>
-        목표 기한 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
+        목표 금액 : <span :class="textClass">{{ formatCurrency(Number(challenge.goal)) }}</span> <br/>
+        시작일 : <span :class="textClass">{{ challenge.from_date }}</span> <br/>
+        목표일 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
         <hr>
         현재까지 <span :class="spentClass">{{ formatCurrency(result.currentSpent) }}원</span> 사용했습니다.<br>
         남은기간(<span :class="remainingDaysClass">{{ result.remainingDays }}일</span>) 동안 <span :class="remainingAmountClass">{{ formatCurrency(result.remainingAmount) }}원</span> 사용할 수 있습니다.
@@ -53,7 +53,7 @@ const calculateCurrentSpent = (trades, challenge) => {
             end: parseISO(challenge.to_date)
         })
     )
-    .reduce((sum, trade) => sum + trade.price, 0);
+    .reduce((sum, trade) => sum + Number(trade.price), 0);
 };
 
 const calculateProgress = (currentSpent, goal) => {
