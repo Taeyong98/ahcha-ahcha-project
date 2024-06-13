@@ -5,6 +5,7 @@
         <button type="button" class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#transactionModal">목표 추가하기</button>
         <div class="row justify-content-center">
             <div class="col-md-6 d-flex flex-column align-items-center">
+                <h4>🧡절약 챌린지🧡</h4>
                 <SpendLessChallenge
                         v-for="(challenge, index) in spendLessList"
                         :key="index"
@@ -13,6 +14,7 @@
                 />
             </div>
             <div class="col-md-6 d-flex flex-column align-items-center">
+                <h4>🧡저축 챌린지🧡</h4>
                 <SavingChallenge
                         v-for="(challenge, index) in savingList"
                         :key = "index"
@@ -45,6 +47,8 @@ import SpendLessChallenge from '../components/challenge/SpendLessChallenge.vue'
 import SavingChallenge from '../components/challenge/SavingChallenge.vue'
 import ChallengeLogWrite from '../components/challenge/ChallengeLogWrite.vue'
 
+let userid = sessionStorage.getItem('userid');
+
 const challenges = ref([]);
 
 const fetchChallenges = async () => {
@@ -63,13 +67,13 @@ onMounted(fetchChallenges);
 
 const spendLessList = computed(()=>{
     return challenges.value.filter(challenge =>
-        challenge.user_id==='ted' && challenge.challenge_type==='spend_less'
+        challenge.user_id===userid && challenge.challenge_type==='spend_less'
     )
 });
 
 const savingList = computed(()=>{
     return challenges.value.filter(challenge=>
-        challenge.user_id==='ted' && challenge.challenge_type==='saving'
+        challenge.user_id===userid && challenge.challenge_type==='saving'
     )
 });
 
@@ -114,5 +118,9 @@ const reloadChallenges = async () => {
 
 .modal-body {
     overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능 */
+}
+
+h4{
+    font-weight: bolder;
 }
 </style>
