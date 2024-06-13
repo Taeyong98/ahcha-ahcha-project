@@ -1,23 +1,45 @@
 <template>
   <div class="container-full text-center">
     <div class="row justify-content-center">
-      <div class="col-md-6 mb-3 mb-md-0">
+      <!-- 왼쪽 위젯 -->
+      <div class="left_widget col-md-6 mb-3 mb-md-0">
         <TransactTrack ref="transactTrack" class="widget"/>
       </div>
-      <div class="col-md-6">
+
+      <!-- 오른쪽 위젯 -->
+      <div class="right_widget col-md-6" >
         <div class="row justify-content-center">
-          <div class="col-md-6">
-            <TransactGraph ref="transactGraph" class="widgetGraph"/>
+          
+          <div class="row">
+          <!-- 그래프 위젯 -->
+          <div class="widgetGraph">
+            <div class="mb-3">
+              <TransactGraph ref="transactGraph" width="400px" height="500px"/>
+            </div>
+            <div >
+              <TransactDoughnutGraph ref="transactDoughnutGraph" width="400px" height="500px"/>
+            </div>
+          </div>  
+          
+          <!-- <div class="widgetGraph">
+            <div class="col-md-12 mb-3">
+              <TransactGraph ref="transactGraph" id=""/>
+            </div>
+          </div>  -->
+
           </div>
-          <div class="col-md-6">
-            <TransactDoughnutGraph ref="transactDoughnutGraph" class="widgetGraph"/>
-          </div>
+
+          
         </div>
       </div>
+      
     </div>
+
+    <!-- 로그 변경 버튼 -->
     <WriteButton @logChanged="handleLogChanged" class="write-button"></WriteButton>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from 'vue';
@@ -56,13 +78,36 @@ const handleLogChanged = () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.left_widget{
+
+  margin: 0px;
+
+} 
+.justify-content-center{
+
+  margin: 0px;
+
+}
+
 .row {
   width: 100%;
+  margin-bottom: 200px;
+  margin:0px;
+}
+
+.container-full{
+
+  margin:0px;
+
+} 
+.col-md-6 {
   margin-bottom: 20px;
 }
 
-.col-md-6 {
-  margin-bottom: 20px;
+.left_widget,
+.right_widget {
+  display: flex;
+  justify-content: center;
 }
 
 .widget {
@@ -72,32 +117,24 @@ const handleLogChanged = () => {
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px; /* Set the maximum width for the widgets */
-  height: 500px; /* Set a fixed height for the widgets */
+  max-width: 400px; /* widget의 최대 너비 설정 */
+  height: 600px; /* widget의 고정 높이 설정 */
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 추가 */
 }
 
-.widgetGraph{
+.widgetGraph {
+  display: flex;
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px; /* Set the maximum width for the widgets */
-  height: 500px; /* Set a fixed height for the widgets */
+  max-width: 800px; /* widgetGraph의 최대 너비 설정 */
+  height: 600px; /* widgetGraph의 고정 높이 설정 */
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 추가 */
 }
 
-.write-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-.write-button:hover {
-  background-color: #0056b3;
-}
+
 </style>
