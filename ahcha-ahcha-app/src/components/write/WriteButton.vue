@@ -43,7 +43,7 @@ const handleSubmitForm = () => {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 35px;
     display: flex;
     align-items: center;
     justify-content: center;

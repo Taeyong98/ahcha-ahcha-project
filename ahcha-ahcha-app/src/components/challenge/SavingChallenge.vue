@@ -48,7 +48,7 @@ const calculateRemainingAmount = (goal, currentMoney) => {
 const calculateCurrentAmount = (trades, challenge) => {
     return trades
     .filter(trade =>
-        trade.user_id === challenge.user_id &&
+        trade.user_id === challenge.userid &&
         trade.type === 'income' &&
         isWithinInterval(parseISO(trade.date), {
             start: new Date(-8640000000000000),
@@ -61,7 +61,7 @@ const calculateCurrentAmount = (trades, challenge) => {
 const calculateCurrentSpent = (trades, challenge) => {
     return trades
     .filter(trade =>
-        trade.user_id === challenge.user_id &&
+        trade.user_id === challenge.userid &&
         trade.type === 'outcome' &&
         isWithinInterval(parseISO(trade.date), {
             start: parseISO(challenge.from_date),

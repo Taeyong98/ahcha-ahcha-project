@@ -9,6 +9,7 @@
                         v-for="(challenge, index) in spendLessList"
                         :key="index"
                         :challenge="challenge"
+                        @addedGoal="reloadChallenges"
                 />
             </div>
             <div class="col-md-6 d-flex flex-column align-items-center">
@@ -16,6 +17,7 @@
                         v-for="(challenge, index) in savingList"
                         :key = "index"
                         :challenge="challenge"
+                        @addedGoal="reloadChallenges"
                 />
             </div>
         </div>
@@ -30,6 +32,7 @@
                     </div>
                     <div class="modal-body">
                         입력 컴포넌트 추가
+                        <InputChallenge @addedGoal="reloadChallenges"></InputChallenge>
                     </div>
                 </div>
             </div>
@@ -41,18 +44,23 @@
 import { ref, onMounted, computed } from 'vue';
 import SpendLessChallenge from '../components/challenge/SpendLessChallenge.vue'
 import SavingChallenge from '../components/challenge/SavingChallenge.vue'
+import InputChallenge from '../components/challenge/InputChallenge.vue'
 
 const challenges = ref([]);
 
-onMounted(async () => {
-    try {
+const fetchChallenges = async () => {
+    try{
         const response = await fetch('http://localhost:3001/challenge_list');
         const data = await response.json();
-        challenges.value = data;
-    } catch (error) {
-        console.error('Failed to fetch data:', error);
+        challenges.value = data;        
     }
-});
+    catch(error){
+        console.error(error);
+    }
+}
+
+onMounted(fetchChallenges);
+
 
 const spendLessList = computed(()=>{
     return challenges.value.filter(challenge =>
@@ -65,6 +73,17 @@ const savingList = computed(()=>{
         challenge.user_id==='ted' && challenge.challenge_type==='saving'
     )
 });
+
+const reloadChallenges = async () => {
+    try {
+        console.log('리로드되었습니다'); // 리로드 메시지 로그
+        const response = await fetch('http://localhost:3001/challenge_list');
+        const data = await response.json();
+        challenges.value = data;
+    } catch (error) {
+        console.error('Failed to fetch data:', error);
+    }
+};
 </script>
 
 <style scoped>
