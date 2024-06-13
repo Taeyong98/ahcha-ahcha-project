@@ -14,7 +14,7 @@
         <div class="progress-bar-container">
             <div :class="progressBarClass" :style="{ width: progressBarWidth + '%' }"></div>
         </div>
-        <p :class="textClass">진행률: {{ progressBarWidth.toFixed(2) }}%</p>
+        <p :class="textClass">실패확률: {{ progressBarWidth.toFixed(2) }}%</p>
     </div>
 </template>
 
@@ -36,7 +36,7 @@ const progressBarWidth = ref(0);
 
 const calculateRemainingDays = (toDate) => {
     const today = new Date();
-    return differenceInDays(parseISO(toDate), today);
+    return differenceInDays(parseISO(toDate), today)+1;
 };
 
 const calculateRemainingAmount = (goal, currentSpent) => {
@@ -46,7 +46,7 @@ const calculateRemainingAmount = (goal, currentSpent) => {
 const calculateCurrentSpent = (trades, challenge) => {
     return trades
     .filter(trade =>
-        trade.user_id === challenge.user_id &&
+        trade.user_id === challenge.userid &&
         trade.type === 'outcome' &&
         isWithinInterval(parseISO(trade.date), {
             start: parseISO(challenge.from_date),

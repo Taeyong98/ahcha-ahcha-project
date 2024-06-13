@@ -43,6 +43,7 @@ import { reactive, defineEmits, watch } from 'vue';
 const emit = defineEmits(['submitForm']);
 
 const state = reactive({
+    user_id:"ted",
     challenge_type: "",
     title: "",
     goal: "",

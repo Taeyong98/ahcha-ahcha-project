@@ -8,7 +8,7 @@
         목표 기한 : <span :class="textClass">{{ challenge.to_date }}</span> <br/>
         <hr>
         현재까지 <span :class="spentClass">{{ formatCurrency(result.currentMoney) }}원</span>을 모았습니다.<br>
-        목표까지 <span :class="remainingAmountClass">{{ formatCurrency(result.remainingAmount) }}원</span> 남았습니다.
+        <span v-if="!isSuccess">목표까지 <span :class="remainingAmountClass">{{ formatCurrency(result.remainingAmount) }}원</span> 남았습니다.</span>
         
         <div class="progress-bar-container">
             <div :class="progressBarClass" :style="{ width: progressBarWidth + '%' }"></div>
@@ -19,7 +19,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue';
-import { differenceInDays, parseISO, isWithinInterval } from 'date-fns';
+import { differenceInDays, parseISO, isWithinInterval, isAfter, endOfDay } from 'date-fns';
 
 const props = defineProps({
     challenge: Object
@@ -30,14 +30,15 @@ const result = ref({
     remainingDays: 0,
     remainingAmount: 0,
     currentSpent: 0,
-    currentMoney:0
+    currentMoney: 0
 });
 
 const progressBarWidth = ref(0);
+const isSuccess = ref(false);
 
 const calculateRemainingDays = (toDate) => {
     const today = new Date();
-    return differenceInDays(parseISO(toDate), today);
+    return differenceInDays(parseISO(toDate), today) + 1;
 };
 
 const calculateRemainingAmount = (goal, currentMoney) => {
@@ -47,7 +48,7 @@ const calculateRemainingAmount = (goal, currentMoney) => {
 const calculateCurrentAmount = (trades, challenge) => {
     return trades
     .filter(trade =>
-        trade.user_id === challenge.user_id &&
+        trade.user_id === challenge.userid &&
         trade.type === 'income' &&
         isWithinInterval(parseISO(trade.date), {
             start: new Date(-8640000000000000),
@@ -60,7 +61,7 @@ const calculateCurrentAmount = (trades, challenge) => {
 const calculateCurrentSpent = (trades, challenge) => {
     return trades
     .filter(trade =>
-        trade.user_id === challenge.user_id &&
+        trade.user_id === challenge.userid &&
         trade.type === 'outcome' &&
         isWithinInterval(parseISO(trade.date), {
             start: parseISO(challenge.from_date),
@@ -70,13 +71,13 @@ const calculateCurrentSpent = (trades, challenge) => {
     .reduce((sum, trade) => sum + trade.price, 0);
 };
 
-const calculateCurrentMoney = (amount, spent)=>{
-    return amount-spent;
+const calculateCurrentMoney = (amount, spent) => {
+    return amount - spent;
 }
 
-const calculateProgress = (currentSpent, goal) => {
+const calculateProgress = (currentMoney, goal) => {
     if (goal === 0) return 0;
-    return (currentSpent / goal) * 100;
+    return (currentMoney / goal) * 100;
 };
 
 const formatCurrency = (value) => {
@@ -93,45 +94,68 @@ onMounted(async () => {
         result.value.currentSpent = calculateCurrentSpent(trades, props.challenge);
         result.value.currentMoney = calculateCurrentMoney(result.value.currentAmount, result.value.currentSpent);
         result.value.remainingAmount = calculateRemainingAmount(props.challenge.goal, result.value.currentMoney);
-        progressBarWidth.value = calculateProgress(result.value.currentAmount, props.challenge.goal);
+        progressBarWidth.value = calculateProgress(result.value.currentMoney, props.challenge.goal);
+
+        if (result.value.currentMoney >= props.challenge.goal) {
+            isSuccess.value = true;
+        }
+
+        console.log("isSuccess value:", isSuccess.value); // 디버깅 메시지 추가
 
     } catch (error) {
         console.error('Failed to fetch trade data:', error);
     }
 });
 
-const isFailed = computed(() => progressBarWidth.value > 100);
+const isFailed = computed(() => {
+    const today = new Date();
+    return isAfter(today, endOfDay(parseISO(props.challenge.to_date))) && !isSuccess.value;
+});
 
 const containerClass = computed(() => ({
     container: true,
-    'container-failed': isFailed.value
+    'container-failed': isFailed.value,
+    'container-success': isSuccess.value && !isFailed.value
 }));
 
 const textClass = computed(() => ({
-    'text-failed': isFailed.value
+    'text-failed': isFailed.value,
+    'text-success': isSuccess.value && !isFailed.value
 }));
 
 const spentClass = computed(() => ({
     spent: true,
-    'text-failed': isFailed.value
+    'text-failed': isFailed.value,
+    'text-success': isSuccess.value && !isFailed.value
 }));
 
 const remainingDaysClass = computed(() => ({
     'remaining-days-header': true,
-    'text-failed': isFailed.value
+    'text-failed': isFailed.value,
+    'text-success': isSuccess.value && !isFailed.value
 }));
 
 const remainingAmountClass = computed(() => ({
     'remaining-amount': true,
-    'text-failed': isFailed.value
+    'text-failed': isFailed.value,
+    'text-success': isSuccess.value && !isFailed.value
 }));
 
 const progressBarClass = computed(() => ({
     'progress-bar': true,
-    'progress-bar-failed': isFailed.value
+    'progress-bar-failed': isFailed.value,
+    'progress-bar-success': isSuccess.value && !isFailed.value
 }));
 
-const remainingDaysText = computed(() => isFailed.value ? '실패' : `D-${result.value.remainingDays}`);
+const remainingDaysText = computed(() => {
+    if (isSuccess.value) {
+        return '성공';
+    }
+    if (isFailed.value) {
+        return '실패';
+    }
+    return `D-${result.value.remainingDays}`;
+});
 </script>
 
 <style scoped>
@@ -154,6 +178,10 @@ const remainingDaysText = computed(() => isFailed.value ? '실패' : `D-${result
     background-color: #a9a9a9;
 }
 
+.progress-bar-success {
+    background-color: #76c7c0;
+}
+
 .progress-text {
     text-align: right;
     font-size: 0.9em;
@@ -173,6 +201,10 @@ const remainingDaysText = computed(() => isFailed.value ? '실패' : `D-${result
 
 .container-failed {
     background-color: #f0f0f0;
+}
+
+.container-success {
+    background-color: #e6ffe6;
 }
 
 h5 {
@@ -213,5 +245,9 @@ hr {
 
 .text-failed {
     color: #a9a9a9;
+}
+
+.text-success {
+    color: #76c7c0;
 }
 </style>
