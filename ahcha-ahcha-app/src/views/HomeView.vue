@@ -17,10 +17,6 @@
       
     </div>
       
-
-
-
-
     <!-- 로그 변경 버튼 -->
     <WriteButton @logChanged="handleLogChanged" class="write-button"></WriteButton>
   </div>
