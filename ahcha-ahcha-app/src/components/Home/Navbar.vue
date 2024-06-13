@@ -1,82 +1,115 @@
 <template>
-    <header>
-      <nav class="navbar">
-        <div class="container">
-          <ul class="nav">
-            <li><router-link to="/">홈</router-link></li>
-            <li><router-link to="/">소개</router-link></li>
-            <li><router-link to="/">아차챌린지</router-link></li>
-          </ul>
-          <ul class="nav justify-content-end">
-            <li><router-link to="/"><img src="../assets/navbar/profile.png" alt=""/></router-link></li>
-            <li><router-link to="/"><img src="../assets/navbar/setting.png" alt=""/></router-link></li>
-          </ul> 
-        </div>
-      </nav>
-    </header>
-  </template>
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <span class="navbar-brand">앗차앗차</span>
+        <ul class="nav">
+          <li class="inButton">
+            <router-link to="/ahcha/">홈</router-link>
+          </li>
+          <li class="inButton">
+            <router-link to="/ahcha/trade">거래</router-link>
+          </li>
+          <li class="inButton">
+            <router-link to="/ahcha/challenge">앗차챌린지</router-link>
+          </li>
+          <li class="icon">
+            <router-link to="/ahcha/mypage/:user_id"><img src="../../assets/navbar/profile.png" alt="Profile"/></router-link>
+          </li>
+          <li class="icon">
+            <router-link to=""><img src="../../assets/navbar/setting.png" alt="Setting"/></router-link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+</template>
+
+<style scoped>
+/* 네비게이션 바 스타일 */
+.navbar {
+  background-color: #FBE4A7;
   
-  <style>
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+/* 홈페이지 이름 스타일 */
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* 컨테이너 스타일 */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* 내비게이션 스타일 */
+.nav {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav li {
+  padding: 0 10px; /* 패딩을 줄여서 공간 확보 */
+}
+
+.nav li a {
+  color: black;
+  text-decoration: none;
+}
+
+/* 이미지 스타일 */
+.nav .icon img {
+  width: 30px;
+  height: 30px;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 520px) {
   .navbar {
-    display: flex;
-    justify-content: space-between; /* 왼쪽과 오른쪽 여백을 최대화하여 요소들을 좌우로 분산 배치 */
+    height: auto;
+    padding: 5px;
+  }
+
+  .container {
+    flex-direction: column;
     align-items: center;
-    height: 60px; /* 네비게이션 바의 적절한 높이 설정 */
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     width: 100%;
-    background-color: #FBE4A7;
-    padding: 0 10 px;
   }
-  
-  .nav, .nav justify-content-end {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+
+  .nav li {
+    padding: 5px; /* 패딩을 줄여서 공간 확보 */
+    text-align: center;
+    flex: 1 1 1; /* 요소들이 동일한 비율로 늘어나도록 설정 */
   }
-  
-  .nav li, .nav justify-content-end li {
-    float: left;
-    padding: 20px;
+
+  .navbar-brand {
+    margin-bottom: 10px;
+    font-size: 20px;
   }
-  
-  .nav li:last-child, .nav justify-content-end li:last-child {
-    margin-right: 0;
+
+  .nav .icon img {
+    width: 20px;
+    height: 20px; /* 이미지 크기 줄이기 */
   }
-  
-  .nav li a, .nav justify-content-end li a {
-    color: black;
-    text-decoration: none;
-  }
-  
-  .nav-left li a:hover, .nav-right li a:hover {
-    /* 아무런 효과 없음 */
-  }
-  
-  img {
-    width: 30px; /* 아이콘의 너비 조정 */
-    height: 30px; /* 아이콘의 높이 조정 */
-  }
-  
-  @media screen and (min-width: 1024px) {
-    .navbar {
-      display: flex;
-      justify-content: space-between; /* 왼쪽과 오른쪽 여백을 최대화하여 요소들을 좌우로 분산 배치 */
-      align-items: center;
-      height: 60px; /* 네비게이션 바의 적절한 높이 설정 */
-      width: 100%;
-      background-color: #FBE4A7;
-      padding: 0;
-    }
-  
-    .nav-left, .nav-right {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-  
-    .nav-left li, .nav-right li {
-      float: left;
-      padding: 20px;
-    }
-  }
-  </style>
-  
+}
+
+</style>
+
