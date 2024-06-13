@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="container-fluid mt-5 mb-5">
+    <div class="container-fluid mb-5">
         <div class="container-md ms-5 me-5 container-box pt-5">
             <h1>내 정보 수정하기</h1>
             <hr />
