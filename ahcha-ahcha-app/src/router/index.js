@@ -26,6 +26,12 @@ const router = createRouter({
       name: 'mypage',
       component: () => import('../components/challenge/SavingChallenge.vue')
    
+    },
+    {
+      path: '/ahcha/test',
+      name: 'challengeLogWrite',
+      component: () => import('../components/challenge/ChallengeLogWrite.vue')
+   
     }
 
   ]

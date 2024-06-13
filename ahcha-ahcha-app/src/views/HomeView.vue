@@ -12,7 +12,7 @@
   </div>
       <WriteButton @logChanged="handleLogChanged"></WriteButton>
   </div>
->>>>>>> dev
+
 
 </template>
 <script setup>
