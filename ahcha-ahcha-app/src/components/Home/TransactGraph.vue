@@ -79,13 +79,13 @@
               labels: labels,
               datasets: [
                 {
-                  label: 'Income',
+                  label: '수입',
                   data: incomeData,
                   borderColor: 'rgb(75, 192, 192)',
                   tension: 0.1
                 },
                 {
-                  label: 'Outcome',
+                  label: '소비',
                   data: outcomeData,
                   borderColor: 'rgb(255, 99, 132)',
                   tension: 0.1

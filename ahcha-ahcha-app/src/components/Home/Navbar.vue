@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar">
       <div class="container">
-        <span class="navbar-brand"><router-link to="/ahcha/">앗차앗차</router-link></span>
+        <span class="navbar-brand"><router-link style="text-decoration: none; color: black;" to="/ahcha/">앗차앗차</router-link></span>
         <ul class="nav">
           <li class="inButton">
             <router-link to="/ahcha/">홈</router-link>
@@ -29,7 +29,6 @@
 /* 네비게이션 바 스타일 */
 .navbar {
   background-color: #FBE4A7;
-  
   height: 70px;
   display: flex;
   align-items: center;
@@ -40,6 +39,12 @@
 .navbar-brand {
   font-size: 24px;
   font-weight: bold;
+  color: black; /* 글자색을 검은색으로 변경 */
+}
+
+.navbar-brand .router-link {
+  color: black;
+  text-decoration: none;
 }
 
 /* 컨테이너 스타일 */
@@ -110,6 +115,4 @@
     height: 20px; /* 이미지 크기 줄이기 */
   }
 }
-
 </style>
-

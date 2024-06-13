@@ -10,8 +10,8 @@
       <!-- 오른쪽 위젯 -->
       <div class="right_widget">
         <div class="widgetGraph">
-          <div class="graph1"><TransactGraph ref="transactGraph" /></div>
           <div class="graph2"><TransactDoughnutGraph ref="transactDoughnutGraph" /></div>
+          <div class="graph1"><TransactGraph ref="transactGraph" /></div>
         </div>
       </div>
     </div>
