@@ -564,11 +564,12 @@ export default {
         background-color:#F1B73F
     }
     .btn-main{
-        background-color:#F1B73F;
+        background-color: #ffffff;
+    border:#FBE4A7 solid 5px;
 
     }
     .btn-main:hover{
-        background-color:#F1B73F;
+        background-color:#FBE4A7;
     }
     
 
@@ -580,7 +581,7 @@ export default {
 }
 
 .selected_button{
-    background-color: #F1B73F;
+    background-color:#FBE4A7;
 }
 .sort_button_group{
     margin-top: 10px;

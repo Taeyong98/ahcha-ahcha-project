@@ -106,7 +106,10 @@ const reloadChallenges = async () => {
     max-width: 50vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
     width: 50vw;
 }
-
+.btn{
+    background-color: #ffffff;
+    border:#FBE4A7 solid 5px;
+}
 
 
 .modal-body {
