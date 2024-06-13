@@ -22,12 +22,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="from_date" class="form-label">시간 기한</label>
+            <label for="from_date" class="form-label">시작일</label>
             <input class="form-control" type="date" id="from_date" v-model="state.from_date">
         </div>
 
         <div class="mb-3">
-            <label for="to_date" class="form-label">목표 기한</label>
+            <label for="to_date" class="form-label">목표일</label>
             <input class="form-control" type="date" id="to_date" v-model="state.to_date">
         </div>
 
