@@ -119,6 +119,7 @@
                     <th>카테고리</th>
                     <th>금액</th>
                     <th>내용</th>
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody v-for="(t, index) in showTradeList.value">
@@ -126,17 +127,46 @@
                     <!-- 날짜가 바뀔 때마다 구분선을 추가 -->
                     <template v-if="index!=0 && (t.date) !== showTradeList.value[index - 1].date">
                     <tr style="border-top: 1px solid #D7D7D7; ">
-                        <td colspan="5" style="padding:0px;"
+                        <td colspan="6" style="padding:0px;"
                        ></td>
                     </tr>
                     </template>
                     <tr style="border-color: white;">
-                        <td><input type="checkbox" class="form-check-input" :id="t.id"
+                        <td><input type="checkbox" class="form-check-input" :id="'checkbox'+t.id"
                             v-model="checkedTradeList.list" :value="t.id"></td>
                         <td>{{ getShowDate(t.date) }}</td>
                         <td>{{ t.category }}</td>
                         <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
                         <td>{{ t.desc }}</td>
+                        <td >
+                            <button type="button" class="btn icon-btn" data-bs-toggle="modal" 
+                            :data-bs-target="'#'+t.id" >
+
+                                <i class="material-icons" style="font-size:24px;">edit</i>
+                                
+                            </button>
+
+                            <div class="modal fade" :id="t.id" tabindex="-1" aria-labelledby="exampleModalToggleLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="aa">수정하기</h5>
+                                            <button type="button" :id="'btn'+t.id" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <EditTradeComponent @submitForm="handleSubmitForm"
+                                            v-bind:state="t" 
+                                            v-bind:incomeCategory="states.incomeCategory"
+                                            v-bind:outcomeCategory="states.outcomeCategory"
+                                            :id="t.id"
+                                            :key="componentKey.value"
+                                            ></EditTradeComponent>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -151,12 +181,20 @@
 import { ref, computed, reactive, onMounted, watch } from 'vue';
 import WriteButton from '@/components/write/WriteButton.vue';
 import axios from 'axios';
+import EditTradeComponent from '@/components/TradeList/EditTradeComponent.vue';
 export default {
     components:{
-        WriteButton
+        WriteButton,
+        EditTradeComponent
     },
     //props:["states"],
     setup(){
+        const componentKey = reactive({value:0});
+
+        function forceRerenderModal(){
+            console.log(componentKey.value);
+            componentKey.value += 1;
+        }
          // 처음엔 일주일 간의 거래 내역을 보여준다. 
         const showPeriod = 7;
         let today = new Date();
@@ -207,6 +245,7 @@ export default {
         const sortButtonGroup = reactive({"sort":"all"})
         function changeSortButton(value){
             sortButtonGroup.sort = value;
+            forceRerenderModal();
         }
 
         const isShowModal = ref(false);
@@ -221,7 +260,7 @@ export default {
             // 카테고리 필터링 모달에서 '지출' 또는 '수입' 버튼 누르면 호출됨
             // categoryType은 'income'또는'outcome'
             typeSelected.sort = value;
-            console.log(typeSelected.sort);
+       
         }
 
         // 테이블에 날짜 항목 형식 변환
@@ -257,7 +296,7 @@ export default {
 
         const fetchTradeList = async () => {
             try{
-                const response = await axios.get(BASEURL+'/trade_list?='+userid);
+                const response = await axios.get(BASEURL+'/trade_list?userid='+userid);
                 if(response.status == 200){
 
                     states.tradeList = response.data;
@@ -274,7 +313,7 @@ export default {
 
         const fetchCategory = async () => {
             try{
-                const response = await axios.get(BASEURL+'/user_category?id=ted');
+                const response = await axios.get(BASEURL+'/user_category?id='+userid);
                 if(response.status == 200){
                     states.incomeCategory = response.data[0].income;
                     states.outcomeCategory = response.data[0].outcome;
@@ -294,13 +333,34 @@ export default {
             }
         }
 
+
+        // 내역 편집해서 업데이트 됨. 
+        const updateTradeList = async(value) =>{
+            try{
+                const response = await axios.put(BASEURL+'/trade_list/'+value.id,value);
+                if(response.status == 200){
+                    let index = states.tradeList.findIndex((item)=> item.id==value.id);
+                    states.tradeList[index] = value;
+
+                    fetchTradeList();
+                    
+                    
+                    
+                }else{
+                    alert("카테고리 내역을 가져오는데 실패하였습니다. ");
+                }
+            }catch(error){
+                alert(error);
+            }
+        }
+
         const deleteTrade = async(id) => {
             console.log(id);
             try{
                 const response = await axios.delete(BASEURL+"/trade_list/"+id);
                 if(response.status == 200){
                     let index = states.tradeList.findIndex((item)=> item.id==id);
-                    console.log(index);
+       
                     states.tradeList.splice(index,1);
 
                     filterAndSortTradeList();
@@ -378,6 +438,8 @@ export default {
             account.all = (income-outcome);
             account.income = income;
             account.outcome = outcome;
+
+            forceRerenderModal();
         }
 
        
@@ -398,6 +460,7 @@ export default {
             filterTradeListByDate(r, showTradeList.value);
             sortTradeListByDate(showTradeList.value);
             filterTradeListByCategory(showTradeList.value);
+            forceRerenderModal();
         }
 
 
@@ -471,12 +534,24 @@ export default {
         });
 
 
+        // 수정
+        const handleSubmitForm = (value) => {
+            const closeButton = document.querySelector('#btn'+value.id);
+            if (closeButton) {
+                closeButton.click();
+            }
+            updateTradeList(value);
+            
+        };
+
+
         return {states, range, attr, isCalendarShow,dateToggle, typeButtonGroup: sortButtonGroup,
             selectedButton, typeSelected: typeSelected,changeCategorySortButton: changeTypeButton,
             changeTypeButton: changeSortButton, toggleCategoryModal, isShowModal, account
            , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
            ,changeDate, dateFormatChange, selectedButton2, checkedOutcomeCategory,checkedIncomeCategory,
-           categorySubmit, dateFormatChangeByDot, checkedTradeList, deleteTradeList
+           categorySubmit, dateFormatChangeByDot, checkedTradeList, deleteTradeList,
+           handleSubmitForm, componentKey
         };
     }    
 }
@@ -550,7 +625,10 @@ export default {
 }
 
 .table th, .table td {
-  padding: 14px;
+  padding-top: 15px;
+  text-align: center;
+  align-items: center;
+  
 }
 
 .btn-delete{
@@ -563,5 +641,23 @@ export default {
 .btn-delete:hover{
     background-color: #FFE1E1;
     color:#FF3838
+}
+
+.icon-btn{
+    border-color: white;
+    outline: none;
+}
+
+.custom-modal-dialog {
+    max-width: 80vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
+    width: 80vw;
+}
+
+.custom-modal-dialog .modal-content {
+    height: 80vh; /* 높이를 뷰포트 높이의 80%로 설정 */
+}
+
+.modal-body {
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능 */
 }
 </style>

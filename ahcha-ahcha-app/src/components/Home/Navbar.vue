@@ -14,7 +14,7 @@
             <router-link to="/ahcha/challenge">앗차챌린지</router-link>
           </li>
           <li class="icon">
-            <router-link to="/ahcha/mypage/:user_id"><img src="../../assets/navbar/profile.png" alt="Profile"/></router-link>
+            <router-link to="/ahcha/mypage"><img src="../../assets/navbar/profile.png" alt="Profile"/></router-link>
           </li>
           <li class="icon">
             <router-link to=""><img src="../../assets/navbar/setting.png" alt="Setting"/></router-link>
