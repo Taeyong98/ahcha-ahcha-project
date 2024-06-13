@@ -14,7 +14,6 @@
           <div class="graph2"><TransactDoughnutGraph ref="transactDoughnutGraph" /></div>
         </div>
       </div>
-      
     </div>
       
     <!-- 로그 변경 버튼 -->

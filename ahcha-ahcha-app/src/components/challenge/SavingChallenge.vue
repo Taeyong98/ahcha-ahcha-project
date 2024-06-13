@@ -55,7 +55,7 @@ const calculateCurrentAmount = (trades, challenge) => {
             end: parseISO(challenge.to_date)
         })
     )
-    .reduce((sum, trade) => sum + trade.price, 0);
+    .reduce((sum, trade) => sum + Number(trade.price), 0);
 };
 
 const calculateCurrentSpent = (trades, challenge) => {
@@ -68,7 +68,7 @@ const calculateCurrentSpent = (trades, challenge) => {
             end: parseISO(challenge.to_date)
         })
     )
-    .reduce((sum, trade) => sum + trade.price, 0);
+    .reduce((sum, trade) => sum + Number(trade.price), 0);
 };
 
 const calculateCurrentMoney = (amount, spent) => {
@@ -93,7 +93,7 @@ onMounted(async () => {
         result.value.remainingDays = calculateRemainingDays(props.challenge.to_date);
         result.value.currentSpent = calculateCurrentSpent(trades, props.challenge);
         result.value.currentMoney = calculateCurrentMoney(result.value.currentAmount, result.value.currentSpent);
-        result.value.remainingAmount = calculateRemainingAmount(props.challenge.goal, result.value.currentMoney);
+        result.value.remainingAmount = calculateRemainingAmount(Number(props.challenge.goal), result.value.currentMoney);
         progressBarWidth.value = calculateProgress(result.value.currentMoney, props.challenge.goal);
 
         if (result.value.currentMoney >= props.challenge.goal) {
