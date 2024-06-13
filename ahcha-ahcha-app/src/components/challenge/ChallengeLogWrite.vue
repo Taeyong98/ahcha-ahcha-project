@@ -2,12 +2,12 @@
     <div class="write">
         <div class="mb-3">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="type1" name="challenge_type" value="saving" v-model="state.challenge_type">
-                <label class="form-check-label" for="type1">절약 챌린지</label>
+                <input class="form-check-input" type="radio" id="type2" name="challenge_type" value="spend_less" v-model="state.challenge_type">
+                <label class="form-check-label" for="type2">절약 챌린지</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="type2" name="challenge_type" value="spend_less" v-model="state.challenge_type">
-                <label class="form-check-label" for="type2">저축 챌린지</label>
+                <input class="form-check-input" type="radio" id="type1" name="challenge_type" value="saving" v-model="state.challenge_type">
+                <label class="form-check-label" for="type1">저축 챌린지</label>
             </div>
         </div>
 
