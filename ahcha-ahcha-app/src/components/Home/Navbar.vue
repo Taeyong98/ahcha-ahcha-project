@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar">
       <div class="container">
-        <span class="navbar-brand">앗차앗차</span>
+        <span class="navbar-brand"><router-link to="/ahcha/">앗차앗차</router-link></span>
         <ul class="nav">
           <li class="inButton">
             <router-link to="/ahcha/">홈</router-link>

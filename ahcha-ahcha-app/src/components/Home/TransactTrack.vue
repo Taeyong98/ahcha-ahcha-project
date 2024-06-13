@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="upperPart">
-      <h3>거래 목록</h3>
+      <!-- <h3>하루 기록</h3> -->
       <div id="decideDate">
-        <button type="button" @click="changeDate(-1)"><</button>
+        <button type="button" @click="changeDate(-1)" ><img src="/Users/test/Documents/ahcha-ahcha-project/ahcha-ahcha-app/src/assets/home/right arrow.png"/></button>
         <span>{{ formatDate(currentDate) }}</span>
-        <button type="button" @click="changeDate(1)">></button> 
+        <button type="button" @click="changeDate(1)" ><img src="/Users/test/Documents/ahcha-ahcha-project/ahcha-ahcha-app/src/assets/home/left arrow.png"/></button> 
       </div>
     </div>
     
@@ -96,6 +96,14 @@ padding: 15px 25px;
 h3{
 margin-bottom:15px;
 }
+
+button{
+
+    background-color: transparent;
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
 .upperPart {
 border: #FBE4A7 solid 5px;
 background-color: #FBE4A7;
@@ -118,4 +126,8 @@ justify-content: space-between; /* Space out the button and span elements */
 align-items: center; /* Center align items vertically */
 }
 
+img{
+    width: 20px;
+    height: 20px;
+}
 </style>

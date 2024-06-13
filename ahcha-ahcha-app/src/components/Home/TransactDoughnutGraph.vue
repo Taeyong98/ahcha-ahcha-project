@@ -4,7 +4,7 @@
         <label for="month">Select Month </label><br>
         <input type="month" id="month" v-model="selectedMonth" @change="fetchData" />
       </div>
-      <canvas ref="canvas" width="400" height="400"></canvas>
+      <canvas ref="canvas" width="300px" height="300px"></canvas>
     </div>
   </template>
   
