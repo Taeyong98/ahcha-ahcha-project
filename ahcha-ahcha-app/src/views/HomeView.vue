@@ -1,13 +1,13 @@
 <template>
   <div class="container-full text-center">
     <div class="row justify-content-center">
-      <!-- 왼쪽 위젯 -->
+      <!-- 왼쪽 위젯-->
       <div class="left_widget col-md-6 mb-3 mb-md-0">
         <TransactTrack ref="transactTrack" class="widget"/>
       </div>
 
       <!-- 오른쪽 위젯 -->
-      <div class="right_widget col-md-6" >
+      <div class="right_widget col-md-6">
         <div class="row justify-content-center">
           
           <div class="row">
@@ -21,11 +21,6 @@
             </div>
           </div>  
           
-          <!-- <div class="widgetGraph">
-            <div class="col-md-12 mb-3">
-              <TransactGraph ref="transactGraph" id=""/>
-            </div>
-          </div>  -->
 
           </div>
 
