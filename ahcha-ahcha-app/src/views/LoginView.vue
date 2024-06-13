@@ -30,7 +30,7 @@
                 </div>
                 <div class="mb-3 form-check"></div>
                 <button type="button" class="btn btn-warning" @click="login">로그인</button>
-                <button type="button" class="btn" @clcik="signUp">회원가입</button>
+                <button type="button" class="btn" @click="signUp">회원가입</button>
             </form>
         </div>
     </div>
@@ -79,6 +79,7 @@ export default {
         };
 
         const signUp = function () {
+            console.log('hllo');
             router.push('/ahcha/signup');
         };
 

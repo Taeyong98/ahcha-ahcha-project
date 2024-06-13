@@ -35,7 +35,7 @@ const router = createRouter({
         },
         {
             path: '/ahcha/signup',
-            name: 'signin',
+            name: 'signup',
             component: () => import('../views/SignupView.vue'),
         },
     ],

@@ -97,12 +97,10 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                                    <img
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                                        class="img-fluid"
-                                        alt="Sample image"
-                                    />
+                                <div
+                                    class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 justify-content-center"
+                                >
+                                    <img src="@/assets/login/로고.png" class="logo-image" alt="Sample image" />
                                 </div>
                             </div>
                         </div>
@@ -197,4 +195,9 @@ export default {
     },
 };
 </script>
-<style lang=""></style>
+<style scoped>
+.logo-image {
+    max-width: 90%; /* 이미지의 최대 너비를 부모 컨테이너 너비로 제한 */
+    height: auto; /* 이미지 비율을 유지하며 높이를 자동 조정 */
+}
+</style>
