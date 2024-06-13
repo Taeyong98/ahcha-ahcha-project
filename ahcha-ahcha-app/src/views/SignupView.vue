@@ -14,14 +14,37 @@
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>ID</label>
-                                                <input type="text" class="form-control" />
+                                                <input type="text" class="form-control" v-model="user_info.id" />
+                                                <button
+                                                    v-if="!idChecked"
+                                                    type="button"
+                                                    data-mdb-button-init
+                                                    data-mdb-ripple-init
+                                                    class="btn btn-lg mt-3"
+                                                    style="background-color: #fbe4a7"
+                                                    @click="checkId"
+                                                >
+                                                    중복확인
+                                                </button>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>이름</label>
-                                                <input type="text" class="form-control" />
+                                                <input type="text" class="form-control" v-model="user_info.user_name" />
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label>닉네임</label>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    v-model="user_info.user_nickname"
+                                                />
                                             </div>
                                         </div>
 
@@ -29,14 +52,14 @@
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>이메일</label>
-                                                <input type="email" class="form-control" />
+                                                <input type="email" class="form-control" v-model="user_info.email" />
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>휴대폰 번호</label>
-                                                <input type="text" class="form-control" />
+                                                <input type="text" class="form-control" v-model="user_info.phone_num" />
                                             </div>
                                         </div>
 
@@ -44,7 +67,11 @@
                                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>비밀번호 입력</label>
-                                                <input type="password" class="form-control" />
+                                                <input
+                                                    type="password"
+                                                    class="form-control"
+                                                    v-model="user_info.password"
+                                                />
                                             </div>
                                         </div>
 
@@ -52,7 +79,7 @@
                                             <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>비밀번호 다시 입력</label>
-                                                <input type="password" class="form-control" />
+                                                <input type="password" class="form-control" v-model="passwordCf" />
                                             </div>
                                         </div>
 
@@ -63,6 +90,7 @@
                                                 data-mdb-ripple-init
                                                 class="btn btn-lg"
                                                 style="background-color: #fbe4a7"
+                                                @click="signUp"
                                             >
                                                 회원가입
                                             </button>
@@ -85,9 +113,12 @@
     </section>
 </template>
 <script>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 export default {
     setup() {
+        const router = useRouter();
         const user_info = reactive({
             id: '',
             user_name: '',
@@ -97,6 +128,72 @@ export default {
             image: '',
             password: '',
         });
+        const idChecked = ref(false);
+        const passwordCf = ref('');
+
+        watch(
+            () => user_info.id,
+            () => {
+                idChecked.value = false;
+            },
+        );
+        const checkId = async function () {
+            try {
+                if (user_info.id == '') {
+                    alert('아이디를 입력하세요.');
+                    return;
+                }
+                let response = await axios.get(`http://localhost:3001/user_list`);
+                let tempUser = response.data.find((u) => {
+                    return u.id == user_info.id;
+                });
+                console.log(tempUser);
+                if (tempUser != undefined) {
+                    alert('이미 존재하는 아이디입니다.');
+                    return;
+                }
+                alert('사용가능한 아이디입니다.');
+                idChecked.value = true;
+            } catch (err) {
+                console.log(err);
+            } finally {
+            }
+        };
+
+        const signUp = function () {
+            if (
+                !user_info.id ||
+                !user_info.user_name ||
+                !user_info.user_nickname ||
+                !user_info.phone_num ||
+                !user_info.email ||
+                !user_info.password
+            ) {
+                alert('빈칸을 모두 기입해주세요.');
+                return;
+            }
+            if (!idChecked.value) {
+                alert('아이디 중복확인을 먼저 해주세요.');
+                return;
+            }
+
+            if (user_info.password != passwordCf.value) {
+                alert('다시 입력한 비밀번호가 다릅니다.');
+                return;
+            }
+
+            axios.post('http://localhost:3001/user_list', user_info).then((res) => {
+                if (res.status != 201) {
+                    console.log(res.data);
+                    console.log(res.status);
+                    return;
+                }
+                alert('회원가입이 완료 되었습니다.');
+                router.push('/ahcha/login');
+            });
+        };
+
+        return { user_info, checkId, passwordCf, signUp, idChecked };
     },
 };
 </script>
