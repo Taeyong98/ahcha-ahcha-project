@@ -14,18 +14,40 @@
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <label>ID</label>
-                                                <input type="text" class="form-control" v-model="user_info.id" />
-                                                <button
-                                                    v-if="!idChecked"
-                                                    type="button"
-                                                    data-mdb-button-init
-                                                    data-mdb-ripple-init
-                                                    class="btn btn-lg mt-3"
-                                                    style="background-color: #fbe4a7"
-                                                    @click="checkId"
-                                                >
-                                                    중복확인
-                                                </button>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" v-model="user_info.id" />
+                                                    <button
+                                                        :disabled="idChecked"
+                                                        type="button"
+                                                        data-mdb-button-init
+                                                        data-mdb-ripple-init
+                                                        class="btn btn-lg"
+                                                        style="background-color: #fbe4a7"
+                                                        @click="checkId"
+                                                    >
+                                                        중복확인
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label>비밀번호 입력</label>
+                                                <input
+                                                    type="password"
+                                                    class="form-control"
+                                                    v-model="user_info.password"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label>비밀번호 다시 입력</label>
+                                                <input type="password" class="form-control" v-model="passwordCf" />
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
@@ -62,27 +84,6 @@
                                                 <input type="text" class="form-control" v-model="user_info.phone_num" />
                                             </div>
                                         </div>
-
-                                        <div class="d-flex flex-row align-items-center mb-4">
-                                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                                <label>비밀번호 입력</label>
-                                                <input
-                                                    type="password"
-                                                    class="form-control"
-                                                    v-model="user_info.password"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex flex-row align-items-center mb-4">
-                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                                <label>비밀번호 다시 입력</label>
-                                                <input type="password" class="form-control" v-model="passwordCf" />
-                                            </div>
-                                        </div>
-
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                             <button
                                                 type="button"
@@ -180,10 +181,20 @@ export default {
                 return;
             }
 
+            axios
+                .post('http://localhost:3001/user_category', {
+                    id: user_info.id,
+                    income: ['월급', '용돈', '환급금', '이자', '기타'],
+                    outcome: ['식비', '교통', '문화생활', '의료', '경조사', '통신', '기타'],
+                })
+                .then((res) => {
+                    if (res.status != 201) {
+                        return;
+                    }
+                });
+
             axios.post('http://localhost:3001/user_list', user_info).then((res) => {
                 if (res.status != 201) {
-                    console.log(res.data);
-                    console.log(res.status);
                     return;
                 }
                 alert('회원가입이 완료 되었습니다.');
