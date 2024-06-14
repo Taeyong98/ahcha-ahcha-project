@@ -4,10 +4,10 @@
       <label>이번 달 얼마 남았을까요? </label><br/>
       <input type="month" id="month" v-model="selectedMonth" @change="fetchData" />
       
-      <div style="width: 400px; height: 550px;">
+      <div style="width: 350px; height: 550px;">
         <canvas ref="canvas"></canvas>
         <div class="total-income">
-          <label>수입</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalIncome) }}원</label><br/>
+          <!-- <label>수입</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalIncome) }}원</label><br/> -->
           <label>소비</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalExpenses) }}원</label><br/>
           <label id="total">남은 금액</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label :class="balanceClass">{{ formatCurrency(balance) }}원</label>
         </div>
@@ -41,12 +41,12 @@ export default {
 
         const userId = sessionStorage.getItem('userid');
         const userTradeList = tradeList.filter(entry => entry.userid === userId);
-        latestMonth = getLatestMonth(tradeList);
+        latestMonth = getLatestMonth(userTradeList);
 
         selectedMonth.value = latestMonth;
-        const filteredData = filterDataByMonth(tradeList, latestMonth);
+        const filteredData = filterDataByMonth(userTradeList, latestMonth);
 
-        const categorySet = new Set(tradeList.map(entry => entry.category));
+        const categorySet = new Set(userTradeList.filter((entry) => entry.type === 'outcome').map(entry => entry.category));
         categories.value = Array.from(categorySet);
         let income = 0;
         let expenses = 0;
@@ -111,7 +111,7 @@ export default {
         const userTradeList = tradeList.filter(entry => entry.userid === userId);
 
 
-        const categorySet = new Set(tradeList.map(entry => entry.category));
+        const categorySet = new Set(userTradeList.map(entry => entry.category));
         categories.value = Array.from(categorySet);
         let income = 0;
         let expenses = 0;
@@ -123,7 +123,7 @@ export default {
         
         
 
-        tradeList.forEach(entry => {
+        userTradeList.forEach(entry => {
           const date = entry.date.toString();
           const year = date.slice(0, 4);
           const month = date.slice(5, 7);

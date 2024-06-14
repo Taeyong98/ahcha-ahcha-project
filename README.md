@@ -1,10 +1,14 @@
 # 앗차앗차 (가계부 프로젝트)
 
+<br/>
 <p align="center">
   <br>
-  <img src="./images/readme/logo.png">
+  <img src="./images/readme/main-logo.png">
   <br>
 </p>
+
+
+<br>
 
 ## 프로젝트 소개
 
@@ -23,6 +27,7 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
 <br>
 
 ## 구현 기능
+
 
 ### 회원가입 및 로그인 화면 
 <p align="justify">회원 정보를 입력하여 회원가입 및 로그인을 수행합니다. 사용자 정보를 입력한 후 홈 화면으로 이동합니다.</p>
@@ -89,8 +94,6 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
   <li>비밀번호 변경</li>
 </ul>
 <br/>
-
-<br>
 
 ## 팀원
 <table>
