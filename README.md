@@ -3,7 +3,7 @@
 <br/>
 <p align="center">
   <br>
-  <img src="./images/readme/logo.png">
+  <img src="./images/readme/main-logo.png">
   <br>
 </p>
 
