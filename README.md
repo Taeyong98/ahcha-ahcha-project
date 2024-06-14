@@ -2,11 +2,9 @@
 
 <p align="center">
   <br>
-  <img src="./images/readme/logo.png">
+  <img src="./images/readme/logo.png" width="200">
   <br>
 </p>
-
-
 
 ## 프로젝트 소개
 
@@ -14,85 +12,84 @@
 KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝트입니다. 지출과 수입을 관리하는 가계부 기능을 구현하였습니다. 
 </p>
 
-
 <br>
 
 ## 기술 스택
 
-| JavaScript | Vue |  bootstrap5   |     
+| JavaScript | Vue |  Bootstrap 5   |     
 | :--------: | :--------: | :------: | 
-|   ![js]    |   ![vue]    | ![bootstrap] | 
+|   <img src="./images/readme/javascript.svg" width="50">    |   <img src="./images/readme/vue.svg" width="50">    | <img src="./images/readme/bootstrap.svg" width="50"> | 
 
 <br>
 
 ## 구현 기능
 
-### 전체 화면 공통 부분
-<img src="./images/common/logo-sample.jpeg">
-
-### 회원가입, 로그인 화면 
-<img src="./images/readme/sign-up.png">
-<img src="./images/readme/sign-in.png">
-<p align="justify">회원 정보를 입력하여 회원가입 및 로그인을 수행 </p>
-<p align="justify">- 입력 폼을 통해 사용자 정보를 입력한 후 홈 화면으로 이동 </p>
+### 회원가입 및 로그인 화면 
+<img src="./images/readme/sign-up.png" width="300">
+<img src="./images/readme/sign-in.png" width="300">
+<p align="justify">회원 정보를 입력하여 회원가입 및 로그인을 수행합니다. 사용자 정보를 입력한 후 홈 화면으로 이동합니다.</p>
 
 ### 홈 화면 
-<img src="./images/readme/image.png">
-<p align="justify">최근 거래 내역을 목록 형식으로 보여주고, 전체 거래 내역 분석 결과를 그래프로 나타낸다.</p>
-<p align="justify">- 최근 거래 내역 확인</p>
-<p align="justify">- 꺾은선 그래프를 이용한 월별 수입 및 지출 요약</p>
-<p align="justify">- 도넛 그래프를 이용한 카테고리별 수입 및 지출 요약</p>
+<img src="./images/readme/image.png" width="300">
+<p align="justify">최근 거래 내역을 목록 형식으로 보여주고, 전체 거래 내역 분석 결과를 그래프로 나타냅니다.</p>
+<ul>
+  <li>최근 거래 내역 확인</li>
+  <li>꺾은선 그래프를 이용한 월별 수입 및 지출 요약</li>
+  <li>도넛 그래프를 이용한 카테고리별 수입 및 지출 요약</li>
+</ul>
 
 ### 거래 내역 화면 
-<img src="./images/readme/trade-list.png">
-<p align="justify">전체 거래 내역을 확인할 수 있다.</p>
-<p align="justify">- 거래 내역 전체 보기</p>
-<p align="justify">- 기간별, 카테고리별 필터링 기능</p>
-<p align="justify">- 거래 내역 삭제 및 수정 기능</p>
-<p align="justify">- 우측 하단의 + 버튼을 이용한 거래 내역 추가</p>
+<img src="./images/readme/trade-list.png" width="300">
+<p align="justify">전체 거래 내역을 확인할 수 있습니다.</p>
+<ul>
+  <li>거래 내역 전체 보기</li>
+  <li>기간별, 카테고리별 필터링 기능</li>
+  <li>거래 내역 삭제 및 수정 기능</li>
+  <li>우측 하단의 + 버튼을 이용한 거래 내역 추가</li>
+</ul>
 
 ### 거래 등록 화면 
-<img src="./images/readme/add-trade.png">
-<p align="justify">새로운 거래를 등록할 수 있다.</p>
-<p align="justify">- 거래 내역 전체 보기</p>
-<p align="justify">- 기간별, 카테고리별 필터링 기능</p>
-<p align="justify">- 거래 내역 삭제 및 수정 기능</p>
-<p align="justify">- 우측 하단의 + 버튼을 이용한 거래 내역 추가</p>
+<img src="./images/readme/add-trade.png" width="300">
+<p align="justify">새로운 거래를 등록할 수 있습니다.</p>
+<ul>
+  <li>거래 내역 전체 보기</li>
+  <li>기간별, 카테고리별 필터링 기능</li>
+  <li>거래 내역 삭제 및 수정 기능</li>
+  <li>우측 하단의 + 버튼을 이용한 거래 내역 추가</li>
+</ul>
 
 ### 목표 (챌린지) 화면
-<img src="./images/readme/challenge.png">
-<p align="justify">전체 거래 내역을 확인할 수 있다.</p>
-<p align="justify">- 거래 내역 전체 보기</p>
-<p align="justify">- 기간별, 카테고리별 필터링 기능</p>
-<p align="justify">- 거래 내역 삭제 및 수정 기능</p>
-<p align="justify">- 우측 하단의 + 버튼을 이용한 거래 내역 추가</p>
+<img src="./images/readme/challenge.png" width="300">
+<p align="justify">전체 거래 내역을 확인할 수 있습니다.</p>
+<ul>
+  <li>거래 내역 전체 보기</li>
+  <li>기간별, 카테고리별 필터링 기능</li>
+  <li>거래 내역 삭제 및 수정 기능</li>
+  <li>우측 하단의 + 버튼을 이용한 거래 내역 추가</li>
+</ul>
 
 ### 목표 (챌린지) 등록 화면
-<img src="./images/readme/challenge.png">
-<p align="justify">전체 거래 내역을 확인할 수 있다.</p>
-<p align="justify">- 거래 내역 전체 보기</p>
-<p align="justify">- 기간별, 카테고리별 필터링 기능</p>
-<p align="justify">- 거래 내역 삭제 및 수정 기능</p>
-<p align="justify">- 우측 하단의 + 버튼을 이용한 거래 내역 추가</p>
+<img src="./images/readme/add-challenge.png" width="300">
+<p align="justify">새로운 목표를 등록할 수 있습니다.</p>
+<ul>
+  <li>목표 설정</li>
+  <li>목표 달성 여부 확인</li>
+</ul>
 
 ### 프로필 관리 화면
-<img src="./images/readme/profile-setting.png">
-<img src="./images/readme/profile-setting2.png">
-<p align="justify">전체 거래 내역을 확인할 수 있다.</p>
-<p align="justify">- 거래 내역 전체 보기</p>
-<p align="justify">- 기간별, 카테고리별 필터링 기능</p>
-<p align="justify">- 거래 내역 삭제 및 수정 기능</p>
-<p align="justify">- 우측 하단의 + 버튼을 이용한 거래 내역 추가</p>
-
-<br>
-
+<img src="./images/readme/profile-setting.png" width="300">
+<img src="./images/readme/profile-setting2.png" width="300">
+<p align="justify">사용자 프로필을 관리할 수 있습니다.</p>
+<ul>
+  <li>프로필 정보 수정</li>
+  <li>비밀번호 변경</li>
+</ul>
 
 <br>
 
 ## 라이센스
 
-
-<!-- Stack Icon Refernces -->
+<!-- Stack Icon References -->
 
 [js]: ./images/readme/javascript.svg
 [vue]: ./images/readme/vue.svg
