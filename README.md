@@ -40,8 +40,18 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
 
 <br>
 
-## 라이센스
-
+## 팀원
+<table>
+    <tbody>
+        <tr>
+            <td align="center" valign="top" width="20%" "><a href="https://github.com/soyoung1832"><img src="https://avatars.githubusercontent.com/u/68853692?v=4" width="100px;"/><br /><sub><b>soyoung1832</b></sub></a><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/anjdfk111"><img src="https://avatars.githubusercontent.com/u/111959522?v=4" width="100px;"/><br /><sub><b>SunJin Moon</b></sub></a><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/Taeyong98"><img src="https://avatars.githubusercontent.com/u/163623205?v=4" width="100px;"/><br /><sub><b>Taeyong98</b></sub></a><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/pq5910"><img src="https://avatars.githubusercontent.com/u/81617589?v=4" width="100px;"/><br /><sub><b>KWJ</b></sub></a><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/sooojChoi"><img src="https://avatars.githubusercontent.com/u/94206303?v=4" width="100px;"/><br /><sub><b>sooojChoi</b></sub></a><br /></a></td>
+        </tr>
+    </tbody>
+</table>
 
 <!-- Stack Icon Refernces -->
 
