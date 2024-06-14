@@ -31,7 +31,7 @@ export default {
         const tradeList = response.data;
 
         const userId = sessionStorage.getItem('userid');
-        const userTradeList = tradeList.filter(entry => entry.userid === userId);
+        
         
 
         // 월별 수입과 지출을 계산

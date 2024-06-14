@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed,watch } from 'vue';
 import axios from 'axios';
 import { Chart, registerables } from 'chart.js';
 
@@ -32,12 +32,77 @@ export default {
     const totalExpenses = ref(0);
     const categories = ref([]);
     let chartInstance = null;
+    let latestMonth = '';
 
-    
+    const firstFetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/trade_list');
+        const tradeList = response.data;
 
+        const userId = sessionStorage.getItem('userid');
+        const userTradeList = tradeList.filter(entry => entry.userid === userId);
+        latestMonth = getLatestMonth(tradeList);
+
+        selectedMonth.value = latestMonth;
+        const filteredData = filterDataByMonth(tradeList, latestMonth);
+
+        const categorySet = new Set(tradeList.map(entry => entry.category));
+        categories.value = Array.from(categorySet);
+        let income = 0;
+        let expenses = 0;
+        const categoryData = {};
+
+        categories.value.forEach(category => {
+          categoryData[category] = 0;
+        });
+
+        filteredData.forEach(entry => {
+          const price = parseFloat(entry.price);
+          categoryData[entry.category] += price;
+          if (entry.type === 'income') {
+            income += price;
+          } else if (entry.type === 'outcome') {
+            expenses += price;
+          }
+        });
+        totalIncome.value = income;
+        totalExpenses.value = expenses;
+
+        if (chartInstance) {
+          chartInstance.destroy();
+        }
+        const ctx = canvas.value.getContext('2d');
+        chartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: categories.value,
+            datasets: [{
+              data: categories.value.map(category => categoryData[category]),
+              backgroundColor: categories.value.map(() => `hsl(${Math.random() * 360}, 100%, 75%)`),
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+              }
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+  
     const fetchData = async () => {
-      if (!selectedMonth.value) return;
-
+    
       try {
         const response = await axios.get('http://localhost:3001/trade_list');
         const tradeList = response.data;
@@ -45,16 +110,18 @@ export default {
         const userId = sessionStorage.getItem('userid');
         const userTradeList = tradeList.filter(entry => entry.userid === userId);
 
+
         const categorySet = new Set(tradeList.map(entry => entry.category));
         categories.value = Array.from(categorySet);
-
+        let income = 0;
+        let expenses = 0;
         const categoryData = {};
+
         categories.value.forEach(category => {
           categoryData[category] = 0;
         });
-
-        let income = 0;
-        let expenses = 0;
+        
+        
 
         tradeList.forEach(entry => {
           const date = entry.date.toString();
@@ -110,9 +177,19 @@ export default {
       }
     };
 
-    onMounted(() => {
-      fetchData();
-    });
+
+    
+
+    // Helper function to get the latest month from the data
+const getLatestMonth = (data) => {
+  const months = data.map(entry => entry.date.slice(0, 7)); // Assuming date format 'YYYY-MM-DD'
+  return Array.from(new Set(months)).sort().reverse()[0];
+};
+
+// Helper function to filter data by a specific month
+const filterDataByMonth = (data, month) => {
+  return data.filter(entry => entry.date.startsWith(month));
+};
 
     const formatCurrency = (value) => {
       return new Intl.NumberFormat('ko-KR', {
@@ -128,6 +205,10 @@ export default {
       return balance.value >= 0 ? 'positive-balance' : 'negative-balance';
     });
 
+    onMounted(() => {
+      firstFetchData(); // Ensure this function is called when component is mounted
+    });
+
     return {
       canvas,
       selectedMonth,
@@ -137,7 +218,8 @@ export default {
       fetchData,
       formatCurrency,
       balance,
-      balanceClass
+      balanceClass,
+      firstFetchData
     };
   }
 };
