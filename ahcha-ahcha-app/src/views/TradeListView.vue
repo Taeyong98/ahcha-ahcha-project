@@ -282,7 +282,8 @@ export default {
 
 
         const BASEURL = "http://localhost:3001";
-        const userid = sessionStorage.getItem("userid");
+        let userid = sessionStorage.getItem("userid");
+        
         const states = reactive({
             tradeList:[],
             incomeCategory:[],
@@ -313,7 +314,7 @@ export default {
 
         const fetchCategory = async () => {
             try{
-                const response = await axios.get(BASEURL+'/user_category?id='+userid);
+                const response = await axios.get(BASEURL+'/user_category?id'+userid);
                 if(response.status == 200){
                     states.incomeCategory = response.data[0].income;
                     states.outcomeCategory = response.data[0].outcome;
@@ -524,6 +525,8 @@ export default {
 
 
         onMounted(()=>{
+            userid = sessionStorage.getItem("userid");
+         
             fetchCategory();
         
         });

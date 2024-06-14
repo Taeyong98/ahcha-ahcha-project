@@ -77,6 +77,7 @@ const logout = ()=>{
     sessionStorage.removeItem("userid");
     router.push("/ahcha/login"); 
   }
+  showSettings.value = !showSettings.value;
 }
 
 // 테마 변경 기능

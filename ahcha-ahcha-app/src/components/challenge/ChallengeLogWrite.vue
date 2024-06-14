@@ -38,12 +38,13 @@
 </template>
 
 <script setup>
+let userid = sessionStorage.getItem('userid');
 import { reactive, defineEmits, watch } from 'vue';
 
 const emit = defineEmits(['submitForm']);
 
 const state = reactive({
-    user_id:"ted",
+    user_id:userid,
     challenge_type: "",
     title: "",
     goal: "",
