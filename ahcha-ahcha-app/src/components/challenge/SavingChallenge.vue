@@ -64,7 +64,7 @@ const calculateCurrentSpent = (trades, challenge) => {
         trade.user_id === challenge.userid &&
         trade.type === 'outcome' &&
         isWithinInterval(parseISO(trade.date), {
-            start: parseISO(challenge.from_date),
+            start: new Date(-8640000000000000),
             end: parseISO(challenge.to_date)
         })
     )
@@ -95,7 +95,7 @@ onMounted(async () => {
         result.value.currentMoney = calculateCurrentMoney(result.value.currentAmount, result.value.currentSpent);
         result.value.remainingAmount = calculateRemainingAmount(Number(props.challenge.goal), result.value.currentMoney);
         progressBarWidth.value = calculateProgress(result.value.currentMoney, props.challenge.goal);
-
+        
         if (result.value.currentMoney >= props.challenge.goal) {
             isSuccess.value = true;
         }
