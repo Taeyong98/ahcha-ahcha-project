@@ -4,15 +4,14 @@
       <label>이번 달 얼마 남았을까요? </label><br/>
       <input type="month" id="month" v-model="selectedMonth" @change="fetchData" />
       
-      <div width="400px" height="550px">
-        <canvas ref="canvas" width="300px" height="300px"></canvas>
+      <div style="width: 400px; height: 550px;">
+        <canvas ref="canvas"></canvas>
         <div class="total-income">
           <label>수입</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalIncome) }}원</label><br/>
           <label>소비</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalExpenses) }}원</label><br/>
           <label id="total">남은 금액</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label :class="balanceClass">{{ formatCurrency(balance) }}원</label>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
@@ -29,25 +28,30 @@ export default {
   setup() {
     const canvas = ref(null);
     const selectedMonth = ref('');
-    const totalIncome = ref(0); // 총 수입
-    const totalExpenses = ref(0); // 총 소비
-    let chartInstance = null; // Chart instance를 저장하기 위한 변수
+    const totalIncome = ref(0);
+    const totalExpenses = ref(0);
+    const categories = ref([]);
+    let chartInstance = null;
+
+    
 
     const fetchData = async () => {
       if (!selectedMonth.value) return;
 
       try {
-        // JSON Server에서 데이터 가져오기
         const response = await axios.get('http://localhost:3001/trade_list');
         const tradeList = response.data;
-        console.log("tradeList_Graph", tradeList);
 
-        // 선택한 월의 "월급", "교통비", "식비"를 계산
-        const monthlyData = {
-          salary: 0,
-          transport: 0,
-          food: 0
-        };
+        const userId = sessionStorage.getItem('userid');
+        const userTradeList = tradeList.filter(entry => entry.userid === userId);
+
+        const categorySet = new Set(tradeList.map(entry => entry.category));
+        categories.value = Array.from(categorySet);
+
+        const categoryData = {};
+        categories.value.forEach(category => {
+          categoryData[category] = 0;
+        });
 
         let income = 0;
         let expenses = 0;
@@ -60,40 +64,31 @@ export default {
 
           if (key === selectedMonth.value) {
             const price = parseFloat(entry.price);
-
-            // 항목에 따라 데이터를 누적
-            if (entry.category === '월급') {
-              monthlyData.salary += price;
+            if (entry.type === 'income') {
+              categoryData[entry.category] += price;
               income += price;
-            } else if (entry.category === '교통비' || entry.category === '식비') {
-              if (entry.category === '교통비') monthlyData.transport += price;
-              if (entry.category === '식비') monthlyData.food += price;
+            } else if (entry.type === 'outcome') {
+              categoryData[entry.category] += price;
               expenses += price;
             }
           }
         });
 
-        // 총 수입과 총 소비를 업데이트
         totalIncome.value = income;
         totalExpenses.value = expenses;
 
-        // 기존 차트가 있으면 파괴
         if (chartInstance) {
           chartInstance.destroy();
         }
 
-        // Chart.js를 사용하여 도넛 차트 생성
-        const config = {
+        const ctx = canvas.value.getContext('2d');
+        chartInstance = new Chart(ctx, {
           type: 'doughnut',
           data: {
-            labels: ['월급', '교통비', '식비'],
+            labels: categories.value,
             datasets: [{
-              data: [monthlyData.salary, monthlyData.transport, monthlyData.food],
-              backgroundColor: [
-                'rgb(75, 192, 192)',
-                'rgb(241, 183, 63)',
-                'rgb(255, 99, 132)'
-              ],
+              data: categories.value.map(category => categoryData[category]),
+              backgroundColor: categories.value.map(() => `hsl(${Math.random() * 360}, 100%, 75%)`),
               hoverOffset: 4
             }]
           },
@@ -108,24 +103,16 @@ export default {
               }
             }
           }
-        };
+        });
 
-        // 그래프를 캔버스에 렌더링
-        const ctx = canvas.value.getContext('2d');
-        chartInstance = new Chart(ctx, config);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     onMounted(() => {
-      // 페이지 로드 시 초기 데이터 가져오기
       fetchData();
     });
-
-    const updateDoughnutGraph = async () => {
-      await fetchData();
-    };
 
     const formatCurrency = (value) => {
       return new Intl.NumberFormat('ko-KR', {
@@ -146,8 +133,8 @@ export default {
       selectedMonth,
       totalIncome,
       totalExpenses,
+      categories,
       fetchData,
-      updateDoughnutGraph,
       formatCurrency,
       balance,
       balanceClass
@@ -159,6 +146,8 @@ export default {
 <style scoped>
 canvas {
   margin: 10px;
+  width: 100%;
+  height: 100%;
 }
 
 .date-picker {
@@ -174,10 +163,11 @@ canvas {
   padding: 20px;
   border-radius: 8px;
 }
-.total-income{
-  background-color:#fafafa;
+
+.total-income {
+  background-color: #fafafa;
   border-radius: 8px;
-  padding:20px;
+  padding: 20px;
 }
 
 input[type="month"] {
@@ -196,16 +186,30 @@ label {
   font-weight: 300;
 }
 
-#total{
-  font-weight:300;
+#total {
+  font-weight: 300;
 }
+
 .positive-balance {
-  color: #FF3838;
+  color: #ff3838;
   font-weight: 300;
 }
 
 .negative-balance {
-  color: #0066FF;
+  color: #0066ff;
   font-weight: 300;
+}
+
+.categories {
+  margin-top: 20px;
+}
+
+.categories ul {
+  list-style: none;
+  padding: 0;
+}
+
+.categories li {
+  margin: 5px 0;
 }
 </style>
