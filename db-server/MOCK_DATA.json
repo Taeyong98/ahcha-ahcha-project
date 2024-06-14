@@ -1,0 +1,117 @@
+{
+  "user_category": [
+    {
+      "id": "ted",
+      "income": [
+        "월급",
+        "환급금",
+        "기타"
+      ],
+      "outcome": [
+        "식비",
+        "교통",
+        "기타"
+      ]
+    }
+  ],
+  "trade_list": [
+    {
+      "id": "370a",
+      "type": "income",
+      "category": "기타",
+      "price": "3000",
+      "date": "2024-06-12",
+      "desc": "용돈",
+      "memo": "부모님께 용돈",
+      "userid": "ted"
+    },
+    {
+      "id": "1ce9",
+      "type": "outcome",
+      "category": "식비",
+      "price": "5000",
+      "date": "2024-06-11",
+      "desc": "간식비",
+      "memo": "편의점 간식 구매",
+      "userid": "ted"
+    },
+    {
+      "id": "4d75",
+      "type": "income",
+      "category": "환급금",
+      "price": "50000",
+      "date": "2024-06-12",
+      "desc": "부모님께 용돈",
+      "memo": "오예",
+      "userid": "ted"
+    },
+    {
+      "id": "45d4",
+      "type": "income",
+      "category": "월급",
+      "price": "44444",
+      "date": "2024-06-15",
+      "desc": "",
+      "memo": "",
+      "userid": "ted"
+    },
+    {
+      "id": "fcc1",
+      "type": "outcome",
+      "category": "교통",
+      "price": "5800",
+      "date": "2024-06-08",
+      "desc": "택시비",
+      "memo": "",
+      "userid": "ted"
+    },
+    {
+      "id": "0d77",
+      "type": "income",
+      "category": "기타",
+      "price": "35000",
+      "date": "2024-06-10",
+      "desc": "알바비",
+      "memo": "쿠팡 일급",
+      "userid": "ted"
+    },
+    {
+      "id": "5602",
+      "type": "outcome",
+      "category": "식비",
+      "price": "30000",
+      "date": "2024-06-12",
+      "desc": "저녁값",
+      "memo": "",
+      "userid": ""
+    },
+    {
+      "id": "cc9b",
+      "type": "income",
+      "category": "월급",
+      "price": "2000000",
+      "date": "2024-06-10",
+      "desc": "KB 월급",
+      "memo": "5월달 근무 월급",
+      "userid": ""
+    }
+  ],
+  "user_list": [
+    {
+      "id": "ted",
+      "user_name": "태용",
+      "user_nickname": "태용",
+      "phone_num": "010-4444-4444",
+      "email": "example@example.com",
+      "password": "akf;ajkd;ajf"
+    },
+    {
+      "id": "ted1",
+      "user_name": "태용1",
+      "user_nickname": "태용1",
+      "phone_num": "010-4444-4444",
+      "email": "example@example.com",
+      "password": "akf;ajkd;ajf"
+    }
+  ]
+}
