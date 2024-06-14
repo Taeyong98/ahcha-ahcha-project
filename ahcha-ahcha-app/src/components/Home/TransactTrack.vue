@@ -3,11 +3,11 @@
       <div class="upperPart">
         <div id="decideDate">
           <button type="button" @click="changeDate(-1)">
-            <img src="/Users/test/Documents/ahcha-ahcha-project/ahcha-ahcha-app/src/assets/home/right arrow.png" />
+            <img src="@/assets/home/right arrow.png" />
           </button>
           <span>{{ formatDate(currentDate) }}</span>
           <button type="button" @click="changeDate(1)">
-            <img src="/Users/test/Documents/ahcha-ahcha-project/ahcha-ahcha-app/src/assets/home/left arrow.png" />
+            <img src="@/assets/home/left arrow.png" />
           </button>
         </div>
       </div>

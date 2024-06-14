@@ -20,9 +20,22 @@
         <label for="category" class="form-label">카테고리</label><br/>
             <select id="category" class="form-select" v-model="state.category">
                 <option value="" disabled>카테고리를 선택해주세요</option>
-                <option v-if="state.type==='income'" v-for="category in form.incomeCategories" :key="category">{{ category }}</option>
-                <option v-if="state.type==='outcome'" v-for="category in form.outcomeCategories" :key="category">{{ category }}</option>
+                <option v-if="state.type==='income'" v-for="category in form.incomeCategory" :key="category">{{ category }}</option>
+                <option v-if="state.type==='outcome'" v-for="category in form.outcomeCategory" :key="category">{{ category }}</option>
             </select><br/>
+        </div>
+        <div class="mb-3">
+            <label for="newCategory" class="form-label">카테고리 추가</label><br/>
+            
+            <div class="input-group">
+                <input class="form-control" type="text" id="newCategory" v-model="newCategoryText.text"><br/>
+          
+                <button class="btn btn-main" style="background-color: #FBE4A7"
+                @click="saveNewCategory">
+                추가
+                </button>
+            </div>
+           
         </div>
 
         <div class="mb-3">
@@ -47,14 +60,28 @@
 </template>
 
 <script setup>
-    import { reactive, defineEmits, watch} from 'vue';
-
+    import { reactive, defineEmits, watch, onMounted} from 'vue';
+    import axios from 'axios';
     const emit = defineEmits(['submitForm']);
+    const BASEURL = "http://localhost:3001";
 
     const form = reactive({
-        incomeCategories:["월급", "환급금", "기타"],
-        outcomeCategories:["식비", "교통비", "기타"]
-    })
+        incomeCategory:[],
+        outcomeCategory:[]
+    });
+
+    const newCategoryText = reactive({text:""});
+    function addCategory(){
+        if(state.type=='income'){
+            form.incomeCategory.push(newCategoryText.text);
+        }else{
+            form.outcomeCategory.push(newCategoryText.text);
+        }
+
+        newCategoryText.text="";
+    }
+
+    let userid = sessionStorage.getItem("userid");
 
     const state = reactive({
         type: "",
@@ -63,7 +90,7 @@
         date: "",
         desc: "",
         memo: "",
-        userid: ""
+        userid: userid
     });
 
     let formattedPrice = "";
@@ -75,18 +102,40 @@
     )
 
 
-    // onMounted(async()=>{
-    //     try{
-    //         const response = await fetch('http://localhost:3001/category');
-    //         const data = await response.json();
-    //         if (data.length > 0) {
-    //             form.incomeCategories = data[0]['income_category'];
-    //             form.outcomeCategories = data[0]['outcome_category'];
-    //         }
-    //     } catch (error) {
-    //         console.error('Failed to fetch data:', error)
-    //     }
-    // });
+    const fetchCategory = async () => {
+            try{
+                const response = await axios.get(BASEURL+'/user_category?id='+userid);
+                if(response.status == 200){
+                    form.incomeCategory = response.data[0].income;
+                    form.outcomeCategory = response.data[0].outcome;
+                    
+                    
+                }else{
+                    alert("카테고리 내역을 가져오는데 실패하였습니다. ");
+                }
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        const saveNewCategory  = async () =>{
+            try{
+                addCategory();
+                if(state.type=='income'){
+                    const response = await axios.put(BASEURL+'/user_category/'+userid,form.incomeCategory );
+                }else{
+                    const response = await axios.put(BASEURL+'/user_category/'+userid,form.outcomeCategory );
+                }
+               
+            }catch(error){
+                alert(error);
+            }
+        }
+
+    onMounted(()=>{
+        fetchCategory();
+    }
+    );
 
     const formatPrice = (event)=>{
         let value = event.target.value;
@@ -95,6 +144,7 @@
         event.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
+   
     const submitForm = async function() {
         console.log('Current state : ', state);
         try{

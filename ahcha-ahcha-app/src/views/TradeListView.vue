@@ -282,7 +282,8 @@ export default {
 
 
         const BASEURL = "http://localhost:3001";
-        const userid = "ted";
+        let userid = sessionStorage.getItem("userid");
+        
         const states = reactive({
             tradeList:[],
             incomeCategory:[],
@@ -313,7 +314,7 @@ export default {
 
         const fetchCategory = async () => {
             try{
-                const response = await axios.get(BASEURL+'/user_category?id='+userid);
+                const response = await axios.get(BASEURL+'/user_category?id'+userid);
                 if(response.status == 200){
                     states.incomeCategory = response.data[0].income;
                     states.outcomeCategory = response.data[0].outcome;
@@ -524,6 +525,8 @@ export default {
 
 
         onMounted(()=>{
+            userid = sessionStorage.getItem("userid");
+         
             fetchCategory();
         
         });
@@ -564,11 +567,12 @@ export default {
         background-color:#F1B73F
     }
     .btn-main{
-        background-color:#F1B73F;
+        background-color: #ffffff;
+    border:#FBE4A7 solid 5px;
 
     }
     .btn-main:hover{
-        background-color:#F1B73F;
+        background-color:#FBE4A7;
     }
     
 
@@ -580,7 +584,7 @@ export default {
 }
 
 .selected_button{
-    background-color: #F1B73F;
+    background-color:#FBE4A7;
 }
 .sort_button_group{
     margin-top: 10px;
