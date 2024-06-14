@@ -4,21 +4,20 @@
       <label>이번 달 얼마 남았을까요? </label><br/>
       <input type="month" id="month" v-model="selectedMonth" @change="fetchData" />
       
-      <div width="400px" height="550px">
-        <canvas ref="canvas" width="300px" height="300px"></canvas>
+      <div style="width: 400px; height: 550px;">
+        <canvas ref="canvas"></canvas>
         <div class="total-income">
           <label>수입</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalIncome) }}원</label><br/>
           <label>소비</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{{ formatCurrency(totalExpenses) }}원</label><br/>
           <label id="total">남은 금액</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label :class="balanceClass">{{ formatCurrency(balance) }}원</label>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed,watch } from 'vue';
 import axios from 'axios';
 import { Chart, registerables } from 'chart.js';
 
@@ -29,71 +28,57 @@ export default {
   setup() {
     const canvas = ref(null);
     const selectedMonth = ref('');
-    const totalIncome = ref(0); // 총 수입
-    const totalExpenses = ref(0); // 총 소비
-    let chartInstance = null; // Chart instance를 저장하기 위한 변수
+    const totalIncome = ref(0);
+    const totalExpenses = ref(0);
+    const categories = ref([]);
+    let chartInstance = null;
+    let latestMonth = '';
 
-    const fetchData = async () => {
-      if (!selectedMonth.value) return;
-
+    const firstFetchData = async () => {
       try {
-        // JSON Server에서 데이터 가져오기
         const response = await axios.get('http://localhost:3001/trade_list');
         const tradeList = response.data;
-        console.log("tradeList_Graph", tradeList);
 
-        // 선택한 월의 "월급", "교통비", "식비"를 계산
-        const monthlyData = {
-          salary: 0,
-          transport: 0,
-          food: 0
-        };
+        const userId = sessionStorage.getItem('userid');
+        const userTradeList = tradeList.filter(entry => entry.userid === userId);
+        latestMonth = getLatestMonth(tradeList);
 
+        selectedMonth.value = latestMonth;
+        const filteredData = filterDataByMonth(tradeList, latestMonth);
+
+        const categorySet = new Set(tradeList.map(entry => entry.category));
+        categories.value = Array.from(categorySet);
         let income = 0;
         let expenses = 0;
+        const categoryData = {};
 
-        tradeList.forEach(entry => {
-          const date = entry.date.toString();
-          const year = date.slice(0, 4);
-          const month = date.slice(5, 7);
-          const key = `${year}-${month}`;
-
-          if (key === selectedMonth.value) {
-            const price = parseFloat(entry.price);
-
-            // 항목에 따라 데이터를 누적
-            if (entry.category === '월급') {
-              monthlyData.salary += price;
-              income += price;
-            } else if (entry.category === '교통비' || entry.category === '식비') {
-              if (entry.category === '교통비') monthlyData.transport += price;
-              if (entry.category === '식비') monthlyData.food += price;
-              expenses += price;
-            }
-          }
+        categories.value.forEach(category => {
+          categoryData[category] = 0;
         });
 
-        // 총 수입과 총 소비를 업데이트
+        filteredData.forEach(entry => {
+          const price = parseFloat(entry.price);
+          categoryData[entry.category] += price;
+          if (entry.type === 'income') {
+            income += price;
+          } else if (entry.type === 'outcome') {
+            expenses += price;
+          }
+        });
         totalIncome.value = income;
         totalExpenses.value = expenses;
 
-        // 기존 차트가 있으면 파괴
         if (chartInstance) {
           chartInstance.destroy();
         }
-
-        // Chart.js를 사용하여 도넛 차트 생성
-        const config = {
+        const ctx = canvas.value.getContext('2d');
+        chartInstance = new Chart(ctx, {
           type: 'doughnut',
           data: {
-            labels: ['월급', '교통비', '식비'],
+            labels: categories.value,
             datasets: [{
-              data: [monthlyData.salary, monthlyData.transport, monthlyData.food],
-              backgroundColor: [
-                'rgb(75, 192, 192)',
-                'rgb(241, 183, 63)',
-                'rgb(255, 99, 132)'
-              ],
+              data: categories.value.map(category => categoryData[category]),
+              backgroundColor: categories.value.map(() => `hsl(${Math.random() * 360}, 100%, 75%)`),
               hoverOffset: 4
             }]
           },
@@ -108,24 +93,103 @@ export default {
               }
             }
           }
-        };
+        });
 
-        // 그래프를 캔버스에 렌더링
-        const ctx = canvas.value.getContext('2d');
-        chartInstance = new Chart(ctx, config);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
-    onMounted(() => {
-      // 페이지 로드 시 초기 데이터 가져오기
-      fetchData();
-    });
+  
+    const fetchData = async () => {
+    
+      try {
+        const response = await axios.get('http://localhost:3001/trade_list');
+        const tradeList = response.data;
 
-    const updateDoughnutGraph = async () => {
-      await fetchData();
+        const userId = sessionStorage.getItem('userid');
+        const userTradeList = tradeList.filter(entry => entry.userid === userId);
+
+
+        const categorySet = new Set(tradeList.map(entry => entry.category));
+        categories.value = Array.from(categorySet);
+        let income = 0;
+        let expenses = 0;
+        const categoryData = {};
+
+        categories.value.forEach(category => {
+          categoryData[category] = 0;
+        });
+        
+        
+
+        tradeList.forEach(entry => {
+          const date = entry.date.toString();
+          const year = date.slice(0, 4);
+          const month = date.slice(5, 7);
+          const key = `${year}-${month}`;
+
+          if (key === selectedMonth.value) {
+            const price = parseFloat(entry.price);
+            if (entry.type === 'income') {
+              categoryData[entry.category] += price;
+              income += price;
+            } else if (entry.type === 'outcome') {
+              categoryData[entry.category] += price;
+              expenses += price;
+            }
+          }
+        });
+
+        totalIncome.value = income;
+        totalExpenses.value = expenses;
+
+        if (chartInstance) {
+          chartInstance.destroy();
+        }
+
+        const ctx = canvas.value.getContext('2d');
+        chartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: categories.value,
+            datasets: [{
+              data: categories.value.map(category => categoryData[category]),
+              backgroundColor: categories.value.map(() => `hsl(${Math.random() * 360}, 100%, 75%)`),
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+              }
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
+
+
+    
+
+    // Helper function to get the latest month from the data
+const getLatestMonth = (data) => {
+  const months = data.map(entry => entry.date.slice(0, 7)); // Assuming date format 'YYYY-MM-DD'
+  return Array.from(new Set(months)).sort().reverse()[0];
+};
+
+// Helper function to filter data by a specific month
+const filterDataByMonth = (data, month) => {
+  return data.filter(entry => entry.date.startsWith(month));
+};
 
     const formatCurrency = (value) => {
       return new Intl.NumberFormat('ko-KR', {
@@ -141,16 +205,21 @@ export default {
       return balance.value >= 0 ? 'positive-balance' : 'negative-balance';
     });
 
+    onMounted(() => {
+      firstFetchData(); // Ensure this function is called when component is mounted
+    });
+
     return {
       canvas,
       selectedMonth,
       totalIncome,
       totalExpenses,
+      categories,
       fetchData,
-      updateDoughnutGraph,
       formatCurrency,
       balance,
-      balanceClass
+      balanceClass,
+      firstFetchData
     };
   }
 };
@@ -159,6 +228,8 @@ export default {
 <style scoped>
 canvas {
   margin: 10px;
+  width: 100%;
+  height: 100%;
 }
 
 .date-picker {
@@ -174,10 +245,11 @@ canvas {
   padding: 20px;
   border-radius: 8px;
 }
-.total-income{
-  background-color:#fafafa;
+
+.total-income {
+  background-color: #fafafa;
   border-radius: 8px;
-  padding:20px;
+  padding: 20px;
 }
 
 input[type="month"] {
@@ -196,16 +268,30 @@ label {
   font-weight: 300;
 }
 
-#total{
-  font-weight:300;
+#total {
+  font-weight: 300;
 }
+
 .positive-balance {
-  color: #FF3838;
+  color: #ff3838;
   font-weight: 300;
 }
 
 .negative-balance {
-  color: #0066FF;
+  color: #0066ff;
   font-weight: 300;
+}
+
+.categories {
+  margin-top: 20px;
+}
+
+.categories ul {
+  list-style: none;
+  padding: 0;
+}
+
+.categories li {
+  margin: 5px 0;
 }
 </style>

@@ -29,7 +29,10 @@ export default {
         // JSON Server에서 데이터 가져오기
         const response = await axios.get('http://localhost:3001/trade_list');
         const tradeList = response.data;
-        console.log("tradeList_Graph", tradeList);
+
+        const userId = sessionStorage.getItem('userid');
+        
+        
 
         // 월별 수입과 지출을 계산
         const monthlyData = {};
