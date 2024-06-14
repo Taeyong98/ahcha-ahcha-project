@@ -79,7 +79,11 @@ export default {
             fetchData(formatDate(currentDate.value));
         });
 
-        return { userTrades, formatDate, formatPrice, currentDate, changeDate };
+        const updateList = ()=>{
+            fetchData(formatDate(currentDate.value))
+        }
+
+        return { userTrades, formatDate, formatPrice, currentDate, changeDate,updateList };
     },
 };
 </script>
