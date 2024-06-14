@@ -1,71 +1,29 @@
+# ahcha-ahcha-app
 
-<p align="center">
-  <br>
-  <img src="./images/common/logo-sample.jpeg">
-  <br>
-</p>
+This template should help get you started developing with Vue 3 in Vite.
 
-목차
+## Recommended IDE Setup
 
-## 프로젝트 소개
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-<p align="justify">
-프로젝트 개요/동기
-</p>
+## Customize configuration
 
-<p align="center">
-GIF Images
-</p>
+See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-<br>
+## Project Setup
 
-## 기술 스택
+```sh
+npm install
+```
 
-| JavaScript | TypeScript |  React   |  Node   |
-| :--------: | :--------: | :------: | :-----: |
-|   ![js]    |   ![ts]    | ![react] | ![node] |
+### Compile and Hot-Reload for Development
 
-<br>
+```sh
+npm run dev
+```
 
-## 구현 기능
+### Compile and Minify for Production
 
-### 전체 화면 공통 부분
-<img src="./images/common/logo-sample.jpeg">
-
-### 회원가입, 로그인 화면 
-<img src="./images/common/logo-sample.jpeg">
-
-### 홈 화면 
-<img src="./images/common/logo-sample.jpeg">
-
-### 거래 내역 화면 
-<img src="./images/common/logo-sample.jpeg">
-
-### 거래 등록 화면 
-<img src="./images/common/logo-sample.jpeg">
-
-### 목표 (챌린지) 화면
-<img src="./images/common/logo-sample.jpeg">
-
-### 프로필 관리 화면
-<img src="./images/common/logo-sample.jpeg">
-
-<br>
-                                                                                                                               
-
-<p align="justify">
-
-</p>
-
-<br>
-
-## 라이센스
-
-MIT &copy; [NoHack](mailto:lbjp114@gmail.com)
-
-<!-- Stack Icon Refernces -->
-
-[js]: /images/stack/javascript.svg
-[ts]: /images/stack/typescript.svg
-[react]: /images/stack/react.svg
-[node]: /images/stack/node.svg
+```sh
+npm run build
+```
