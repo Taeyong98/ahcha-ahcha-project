@@ -1,11 +1,11 @@
 <template>
   <div class="another-month">
     <div class="label-month">
-      <label class="title">다른 달 어떻게 사용했을까요? </label>
+      <label class="title">다른 달 어떻게 사용했을까요? </label><br/>
       <label>그래프에 마우스를 올려 확인해보세요</label><br/>
     </div>
     <div class="graph">
-      <canvas ref="canvas" width="350px" height="400px"></canvas>
+      <canvas ref="canvas" width="900px" height="800px"></canvas>
     </div>
   </div>
 </template>
@@ -127,17 +127,15 @@ canvas {
 }
 
 .title {
-  padding: 3px;
+  padding:10px;
   font-size: 16px;
-  margin-bottom: 0px;
-  color: #333;
+  color: #000000;
   font-weight: 300;
 }
 
 label {
-  padding: 3px;
+
   font-size: 14px;
-  margin-bottom: px;
   color: #999;
   font-weight: 200;
 }
