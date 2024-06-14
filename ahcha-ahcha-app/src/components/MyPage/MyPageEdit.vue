@@ -110,11 +110,11 @@
 </template>
 <script>
 import axios from 'axios';
-import {ref} from 'vue';
+import { ref } from 'vue';
 export default {
     props: ['user'],
-    emits: ["fetchData"],
-    setup(props,context) {
+    emits: ['fetchData'],
+    setup(props, context) {
         const file = ref(null);
         const filePreview = ref(null);
         const fileInput = ref(null);
@@ -166,8 +166,9 @@ export default {
         };
 
         const changeProfile = () => {
+            let userid = sessionStorage.getItem('userid');
             axios
-                .put('http://localhost:3001/user_list/ted', {
+                .put(`http://localhost:3001/user_list/${userid}`, {
                     id: props.user.user.id,
                     user_name: props.user.user.user_name,
                     user_nickname: props.user.user.user_nickname,
@@ -186,17 +187,18 @@ export default {
                 })
                 .finally(() => {
                     file.value = null;
-                    context.emit("fetchData");
+                    context.emit('fetchData');
                 });
         };
 
         const changeNickname = () => {
-            if(!newNickname.value){
-                alert("닉네임을 입력해주세요!")
+            if (!newNickname.value) {
+                alert('닉네임을 입력해주세요!');
                 return;
             }
+            let userid = sessionStorage.getItem('userid');
             axios
-                .put('http://localhost:3001/user_list/ted', {
+                .put(`http://localhost:3001/user_list/${userid}`, {
                     id: props.user.user.id,
                     user_name: props.user.user.user_name,
                     user_nickname: newNickname.value,
@@ -214,8 +216,8 @@ export default {
                     console.log(err);
                 })
                 .finally(() => {
-                    newNickname.value = ""
-                    context.emit("fetchData");
+                    newNickname.value = '';
+                    context.emit('fetchData');
                 });
         };
         const changePassword = () => {
@@ -223,12 +225,13 @@ export default {
                 alert('현재 비밀번호가 다릅니다!');
                 return;
             }
-            if(!newPassword.value){
-                alert("새로운 비밀번호를 입력해주세요!")
+            if (!newPassword.value) {
+                alert('새로운 비밀번호를 입력해주세요!');
                 return;
             }
+            let userid = sessionStorage.getItem('userid');
             axios
-                .put('http://localhost:3001/user_list/ted', {
+                .put(`http://localhost:3001/user_list/${userid}`, {
                     id: props.user.user.id,
                     user_name: props.user.user.user_name,
                     user_nickname: props.user.user.user_nickname,
@@ -246,9 +249,9 @@ export default {
                     console.log(err);
                 })
                 .finally(() => {
-                    currentPassword.value = ""
-                    newPassword.value = ""
-                    context.emit("fetchData");
+                    currentPassword.value = '';
+                    newPassword.value = '';
+                    context.emit('fetchData');
                 });
         };
 
