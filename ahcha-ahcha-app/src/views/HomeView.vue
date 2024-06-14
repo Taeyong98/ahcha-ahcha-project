@@ -1,9 +1,6 @@
 <template>
   <div class="container-full ">
-    
     <div class="widget-container">
-
-
 
       <!-- 오른쪽 위젯 -->
       <div class="right_widget">
@@ -13,12 +10,10 @@
         </div>
       </div>
 
-      
       <!-- 왼쪽 위젯-->
       <div class="left_widget">
         <TransactTrack ref="transactTrack" class="widget"/>
       </div>
-
     </div>
       
     <!-- 로그 변경 버튼 -->
@@ -38,6 +33,10 @@ const transactGraph = ref(null);
 const transactDoughnutGraph = ref(null);
 const transactTrack = ref(null);
 
+//수정 부분
+const selectedMonth = ref('');
+const showDefaultDoughnutGraph = ref(true);
+
 const handleLogChanged = () => {
   if (transactGraph.value) {
     transactGraph.value.updateGraph();
@@ -48,7 +47,11 @@ const handleLogChanged = () => {
   if (transactTrack.value) {
     transactTrack.value.updateList();
   }
+  //누를 시 false로 전환
+  showDefaultDoughnutGraph.value = false; 
 };
+
+
 </script>
 
 <style scoped>

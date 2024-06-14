@@ -51,8 +51,8 @@ const handleSubmitForm = () => {
 }
 
 .custom-modal-dialog {
-    max-width: 80vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
-    width: 80vw;
+    max-width: 40vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
+    width: 40vw;
 }
 
 .custom-modal-dialog .modal-content {
