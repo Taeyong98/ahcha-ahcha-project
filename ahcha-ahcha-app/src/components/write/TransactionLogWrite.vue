@@ -31,7 +31,7 @@
                 <input class="form-control" type="text" id="newCategory" v-model="newCategoryText.text"><br/>
           
                 <button class="btn btn-main" style="background-color: #FBE4A7"
-                @click="addCategory">
+                @click="saveNewCategory">
                 추가
                 </button>
             </div>
@@ -104,16 +104,29 @@
 
     const fetchCategory = async () => {
             try{
-                const response = await axios.get(BASEURL+'/user_category?id'+userid);
+                const response = await axios.get(BASEURL+'/user_category?id='+userid);
                 if(response.status == 200){
                     form.incomeCategory = response.data[0].income;
                     form.outcomeCategory = response.data[0].outcome;
                     
-                    console.log(form);
                     
                 }else{
                     alert("카테고리 내역을 가져오는데 실패하였습니다. ");
                 }
+            }catch(error){
+                alert(error);
+            }
+        }
+
+        const saveNewCategory  = async () =>{
+            try{
+                addCategory();
+                if(state.type=='income'){
+                    const response = await axios.put(BASEURL+'/user_category/'+userid,form.incomeCategory );
+                }else{
+                    const response = await axios.put(BASEURL+'/user_category/'+userid,form.outcomeCategory );
+                }
+               
             }catch(error){
                 alert(error);
             }
