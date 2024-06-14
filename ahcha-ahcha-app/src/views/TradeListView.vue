@@ -1,8 +1,8 @@
 <template>
     
     <div 
-    style=" width: 70%; padding-top: 50px; margin: 0 auto;">
-        <div style="position: relative;">
+    style=" width: 70%; padding: 70px 0px; margin: 0 auto;">
+        <div style="position: relative; ">
             <button class="btn btn-main"
             @click="dateToggle()">
                 {{ dateFormatChange(range.start)
@@ -47,6 +47,9 @@
                     </div>
                
             </span>
+            <span style="margin-left: 12px;">
+                총 자산: {{allAccount.value.toLocaleString()}} 원
+            </span>
 
             <span v-if="checkedTradeList.list.length>0">
                 <button class="btn btn-delete"
@@ -88,7 +91,7 @@
         </div>
         
 
-        <div class="sort_button_group">
+        <div class="sort_button_group" style="">
             <button class="btn" :style="[typeButtonGroup.sort=='all' ? selectedButton : '']"
              style="border-top-right-radius: 0px;
             border-bottom-right-radius: 0px;"
@@ -104,14 +107,15 @@
         </div>
         <div style="margin-top: 2px; margin-bottom: 20px;" class="sort_button_group">
             <label>{{ account.all.toLocaleString() }}원</label>
-            <label style="color: #FF3838;">{{ account.outcome.toLocaleString() }}원</label>
+            <label style="color: #FF3838;">{{
+            account.outcome==0 ? account.outcome.toLocaleString() : '-'+account.outcome.toLocaleString() }}원</label>
             <label style="color: #0066FF;">{{ account.income.toLocaleString() }}원</label>
         </div>
 
 
 
         <div>
-            <table class="table" style="text-align: center; " >
+            <table class="table" style="text-align: center; margin-top: 30px; " >
                 <thead>
                     <tr style="border-color: #D7D7D7">
                         <th></th>
@@ -136,13 +140,16 @@
                             v-model="checkedTradeList.list" :value="t.id"></td>
                         <td>{{ getShowDate(t.date) }}</td>
                         <td>{{ t.category }}</td>
-                        <td :style="[t.type=='income' ? incomeText : outcomeText]">{{ parseInt(t.price).toLocaleString() }}원</td>
+                        <td :style="[t.type=='income' ? incomeText : outcomeText]">
+                            {{ t.type=='income'? parseInt(t.price).toLocaleString() : 
+                        '-'+ parseInt(t.price).toLocaleString()}}원
+                        </td>
                         <td>{{ t.desc }}</td>
                         <td >
                             <button type="button" class="btn icon-btn" data-bs-toggle="modal" 
                             :data-bs-target="'#'+t.id" >
 
-                                <i class="material-icons" style="font-size:24px;">edit</i>
+                                <i class="material-icons edit-icon">edit</i>
                                 
                             </button>
 
@@ -189,7 +196,11 @@ export default {
     },
     //props:["states"],
     setup(){
+        
+        // 총 자산
+        const allAccount = reactive({"value":0});
         const componentKey = reactive({value:0});
+
 
         function forceRerenderModal(){
             console.log(componentKey.value);
@@ -301,6 +312,20 @@ export default {
                 if(response.status == 200){
 
                     states.tradeList = response.data;
+
+                    // 상단에 뜨는 총 자산 업데이트
+                    let income = 0;
+                    let outcome = 0;
+                    states.tradeList.forEach((item)=>{
+                        if(item.type=='income'){
+                            income += parseInt(item.price);
+                        }else{
+                            outcome += parseInt(item.price);
+                        }
+                    });
+                    allAccount.value = (income-outcome);
+
+                    // 화면에 보여지는 거래 내역 필터링
                     filterAndSortTradeList();
 
 
@@ -314,7 +339,9 @@ export default {
 
         const fetchCategory = async () => {
             try{
+                console.log('userid:',userid);
                 const response = await axios.get(BASEURL+'/user_category?id'+userid);
+                console.log(response);
                 if(response.status == 200){
                     states.incomeCategory = response.data[0].income;
                     states.outcomeCategory = response.data[0].outcome;
@@ -428,7 +455,7 @@ export default {
             let income = 0;
             let outcome = 0;
             // 전체, 수입, 지출 요금 저장해두기.
-            states.tradeList.forEach((item)=>{
+            showTradeList.value.forEach((item)=>{
                 if(item.type=='income'){
                     income += parseInt(item.price);
                 }else{
@@ -439,7 +466,8 @@ export default {
             account.all = (income-outcome);
             account.income = income;
             account.outcome = outcome;
-
+            
+         
             forceRerenderModal();
         }
 
@@ -461,6 +489,21 @@ export default {
             filterTradeListByDate(r, showTradeList.value);
             sortTradeListByDate(showTradeList.value);
             filterTradeListByCategory(showTradeList.value);
+
+            let income = 0;
+            let outcome = 0;
+            // 전체, 수입, 지출 요금 저장해두기.
+            showTradeList.value.forEach((item)=>{
+                if(item.type=='income'){
+                    income += parseInt(item.price);
+                }else{
+                    outcome += parseInt(item.price);
+                }
+            });
+
+            account.all = (income-outcome);
+            account.income = income;
+            account.outcome = outcome;
             forceRerenderModal();
         }
 
@@ -554,7 +597,7 @@ export default {
            , getShowDate, incomeText, outcomeText,fetchTradeList, showTradeList
            ,changeDate, dateFormatChange, selectedButton2, checkedOutcomeCategory,checkedIncomeCategory,
            categorySubmit, dateFormatChangeByDot, checkedTradeList, deleteTradeList,
-           handleSubmitForm, componentKey
+           handleSubmitForm, componentKey, allAccount
         };
     }    
 }
@@ -587,7 +630,7 @@ export default {
     background-color:#FBE4A7;
 }
 .sort_button_group{
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .sort_button_group label{
     width:33.3%;
@@ -653,8 +696,8 @@ export default {
 }
 
 .custom-modal-dialog {
-    max-width: 80vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
-    width: 80vw;
+    max-width: 40vw; /* 최대 너비를 뷰포트 너비의 80%로 설정 */
+    width: 40vw;
 }
 
 .custom-modal-dialog .modal-content {
@@ -664,4 +707,5 @@ export default {
 .modal-body {
     overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능 */
 }
+
 </style>
