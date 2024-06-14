@@ -10,10 +10,18 @@ import Navbar from './components/Home/Navbar.vue'
     </div>
 </template>
 
-<style scoped>
+<style>
 *{
   padding :0px;
   margin : 0px;
+  
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 330;
+  font-style: normal;
 }
+
+
+
 </style>
 
