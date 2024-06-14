@@ -3,8 +3,6 @@
     
     <div class="widget-container">
 
-
-
       <!-- 오른쪽 위젯 -->
       <div class="right_widget">
         <div class="widgetGraph">
@@ -13,12 +11,10 @@
         </div>
       </div>
 
-      
       <!-- 왼쪽 위젯-->
       <div class="left_widget">
         <TransactTrack ref="transactTrack" class="widget"/>
       </div>
-
     </div>
       
     <!-- 로그 변경 버튼 -->
@@ -49,6 +45,8 @@ const handleLogChanged = () => {
     transactTrack.value.updateList();
   }
 };
+
+
 </script>
 
 <style scoped>
