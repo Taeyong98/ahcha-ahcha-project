@@ -1,12 +1,11 @@
 <template>
   <div class="another-month">
     <div class="label-month">
-    <br/>
-      <label class="title">다른 달 어떻게 사용했을까요? </label>
+      <label class="title">다른 달 어떻게 사용했을까요? </label><br/>
       <label>그래프에 마우스를 올려 확인해보세요</label><br/>
     </div>
     <div class="graph">
-      <canvas ref="canvas" width="350px" height="400px"></canvas>
+      <canvas ref="canvas" width="900px" height="800px"></canvas>
     </div>
   </div>
 </template>
@@ -31,12 +30,11 @@ export default {
         const tradeList = response.data;
 
         const userId = sessionStorage.getItem('userid');
-        
-        
+        const userTradeList = tradeList.filter(entry => entry.userid === userId);
 
         // 월별 수입과 지출을 계산
         const monthlyData = {};
-        tradeList.forEach(entry => {
+        userTradeList.forEach(entry => {
           const date = entry.date.toString();
           const year = date.slice(0, 4);
           const month = date.slice(5, 7);
@@ -59,17 +57,17 @@ export default {
           }
         });
 
+        const sortedKeys = Object.keys(monthlyData).sort();
+
         // 그래프를 그리기 위한 데이터 생성
         const labels = [];
         const incomeData = [];
         const outcomeData = [];
-        for (const key in monthlyData) {
-          if (Object.hasOwnProperty.call(monthlyData, key)) {
-            labels.push(key);
-            incomeData.push(monthlyData[key].income);
-            outcomeData.push(monthlyData[key].outcome);
-          }
-        }
+        sortedKeys.forEach(key => {
+          labels.push(key);
+          incomeData.push(monthlyData[key].income);
+          outcomeData.push(monthlyData[key].outcome);
+        });
 
         // 기존 차트가 있으면 파괴
         if (chartInstance) {
@@ -129,20 +127,19 @@ canvas {
 }
 
 .title {
-  padding: 3px;
+  padding:10px;
   font-size: 16px;
-  margin-bottom: 0px;
-  color: #333;
+  color: #000000;
   font-weight: 300;
 }
 
-label{
-  padding: 3px;
+label {
+
   font-size: 14px;
-  margin-bottom: px;
   color: #999;
   font-weight: 200;
 }
+
 .another-month {
   margin-bottom: 10px;
   text-align: center;
@@ -163,8 +160,5 @@ label{
   display: flex;
   justify-content: center; /* 그래프 수평 중앙 정렬 */
   align-items: center; /* 그래프 수직 중앙 정렬 */
-  
 }
 </style>
-
-  
