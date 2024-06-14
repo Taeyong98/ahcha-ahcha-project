@@ -41,12 +41,12 @@ export default {
 
         const userId = sessionStorage.getItem('userid');
         const userTradeList = tradeList.filter(entry => entry.userid === userId);
-        latestMonth = getLatestMonth(tradeList);
+        latestMonth = getLatestMonth(userTradeList);
 
         selectedMonth.value = latestMonth;
-        const filteredData = filterDataByMonth(tradeList, latestMonth);
+        const filteredData = filterDataByMonth(userTradeList, latestMonth);
 
-        const categorySet = new Set(tradeList.map(entry => entry.category));
+        const categorySet = new Set(userTradeList.map(entry => entry.category));
         categories.value = Array.from(categorySet);
         let income = 0;
         let expenses = 0;
@@ -111,7 +111,7 @@ export default {
         const userTradeList = tradeList.filter(entry => entry.userid === userId);
 
 
-        const categorySet = new Set(tradeList.map(entry => entry.category));
+        const categorySet = new Set(userTradeList.map(entry => entry.category));
         categories.value = Array.from(categorySet);
         let income = 0;
         let expenses = 0;
@@ -123,7 +123,7 @@ export default {
         
         
 
-        tradeList.forEach(entry => {
+        userTradeList.forEach(entry => {
           const date = entry.date.toString();
           const year = date.slice(0, 4);
           const month = date.slice(5, 7);
