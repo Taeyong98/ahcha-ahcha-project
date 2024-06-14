@@ -25,7 +25,7 @@
             <tr v-for="trade in userTrades" :key="trade.date">
               <td>{{ trade.date }}</td>
               <td>{{ trade.category }}</td>
-              <td :class="{'income': trade.type === 'income', 'outcome': trade.type === 'outcome'}">{{ trade.price }}원</td>
+              <td :class="{'income': trade.type === 'income', 'outcome': trade.type === 'outcome'}">{{ formatPrice(trade.price) }}원</td>
             </tr>
           </tbody>
         </table>
@@ -47,6 +47,10 @@
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
+      };
+  
+      const formatPrice = (price) => {
+        return price.toLocaleString();
       };
   
       const changeDate = (daysToAdd) => {
@@ -79,6 +83,7 @@
       return {
         userTrades,
         formatDate,
+        formatPrice,
         currentDate,
         changeDate,
         updateList
