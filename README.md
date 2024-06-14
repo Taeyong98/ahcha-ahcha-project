@@ -16,9 +16,9 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
 
 ## 기술 스택
 
-| JavaScript | Vue |  Bootstrap 5   |     
+| JavaScript | Vue |  bootstrap5   |     
 | :--------: | :--------: | :------: | 
-|   <img src="./images/readme/javascript.svg" width="50">    |   <img src="./images/readme/vue.svg" width="50">    | <img src="./images/readme/bootstrap.svg" width="50"> | 
+|   ![js]    |   ![vue]    | ![bootstrap] | 
 
 <br>
 
@@ -68,8 +68,7 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
 <ul>
   <li>절약 챌린지 기능</li>
   <li>저축 챌린지 기능</li>
-  <li>목표 설정</li>
-  <li>목표 달성 여부 확인</li>
+  <li>진행률에 대해 막대바로 확인</li>
 </ul>
 <br/>
 
@@ -77,8 +76,7 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
 <p align="justify">새로운 목표를 등록할 수 있습니다.</p>
 <img src="./images/readme/add-challenge.png" width="500">
 <ul>
-  <li>목표 설정</li>
-  <li>목표 달성 여부 확인</li>
+  <li>상단의 '목표 추가하기' 버튼을 이용한 챌린지 내역 추가</li>
 </ul>
 <br/>
 
@@ -94,9 +92,20 @@ KB IT's Your Life의 Vue.js 교육 과정을 이수한 후 진행한 프로젝�
 
 <br>
 
-## 라이센스
+## 팀원
+<table>
+    <tbody>
+        <tr>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/soyoung1832"><img src="https://avatars.githubusercontent.com/u/68853692?v=4" width="100px;"/><br /><sub><b>soyoung1832</b></sub><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/anjdfk111"><img src="https://avatars.githubusercontent.com/u/111959522?v=4" width="100px;"/><br /><sub><b>SunJin Moon</b></sub><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/Taeyong98"><img src="https://avatars.githubusercontent.com/u/163623205?v=4" width="100px;"/><br /><sub><b>Taeyong98</b></sub><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/pq5910"><img src="https://avatars.githubusercontent.com/u/81617589?v=4" width="100px;"/><br /><sub><b>KWJ</b></sub><br /></a></td>
+            <td align="center" valign="top" width="20%"><a href="https://github.com/sooojChoi"><img src="https://avatars.githubusercontent.com/u/94206303?v=4" width="100px;"/><br /><sub><b>sooojChoi</b></sub><br /></a></td>
+        </tr>
+    </tbody>
+</table>
 
-<!-- Stack Icon References -->
+<!-- Stack Icon Refernces -->
 
 [js]: ./images/readme/javascript.svg
 [vue]: ./images/readme/vue.svg
